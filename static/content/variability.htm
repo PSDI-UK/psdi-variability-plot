@@ -1,0 +1,83 @@
+<!--
+  variability.htm
+
+  Ray Whorley
+  School of Chemistry and Chemical Engineering
+  University of Southampton
+  Started on 24/07/2025
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Reporting Variability of Numerical Outcomes</title>
+  <!--<link rel="stylesheet" href="{{url_for('static', filename='styles/format.css')}}">-->
+</head>
+
+</html>
+
+<body>
+  <a href="/">Home</a><br>
+  <h1>Reporting Variability of Numerical Outcomes</h1>
+  <p>
+    This tool enables you to produce plots that describe the reproducibility of any
+    numerical reaction outcome. The generated scatterplots display mean values and
+    confidence intervals and can be exported to use in your supplementary
+    information.
+  </p>
+  <p>
+    <label for="compound" id="compLabel">Compound label:</label>
+    <input type="text" placeholder="e.g. Lactam 4a" size="30" id="compound"><br><br>
+    <label for="type" id="typeLabel">Measurement type:</label>
+    <select id="type">
+      <option value="Yield">Yield (%)</option>
+      <option value="Diastereomeric Excess (de)">Diastereomeric
+        Excess (de, %)</option>
+      <option value="Enantiomeric Excess (ee)">Enantiomeric
+        Excess (ee, %)</option>
+    </select><br><br>
+    <p>Measurements</p>
+    <p>
+      Blurb about the importance of repeating reactions and how you must enter at least
+      3 measurements and that magic happens with 5 and more is better.
+    </p>
+    <div id="measurements">
+      <label for="measure1" id="measLabel1">1:</label>
+      <input type="text" placeholder="Required" size="20" id="measure1"><br><br>
+      <label for="measure2" id="measLabel2">2:</label>
+      <input type="text" placeholder="Required" size="20" id="measure2"><br><br>
+      <label for="measure3" id="measLabel3">3:</label>
+      <input type="text" placeholder="Required" size="20" id="measure3"><br><br>
+      <label for="measure4" id="measLabel4">4:</label>
+      <input type="text" size="20" id="measure4"><br><br>
+      <label for="measure5" id="measLabel5">5:</label>
+      <input type="text" size="20" id="measure5"><br>
+    </div>
+  </p>
+  <input type="button" value=" Add new measurement " id="addButton">
+  <input type="button" value=" Reset " id="resetButton"><br><br>
+  <label for="width" id="widthLabel">Plot width (pixels):</label>
+  <input type="text" size="10" value="640" id="width"><br><br>
+  <label for="height" id="heightLabel">Plot height (pixels):</label>
+  <input type="text" size="10" value="480" id="height"><br><br>
+  <input type="button" value=" Generate plot " id="genButton"><br><br>
+  <img src="../fig/fig.png" alt="Image Placeholder" id="image">
+  <p>
+    To save the variability plot for your compound, select an <strong>Image type</strong>
+    and click <strong>Download plot</strong>
+  </p>
+  <label for="imageType" id="imageTypeLabel">Image type:</label>
+  <select id="imageType">
+    <option value="tiff">TIFF</option>
+    <option value="eps">EPS</option>
+    <option value="pdf">PDF</option>
+    <option value="png">PNG</option>
+    <option value="jpeg">JPEG</option>
+    <option value="svg">SVG</option>
+  </select><br><br>
+  <input type="button" value=" Download plot " id="saveButton">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="crossorigin="anonymous"></script>
+  <script src="../javascript/variability.js" type="module" language="JavaScript"></script>
+</body>
+</html>
