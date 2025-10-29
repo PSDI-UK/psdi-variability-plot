@@ -8,6 +8,7 @@ Started 23/07/2025
 '''
 
 import os
+import errno
 import matplotlib
 import matplotlib.pyplot as plt
 from numpy import mean, std, sqrt
@@ -119,6 +120,14 @@ def generate_plot():
     plt.title(title, fontsize=title_font_size)
     plt.grid()
     img = BytesIO()
+
+    if not os.path.exists('static/fig'):
+        try:
+            os.makedirs('static/fig')
+        except OSError as exc:  # In case of race condition
+            if exc.errno != errno.EEXIST:
+                raise
+
     plt.savefig('static/fig/fig.png')
     #plt.savefig(f'static/fig/{compound_label}.png')
     #plt.savefig(img)
