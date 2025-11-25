@@ -278,3 +278,46 @@ select#dark-background option {
   color  : var(--ifm-color-primary);
   scale  : 75%;
 }
+
+div#noChart {
+  border: 1px solid #ccc;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  font-size: 150%;
+  border-radius: 6px;
+}
+
+#copySuccess {
+  color: green;
+}
+
+#copyFailure {
+  color: red;
+}
+
+.formControl {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.6em;
+}
+
+textarea#reactionOutcomeValues {
+  resize: vertical;
+}
+
+.spreadWidth {
+  display: flex;
+}
+
+.spreadWidth > * {
+  flex: 1;
+  margin-left: 0.5em;
+  display: flex;
+}
+
+.spreadWidth > *:first-child {
+  margin-left: 0;
+}

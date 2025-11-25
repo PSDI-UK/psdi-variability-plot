@@ -10,72 +10,130 @@
 {% block hero_title %}Reporting Variability of Numerical Outcomes{% endblock %}
 
 {% block inner_content %}
-<body>
-  <p>
-    This tool enables you to produce plots that describe the reproducibility of any
-    numerical reaction outcome. The generated scatterplots display mean values and
-    confidence intervals and can be exported to use in your supplementary
-    information.
-  </p>
-  <p>
-    <label for="compound" id="compLabel">Compound label:</label>
-    <input type="text" placeholder="e.g. Lactam 4a" size="30" id="compound"><br><br>
-    <label for="type" id="typeLabel">Measurement type:</label>
-    <select id="type">
-      <option value="Yield">Yield (%)</option>
-      <option value="Diastereomeric Excess (de)">Diastereomeric
-        Excess (de, %)</option>
-      <option value="Enantiomeric Excess (ee)">Enantiomeric
-        Excess (ee, %)</option>
-    </select><br><br>
-    <div id="measurements">
-      <div class="flex-panel-display">
-        <div class="flex-panel">
-          <h6>Measurements</h6>
-          <p>
-            Blurb about the importance of repeating reactions and how you must enter at least
-            3 measurements and that magic happens with 5 and more is better.
-          </p>
-          <label for="measure1" id="measLabel1">1:</label>
-          <input type="text" placeholder="Required" size="20" id="measure1"><br><br>
-          <label for="measure2" id="measLabel2">2:</label>
-          <input type="text" placeholder="Required" size="20" id="measure2"><br><br>
-          <label for="measure3" id="measLabel3">3:</label>
-          <input type="text" placeholder="Required" size="20" id="measure3"><br><br>
-          <label for="measure4" id="measLabel4">4:</label>
-          <input type="text" size="20" id="measure4"><br><br>
-          <label for="measure5" id="measLabel5">5:</label>
-          <input type="text" size="20" id="measure5"><br><br>
-          <input type="button" class="button" value=" Add new measurement " id="addButton">
-          <input type="button" class="button" value=" Reset " id="resetButton"><br><br>
-          <label for="width" id="widthLabel">Plot width (pixels):</label>
-          <input type="text" size="10" value="640" id="width"><br><br>
-          <label for="height" id="heightLabel">Plot height (pixels):</label>
-          <input type="text" size="10" value="480" id="height"><br><br>
-          <input type="button" class="button" value=" Generate plot " id="genButton"><br><br>
-        </div>
-        <div class="flex-panel">
-          <h6>Variability plot</h6>
-          <img src="../static/fig/fig.png" alt="Image Placeholder" id="image">
-          <p>
-            To save the variability plot for your compound, select an <strong>Image type</strong>
-            and click <strong>Download plot</strong>
-          </p>
-          <label for="imageType" id="imageTypeLabel">Image type:</label>
-          <select id="imageType">
-            <option value="tiff">TIFF</option>
-            <option value="eps">EPS</option>
-            <option value="pdf">PDF</option>
-            <option value="png">PNG</option>
-            <option value="jpeg">JPEG</option>
-            <option value="svg">SVG</option>
-          </select><br><br>
-          <input type="button" class="button" value=" Download plot " id="saveButton">
-        </div>
+
+<template id="notEnoughValues">
+  <div role="alert">
+    You need to enter at least three reaction outcomes.
+    <button type="button" aria-label="Close"></button>
+  </div>
+</template>
+
+<template id="noChartSelection">
+  <div role="alert">
+    You need to select a chart type.
+    <button type="button" aria-label="Close"></button>
+  </div>
+</template>
+
+<template id="noChartTitle">
+  <div role="alert">
+    You need to enter a chart title.
+    <button type="button" aria-label="Close"></button>
+  </div>
+</template>
+
+<template id="noCompound">
+  <div role="alert">
+    You need to enter a compound.
+    <button type="button" aria-label="Close"></button>
+  </div>
+</template>
+
+<div id="notifications"></div>
+
+<p>
+  This tool enables you to produce plots that describe the reproducibility of any
+  numerical reaction outcome. The generated scatterplots display mean values and
+  confidence intervals and can be exported to use in your supplementary
+  information.
+</p>
+
+<div class="flex-panel-display">
+  <div class="flex-panel">
+    <h6>Measurements</h6>
+
+
+    <p>
+      Blurb about the importance of repeating reactions and how you must enter at least
+      3 measurements and that magic happens with 5 and more is better.
+    </p>
+
+    <div class="formControl">
+      <label for="reactionOutcomeValues">Reaction outcome values</label>
+      <textarea id="reactionOutcomeValues" rows="8">42.0  37.0  44.0  55.0  51.0</textarea>
+    </div>
+
+    <div class="formControl">
+      <label for="chartType">Chart type</label>
+      <select id="chartType" aria-label="Chart Type">
+        <option value="noSelection" selected>Select chart type</option>
+        <option value="isolatedYield">Isolated yield</option>
+        <option value="spectroscopicYield">Spectroscopic yield</option>
+        <option value="chromatographicYield">Chromatographic yield</option>
+        <option value="de">Diastereomeric excess</option>
+        <option value="ee">Enantiomeric excess</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="formControl">
+      <label for="compound">Compound</label>
+      <input id="compound" placeholder="Aniline 6a">
+    </div>
+
+    <div class="formControl">
+      <label for="chartTitle">Chart title</label>
+      <input id="chartTitle" placeholder="Reaction variability plot">
+    </div>
+
+    <div id="otherTypeRow" hidden>
+      <div class="formControl">
+        <label for="otherType">Custom type</label>
+        <input id="otherType" placeholder="yield">
       </div>
     </div>
-  </p>
-  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="crossorigin="anonymous"></script>
-  <script src="../static/js/variability.js" type="module" language="JavaScript"></script>
-</body>
+
+    <div class="formControl">
+      <label for="significance">Significance</label>
+      <input type="number" id="significance" value="95" min="90" max="95" step="1">
+    </div>
+
+    <div class="formControl">
+      <label for="chartWidth">Chart width / height (pixels)</label>
+      <div class="spreadWidth">
+        <input type="number" id="chartWidth" value="640">
+        <input type="number" id="chartHeight" value="480">
+      </div>
+    </div>
+
+
+    <div>
+      <button id="generatePlot">Generate plot</button>
+    </div>
+
+  </div>
+
+  <div class="flex-panel">
+    <h6>Variability plot</h6>
+
+    <div id="variabilityPlotContainer" hidden>
+
+      <div>
+        <button id="downloadChart">Download plot</button>
+        <button id="copyToClipboard">Copy plot to clipboard</button>
+        <span hidden id="copySuccess">Copied!</span>
+        <span hidden id="copyFailure">Copied failed!</span>
+      </div>
+
+      <div>
+        <canvas id="variabilityPlot" width="400" height="250"></canvas>
+      </div>
+    </div>
+
+    <div id="noChart" style="height: 250px">Click "Generate plot"</div>
+  </div>
+</div>
+
+<script type="module" src="../static/js/variability.js"></script>
+
 {% endblock %}
