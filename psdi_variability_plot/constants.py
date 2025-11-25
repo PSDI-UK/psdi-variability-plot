@@ -31,7 +31,7 @@ import shutil
 # ---------
 
 # The name of the command-line script
-CL_SCRIPT_NAME = "variability-plot"
+CL_SCRIPT_NAME = "psdi-variability-plot"
 
 # The name of the Flask app
 APP_NAME = "psdi_variability_plot"

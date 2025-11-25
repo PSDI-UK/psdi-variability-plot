@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: variability-plot
+  name: psdi-variability-plot
 spec:
   selector:
-    app: variability-plot
+    app: psdi-variability-plot
   ports:
     - port: 8000
       targetPort: 8000

@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: variability-plot
+  name: psdi-variability-plot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: variability-plot
+      app: psdi-variability-plot
   template:
     metadata:
       labels:
-        app: variability-plot
+        app: psdi-variability-plot
       annotations:
         elastic.co/dataset: kubernetes.container_logs.psdi_variability_plot
     spec:
@@ -24,11 +24,11 @@ spec:
                     - key: app
                       operator: In
                       values:
-                        - variability-plot
+                        - psdi-variability-plot
                 topologyKey: "kubernetes.io/hostname"
       containers:
-        - name: variability-plot
-          image: variability-plot
+        - name: psdi-variability-plot
+          image: psdi-variability-plot
           volumeMounts:
             - mountPath: /tmp
               name: uploads

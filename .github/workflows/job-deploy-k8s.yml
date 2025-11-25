@@ -69,7 +69,7 @@ jobs:
           DEPLOY_ENV="${{ inputs.environment }}"
           cd deploy/$DEPLOY_ENV
           # update image with version passed from upstream build job
-          kustomize edit set image variability-plot=ghcr.io/psdi-uk/variability-plot/variability-plot:$CONTAINER_TAG
+          kustomize edit set image psdi-variability-plot=ghcr.io/psdi-uk/psdi-variability-plot/psdi-variability-plot:$CONTAINER_TAG
           # return to root of repository
           cd -
           # Apply env specific kustomizations

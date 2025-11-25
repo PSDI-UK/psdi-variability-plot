@@ -2,4 +2,4 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: variability-plot-admin-sa
+  name: psdi-variability-plot-admin-sa

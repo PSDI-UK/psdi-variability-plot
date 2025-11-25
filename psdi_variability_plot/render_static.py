@@ -28,7 +28,7 @@ def main():
                         help="The desired directory (absolute or relative to where this script is run from) to render"
                         "the site to")
 
-    parser.add_argument("--server-name", "-s", type=str, default=DEFAULT_SERVER_ROOT + "variability-plot",
+    parser.add_argument("--server-name", "-s", type=str, default=DEFAULT_SERVER_ROOT + "psdi-variability-plot",
                         help="The name of the server this will be deployed to, which will be used in constructing "
                         "absolute URLs")
 

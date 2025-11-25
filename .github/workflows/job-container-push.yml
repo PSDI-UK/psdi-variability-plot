@@ -17,7 +17,7 @@ on:
 
 jobs:
   container-push:
-    runs-on: variability-plot-runners
+    runs-on: psdi-variability-plot-runners
     steps:
       - uses: actions/checkout@v6
         with:

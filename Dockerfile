@@ -6,20 +6,20 @@
 # ------------------
 #
 # 1. Download the service repo containing the source code
-#    from https://github.com/PSDI-UK/variability-plot/tree/main
+#    from https://github.com/PSDI-UK/psdi-variability-plot/tree/main
 # 2. Copy this file into the main directory of the repo
 # 3. From within the main directory of the repo, use docker to build the image
-#    'variability-plot' via the command
-#    ``docker build -t variability-plot .``
+#    'psdi-variability-plot' via the command
+#    ``docker build -t psdi-variability-plot .``
 #
 # To check that the image has been build run ``docker images``, which should
-# list and image called 'variability-plot'.
+# list and image called 'psdi-variability-plot'.
 #
 #
 # Running the service
 # -------------------
 #
-# The command ``docker run -p 8000:8000 variability-plot`` will run the
+# The command ``docker run -p 8000:8000 psdi-variability-plot`` will run the
 # service on port 8000 of localhost, with logs output to stdout. To access the
 # service visit http://localhost:8000 in your browser.
 #
