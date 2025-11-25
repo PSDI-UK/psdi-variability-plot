@@ -1,4 +1,4 @@
-"""@file variability_plot/constants.py
+"""@file psdi_variability_plot/constants.py
 
 Miscellaneous constant values used within this project.
 
@@ -34,7 +34,7 @@ import shutil
 CL_SCRIPT_NAME = "variability-plot"
 
 # The name of the Flask app
-APP_NAME = "variability_plot"
+APP_NAME = "psdi_variability_plot"
 
 # Environmental variables
 LOG_MODE_EV = "LOG_MODE"

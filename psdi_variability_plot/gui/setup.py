@@ -13,11 +13,11 @@ from typing import Any
 import werkzeug
 from flask import Flask, cli
 
-import variability_plot
-from variability_plot import constants as const
-from variability_plot.gui.env import get_env
-from variability_plot.gui.get import init_get
-from variability_plot.gui.post import init_post
+import psdi_variability_plot
+from psdi_variability_plot import constants as const
+from psdi_variability_plot.gui.env import get_env
+from psdi_variability_plot.gui.get import init_get
+from psdi_variability_plot.gui.post import init_post
 
 _app: Flask | None = None
 
@@ -71,7 +71,7 @@ def start_app():
     old_cwd = os.getcwd()
 
     try:
-        os.chdir(os.path.join(variability_plot.__path__[0], ".."))
+        os.chdir(os.path.join(psdi_variability_plot.__path__[0], ".."))
         get_app().run(debug=get_env().debug_mode)
     finally:
         # Return to the previous directory after running the app

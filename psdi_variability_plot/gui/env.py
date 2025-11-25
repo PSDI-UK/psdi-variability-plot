@@ -11,8 +11,8 @@ from subprocess import run
 from traceback import format_exc
 from typing import TypeVar
 
-from variability_plot import constants as const
-from variability_plot import log_utility
+from psdi_variability_plot import constants as const
+from psdi_variability_plot import log_utility
 
 
 class SiteEnv:

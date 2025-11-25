@@ -8,7 +8,7 @@ Miscellaneous utility functions used by this project
 import sys
 import textwrap
 
-from variability_plot.constants import TERM_WIDTH
+from psdi_variability_plot.constants import TERM_WIDTH
 
 
 class TextColors:

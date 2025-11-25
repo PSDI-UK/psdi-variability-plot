@@ -9,10 +9,10 @@ from argparse import ArgumentParser
 
 from flask import render_template
 
-import variability_plot
-from variability_plot.gui.env import update_env
-from variability_plot.gui.get import d_pages
-from variability_plot.gui.setup import get_app
+import psdi_variability_plot
+from psdi_variability_plot.gui.env import update_env
+from psdi_variability_plot.gui.get import d_pages
+from psdi_variability_plot.gui.setup import get_app
 
 DEFAULT_TARGET_DIR = "public"
 DEFAULT_SERVER_ROOT = "psdi-uk.github.io/"
@@ -64,13 +64,13 @@ def main():
         raise FileNotFoundError(f"Unable to create directory {output_dir}")
 
     # Get the location of the project's root directory
-    project_dir = os.path.abspath(os.path.join(variability_plot.__path__[0], ".."))
+    project_dir = os.path.abspath(os.path.join(psdi_variability_plot.__path__[0], ".."))
 
     # Copy over the static contents directly to the output directory
     target_static_dir = os.path.join(output_dir, "static")
     if os.path.exists(target_static_dir):
         shutil.rmtree(target_static_dir)
-    shutil.copytree(os.path.join(project_dir, "variability_plot/static"),
+    shutil.copytree(os.path.join(project_dir, "psdi_variability_plot/static"),
                     target_static_dir)
 
     # Start the app so we're able to render pages

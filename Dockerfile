@@ -33,7 +33,7 @@ RUN apt-get -y install libxrender1 libxext6 git
 RUN pip install --upgrade pip
 
 WORKDIR /app
-COPY variability_plot /app/variability_plot
+COPY psdi_variability_plot /app/psdi_variability_plot
 COPY CHANGELOG.md CONTRIBUTING.md LICENSE pyproject.toml README.md /app/
 
 ENV SETUPTOOLS_SCM_PRETEND_VERSION="1.0.0"
@@ -57,10 +57,10 @@ ENV SHA=$SHA
 
 EXPOSE 8000
 
-RUN mkdir -p /app/variability_plot/static/uploads
-RUN mkdir -p /app/variability_plot/static/downloads
+RUN mkdir -p /app/psdi_variability_plot/static/uploads
+RUN mkdir -p /app/psdi_variability_plot/static/downloads
 
 #set web server timout to more than application default (60)
 ENV TIMEOUT=90
 
-CMD ["sh", "-c", "gunicorn -b 0.0.0.0:8000 variability_plot.app:app --timeout $TIMEOUT"]
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:8000 psdi_variability_plot.app:app --timeout $TIMEOUT"]

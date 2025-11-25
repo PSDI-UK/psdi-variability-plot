@@ -3,7 +3,7 @@ requires = ["hatchling==1.27.0", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "variability_plot"
+name = "psdi_variability_plot"
 authors = [
   # Add your name and email here
   { name = "Bryan Gillis", email = "7204836+brgillis@users.noreply.github.com" },
@@ -52,8 +52,8 @@ doc = ["pdoc3", "gunicorn", "pytest", "selenium"]
 plots = ["matplotlib"]
 
 [project.scripts]
-variability-plot-gui = "variability_plot.main_gui:main"
-variability-plot-render = "variability_plot.render_static:main"
+variability-plot-gui = "psdi_variability_plot.main_gui:main"
+variability-plot-render = "psdi_variability_plot.render_static:main"
 
 [project.urls]
 Homepage = "https://variability-plot.psdi.ac.uk/"
@@ -78,7 +78,7 @@ exclude = [
 pythonpath = ["."]
 
 [tool.coverage.run]
-source_pkgs = ["variability_plot"]
+source_pkgs = ["psdi_variability_plot"]
 branch = true
 # main_gui.py is tested via the Selenium tests, which are indirect enough that the coverage tool doesn't pick up that the
 # lines are being tested, so we exclude it from the coverage % calculation

@@ -1,4 +1,4 @@
-"""@file variability_plot/logging.py
+"""@file psdi_variability_plot/logging.py
 
 Functions and classes related to logging and other messaging for the user
 """

@@ -5,9 +5,9 @@ This script acts as a server for the PSDI Variability Plot website.
 
 from argparse import ArgumentParser
 
-from variability_plot.gui.env import update_env
-from variability_plot.gui.setup import start_app
-from variability_plot.utils import print_wrap
+from psdi_variability_plot.gui.env import update_env
+from psdi_variability_plot.gui.setup import start_app
+from psdi_variability_plot.utils import print_wrap
 
 
 def main():

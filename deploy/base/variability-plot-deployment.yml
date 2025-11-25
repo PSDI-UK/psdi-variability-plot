@@ -12,7 +12,7 @@ spec:
       labels:
         app: variability-plot
       annotations:
-        elastic.co/dataset: kubernetes.container_logs.variability_plot
+        elastic.co/dataset: kubernetes.container_logs.psdi_variability_plot
     spec:
       affinity:
         podAntiAffinity:

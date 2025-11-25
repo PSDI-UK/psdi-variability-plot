@@ -14,7 +14,7 @@ This is a template project for a PSDI project which deploys a Flask website, als
 
 One you have a new project, you'll want to do the following tasks:
 
-1. Replace the "variability_plot" placeholders throughout this project with the actual project name. This project provides a script to do this, at `scripts/rename_project.py`. You can run this through e.g.:
+1. Replace the "psdi_variability_plot" placeholders throughout this project with the actual project name. This project provides a script to do this, at `scripts/rename_project.py`. You can run this through e.g.:
 
 ```bash
 $ python scripts/rename_project.py new-project-name New Project Name
@@ -59,7 +59,7 @@ If something went wrong, it's easiest to undo this through using git to revert t
     - (Automated workflows for various tasks related to project maintenance)
 - `deploy`
   - (Files used as part of the deployment to STFC infrastructure)
-- `variability_plot` (Primary source directory)
+- `psdi_variability_plot` (Primary source directory)
   - `static` (Static code and assets for the web app)
     - `img`
       - (Image assets for the web app)
@@ -158,7 +158,7 @@ In addition to the dependencies listed above, this project uses the assets made 
 
 ## Using the online app
 
-Enter https://variability_plot.psdi.ac.uk/ in a browser. Guidance on usage is given on each page of the website.
+Enter https://psdi_variability_plot.psdi.ac.uk/ in a browser. Guidance on usage is given on each page of the website.
 
 ## Running the Python/Flask app locally
 
