@@ -224,6 +224,8 @@ function generatePlot() {
 
         const scatterPlotData = valuesAsNumbers.map((number, index) => ({ x: index + 1, y: number }));
 
+        const devicePixelRatio = parseInt(document.querySelector("#devicePixelRatio").value);
+
         currentChart = new Chart(ctx, {
 
             data: {
@@ -273,7 +275,7 @@ function generatePlot() {
 
                 responsive: false,
 
-                devicePixelRatio: 4,
+                devicePixelRatio,
 
                 animation: {
                     duration: 0,
