@@ -14,10 +14,30 @@ on:
     branches: ["main"]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./psdi_variability_plot
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - run: npm install
+      - run: npm run build
+      - name: Upload JS bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: js-bundle
+          path: psdi_variability_plot/static/js/variability.js
+
   test-all:
-    if: ${{ github.event_name == 'push' || ! github.event.inputs.skip-tests }}
+    if: ${{ github.event_name == 'push' || ! github.event.inputs.skip-tests }} && (needs.build.result == 'success')
 
     uses: ./.github/workflows/job-test-main.yml
+    needs: [build]
     secrets: inherit # pass all secrets for the environment
 
   deploy-pages:

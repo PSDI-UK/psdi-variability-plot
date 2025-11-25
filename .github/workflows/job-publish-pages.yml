@@ -40,6 +40,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install .
 
+      - name: Download JS bundle
+        uses: actions/download-artifact@v5
+        with:
+          name: js-bundle
+          path: psdi_variability_plot/static/js
+
       - name: Render Static Content
         run: psdi-variability-plot-render
 
