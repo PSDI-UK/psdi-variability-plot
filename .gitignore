@@ -26,7 +26,8 @@ scripts/purge-common-style.sh
 
 # Downloaded assets
 psdi-assets.tar.gz
-psdi-common-style-*.*.*psdi_variability_plot/node_modules/
+psdi-common-style-*.*.*
+psdi_variability_plot/node_modules/
 psdi_variability_plot/dist/js/variability.js
 
 # Node modules
