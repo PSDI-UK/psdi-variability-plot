@@ -67,11 +67,11 @@ def main():
     project_dir = os.path.abspath(os.path.join(psdi_variability_plot.__path__[0], ".."))
 
     # Copy over the static contents directly to the output directory
+    source_static_dir = "psdi_variability_plot/static"
     target_static_dir = os.path.join(output_dir, "static")
     if os.path.exists(target_static_dir):
         shutil.rmtree(target_static_dir)
-    shutil.copytree(os.path.join(project_dir, "psdi_variability_plot/static"),
-                    target_static_dir)
+    shutil.copytree(source_static_dir, target_static_dir)
 
     # Start the app so we're able to render pages
 
