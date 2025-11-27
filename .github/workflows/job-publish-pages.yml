@@ -30,6 +30,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Download JS bundle
+        uses: actions/download-artifact@v5
+        with:
+          name: js-bundle
+          path: psdi_variability_plot/static/js
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v6
         with:
@@ -39,12 +45,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install .
-
-      - name: Download JS bundle
-        uses: actions/download-artifact@v5
-        with:
-          name: js-bundle
-          path: psdi_variability_plot/static/js
 
       - name: Render Static Content
         run: psdi-variability-plot-render
