@@ -304,10 +304,6 @@ div#noChart {
   margin-bottom: 0.6em;
 }
 
-textarea#reactionOutcomeValues {
-  resize: vertical;
-}
-
 .spreadWidth {
   display: flex;
 }
@@ -320,4 +316,13 @@ textarea#reactionOutcomeValues {
 
 .spreadWidth > *:first-child {
   margin-left: 0;
+}
+
+input.valueField {
+    width: 100px;
+    margin: 2px;
+}
+
+button#addNewValueField {
+    width: fit-content;
 }

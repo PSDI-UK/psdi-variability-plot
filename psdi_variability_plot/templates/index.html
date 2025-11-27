@@ -39,6 +39,8 @@
   </div>
 </template>
 
+<template id="newValueField"><input class="valueField" aria-labelledby="valuesLabel"></template>
+
 <div id="notifications"></div>
 
 <p>
@@ -61,8 +63,9 @@
     </p>
 
     <div class="formControl">
-      <label for="reactionOutcomeValues">Reaction outcome values</label>
-      <textarea id="reactionOutcomeValues" rows="8"></textarea>
+      <label id="valuesLabel">Reaction outcome values</label>
+      <div id="valuesArea"></div>
+      <button id="addNewValueField" type="button">Add new field</button>
     </div>
 
     <div class="formControl">

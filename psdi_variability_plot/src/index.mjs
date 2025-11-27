@@ -7,7 +7,6 @@ import { Chart, LinearScale, ScatterController, LineElement, LineController, Poi
 
 Chart.register(LinearScale, ScatterController, LineElement, LineController, PointElement, Filler);
 
-const valuesTextArea = document.querySelector("textarea#reactionOutcomeValues");
 const chartWidthInput = document.querySelector("input#chartWidth");
 const chartHeightInput = document.querySelector("input#chartHeight");
 const chartTypeSelect = document.querySelector("select#chartType");
@@ -23,6 +22,8 @@ const noChartDiv = document.querySelector("div#noChart");
 const generatePlotButton = document.querySelector("button#generatePlot");
 const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
+const valuesAreaDiv = document.querySelector("div#valuesArea");
+const addNewValueFieldButton = document.querySelector("button#addNewValueField");
 
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
@@ -68,7 +69,6 @@ function capitalise(text) {
 
 function generatePlot() {
 
-    const valuesText = valuesTextArea.value;
     const chartWidth = parseInt(chartWidthInput.value);
     const chartHeight = parseInt(chartHeightInput.value);
     const chartType = chartTypeSelect.value;
@@ -76,13 +76,17 @@ function generatePlot() {
     const compound = compoundInput.value;
     const significance = parseFloat(significanceInput.value);
 
-    const valuesAsText = valuesText.match(/-?\d+(\.\d+)?/g);
+    const valueFields = Array.from(document.querySelectorAll("#valuesArea input.valueField"));
+
+    const values = valueFields
+        .map(field => parseFloat(field.value))
+        .filter(value => !isNaN(value));
 
     let validated = true;
 
     resetAlerts();
 
-    if ((valuesAsText === null) || (valuesAsText.length < 3)) {
+    if ((values === null) || (values.length < 3)) {
         showAlert("notEnoughValues");
         validated = false;
     }
@@ -104,9 +108,7 @@ function generatePlot() {
 
     if (validated) {
 
-        const valuesAsNumbers = valuesAsText.map(number => parseFloat(number));
-
-        const results = calculateVariabilityData(valuesAsNumbers, 1 - (significance / 100));
+        const results = calculateVariabilityData(values, 1 - (significance / 100));
 
         const customTextboxOverlayPlugin = {
 
@@ -194,7 +196,7 @@ function generatePlot() {
 
         // Generate the chart.
 
-        const mean = valuesAsNumbers.reduce((acc, current) => acc + current, 0.0) / valuesAsNumbers.length;
+        const mean = values.reduce((acc, current) => acc + current, 0.0) / values.length;
 
         const lowerConfidenceBound = Math.round(results.ci[0]);
         const upperConfidenceBound = Math.round(results.ci[1]);
@@ -213,7 +215,7 @@ function generatePlot() {
 
         const ctx = document.getElementById('variabilityPlot').getContext('2d');
 
-        const labels = valuesAsNumbers;
+        const labels = values;
 
         if (currentChart !== undefined) {
             currentChart.destroy();
@@ -222,7 +224,7 @@ function generatePlot() {
         variabilityPlotCanvas.setAttribute("width", chartWidth);
         variabilityPlotCanvas.setAttribute("height", chartHeight);
 
-        const scatterPlotData = valuesAsNumbers.map((number, index) => ({ x: index + 1, y: number }));
+        const scatterPlotData = values.map((number, index) => ({ x: index + 1, y: number }));
 
         const devicePixelRatio = parseInt(document.querySelector("#devicePixelRatio").value);
 
@@ -244,7 +246,7 @@ function generatePlot() {
                         // Lower confidence bound.
 
                         type: 'line',
-                        data: [[0, lowerConfidenceBound], [valuesAsNumbers.length + 1, lowerConfidenceBound]],
+                        data: [[0, lowerConfidenceBound], [values.length + 1, lowerConfidenceBound]],
                         borderColor: 'rgba(0, 0, 0, 0)',
                         backgroundColor: 'rgba(54, 162, 235, 0.5)',
                         pointStyle: false,
@@ -254,7 +256,7 @@ function generatePlot() {
                         // Mean line.
 
                         type: 'line',
-                        data: [[0, mean], [valuesAsNumbers.length + 1, mean]],
+                        data: [[0, mean], [values.length + 1, mean]],
                         borderColor: 'rgba(64, 64, 255)',
                         pointStyle: false,
                     },
@@ -262,7 +264,7 @@ function generatePlot() {
                         // Upper confidence bound.
 
                         type: 'line',
-                        data: [[0, upperConfidenceBound], [valuesAsNumbers.length + 1, upperConfidenceBound]],
+                        data: [[0, upperConfidenceBound], [values.length + 1, upperConfidenceBound]],
                         borderColor: 'rgba(0, 0, 0, 0)',
                         pointStyle: false,
                     },
@@ -315,7 +317,7 @@ function generatePlot() {
                     x: {
                         type: 'linear',
                         min: 0.8,
-                        max: valuesAsNumbers.length + 0.2,
+                        max: values.length + 0.2,
                         ticks: {
                             precision: 0,
                             includeBounds: false,
@@ -390,7 +392,20 @@ function downloadChart() {
     anchor.click();
 }
 
+function addNewValueField(count) {
+
+    for (let n = 0; n < count; n++) {
+
+        const newValue = document.querySelector(`template#newValueField`).content.cloneNode(true)
+
+        valuesAreaDiv.append(newValue)
+    }
+}
+
 generatePlotButton.addEventListener("click", generatePlot);
 chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
+addNewValueFieldButton.addEventListener("click", () => addNewValueField(1));
+
+addNewValueField(5)
