@@ -13,14 +13,14 @@
 
 <template id="notEnoughValues">
   <div role="alert">
-    You need to enter at least three reaction outcomes.
+    You need to enter at least three reaction outcome values.
     <button type="button" aria-label="Close"></button>
   </div>
 </template>
 
 <template id="noChartSelection">
   <div role="alert">
-    You need to select a chart type.
+    You need to select a reaction outcome.
     <button type="button" aria-label="Close"></button>
   </div>
 </template>
@@ -34,7 +34,7 @@
 
 <template id="noCompound">
   <div role="alert">
-    You need to enter a compound.
+    You need to enter a product label.
     <button type="button" aria-label="Close"></button>
   </div>
 </template>
@@ -69,21 +69,21 @@
     </div>
 
     <div class="formControl">
-      <label for="chartType">Chart type</label>
+      <label for="chartType">Reaction outcome</label>
       <select id="chartType" aria-label="Chart Type">
-        <option value="noSelection" selected>Select chart type</option>
-        <option value="isolatedYield">Isolated yield</option>
-        <option value="spectroscopicYield">Spectroscopic yield</option>
-        <option value="chromatographicYield">Chromatographic yield</option>
-        <option value="de">Diastereomeric excess</option>
-        <option value="ee">Enantiomeric excess</option>
+        <option value="noSelection" selected>Select reaction outcome</option>
+        <option value="isolatedYield">Isolated yield (%)</option>
+        <option value="spectroscopicYield">Spectroscopic yield (%)</option>
+        <option value="chromatographicYield">Chromatographic yield (%)</option>
+        <option value="de">Diastereomeric excess (%)</option>
+        <option value="ee">Enantiomeric excess (%)</option>
         <option value="other">Other</option>
       </select>
     </div>
 
     <div class="formControl">
-      <label for="compound">Compound</label>
-      <input id="compound" placeholder="Aniline 6a">
+      <label for="compound">Product label</label>
+      <input id="compound" placeholder="e.g., Amine 2">
     </div>
 
     <div class="formControl">
@@ -99,8 +99,8 @@
     </div>
 
     <div class="formControl">
-      <label for="significance">Significance</label>
-      <input type="number" id="significance" value="95" min="90" max="95" step="1">
+      <label for="significance">Confidence level (%)</label>
+      <input type="number" id="significance" value="95" min="90" max="95" step="5">
     </div>
 
     <div class="formControl">
@@ -135,7 +135,7 @@
         <button id="downloadChart">Download plot</button>
         <button id="copyToClipboard">Copy plot to clipboard</button>
         <span hidden id="copySuccess">Copied!</span>
-        <span hidden id="copyFailure">Copied failed!</span>
+        <span hidden id="copyFailure">Copy failed.</span>
       </div>
 
       <div>
