@@ -54,7 +54,7 @@
     <h6>Measurements</h6>
 
     <p>
-      Enter a <em>minimum</em> of three values (with a space between them) for the reaction
+      Enter a <em>minimum</em> of three values for the reaction
       outcome, from repeating the experimental process each time under identical
       conditions. The width of the confidence interval that accompanies the plotted
       mean value is based on a combination of the outcome variance and the number of
@@ -79,6 +79,11 @@
         <option value="ee">Enantiomeric excess (%)</option>
         <option value="other">Other</option>
       </select>
+      <div id="otherTypeRow" hidden>
+        <div class="formControl">
+          <input id="otherType" placeholder="Define outcome">
+        </div>
+      </div>
     </div>
 
     <div class="formControl">
@@ -91,16 +96,12 @@
       <input id="chartTitle" placeholder="Reaction variability plot">
     </div>
 
-    <div id="otherTypeRow" hidden>
-      <div class="formControl">
-        <label for="otherType">Custom type</label>
-        <input id="otherType" placeholder="yield">
-      </div>
-    </div>
-
     <div class="formControl">
       <label for="significance">Confidence level (%)</label>
-      <input type="number" id="significance" value="95" min="90" max="95" step="5">
+      <select id="significance" aria-label="Chart Type">
+        <option value="95" selected>95</option>
+        <option value="90">90</option>
+      </select>
     </div>
 
     <div class="formControl">
