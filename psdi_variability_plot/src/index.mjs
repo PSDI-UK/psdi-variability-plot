@@ -12,7 +12,7 @@ const chartHeightInput = document.querySelector("input#chartHeight");
 const chartTypeSelect = document.querySelector("select#chartType");
 const chartTitleInput = document.querySelector("input#chartTitle");
 const compoundInput = document.querySelector("input#compound");
-const significanceInput = document.querySelector("input#significance");
+const significanceInput = document.querySelector("select#significance");
 const variabilityPlotCanvas = document.querySelector("#variabilityPlot");
 const variabilityPlotContainer = document.querySelector("#variabilityPlotContainer");
 const notificationsDiv = document.querySelector("div#notifications");
@@ -205,7 +205,11 @@ function generatePlot() {
         const legendText2 =
             `${significance}% Confidence interval: ${lowerConfidenceBound}% to ${upperConfidenceBound}%`;
 
-        const chartTypeText = chartType !== "other" ? chartTypeLabel[chartType] : otherTypeInput.value;
+        var otherTypeText = otherTypeInput.value.trim();
+        otherTypeText = otherTypeText.replace('(%)', '').trim();
+        otherTypeText = otherTypeText.replace('%', '').trim();
+
+        const chartTypeText = chartType !== "other" ? chartTypeLabel[chartType] : otherTypeText;
 
         // const title = 'Yield of Lactam 4a';
         const title = `${capitalise(chartTitle)} for the ${chartTypeText} of ${compound}`;
@@ -340,6 +344,12 @@ function generatePlot() {
 
 function changeOtherTypeVisibility() {
     otherTypeRowDiv.hidden = chartTypeSelect.value !== "other";
+
+    if (chartTypeSelect.value !== "other") {
+        otherTypeInput.value = "";
+    } else {
+        otherTypeInput.focus();
+    }
 }
 
 async function copyToClipboard() {
