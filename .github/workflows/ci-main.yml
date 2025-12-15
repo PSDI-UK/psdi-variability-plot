@@ -22,13 +22,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22.x'
       - run: npm install
       - run: npm run build
       - name: Upload JS bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: js-bundle
           path: psdi_variability_plot/static/js/variability.js
