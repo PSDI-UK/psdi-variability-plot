@@ -1,39 +1,3 @@
-/*
-  index.css
-  Version 1.0, 11th October 2024
-*/
-
-@import url("./psdi-common.css");
-
-/* Special handling for dark mode - we override the color specifications to match light mode here, and store the
-values for dark mode in variables that we can reference when we want to retrieve them
-*/
-[data-theme='dark'] {
-
-  /* In dark mode, store the same value as in light mode - the variable values will be overridden to enact the toggle */
-  --ifm-background-color: var(--psdi-bg-color-default);
-
-  --ifm-color-primary         : var(--psdi-bg-color-primary);
-  --ifm-color-primary-dark    : var(--psdi-bg-color-primary-dark);
-  --ifm-color-primary-darker  : var(--psdi-bg-color-primary-darker);
-  --ifm-color-primary-darkest : var(--psdi-bg-color-primary-darkest);
-  --ifm-color-primary-light   : var(--psdi-bg-color-primary-light);
-  --ifm-color-primary-lighter : var(--psdi-bg-color-primary-lighter);
-  --ifm-color-primary-lightest: var(--psdi-bg-color-primary-lightest);
-
-  --ifm-color-secondary           : var(--psdi-bg-color-secondary);
-  --ifm-color-secondary-dark      : var(--psdi-bg-color-secondary-dark);
-  --ifm-background-color-secondary: var(--psdi-bg-color-secondary);
-
-  --ifm-font-color-base        : var(--psdi-dark-text-color-body);
-  --ifm-hero-text-color        : var(--psdi-light-text-color-body);
-  --ifm-heading-color          : var(--psdi-dark-text-color-heading);
-  --psdi-heading-color-inverse : var(--psdi-light-text-color-heading);
-  --ifm-font-color-secondary   : var(--psdi-text-color-secondary-body);
-  --ifm-heading-color-secondary: var(--psdi-dark-text-color-heading);
-  --psdi-font-color-faint      : gray;
-}
-
 /* Forms inherit style from normal content, and make sure content is well away from the edges */
 form {
   width      : 95%;
@@ -280,14 +244,14 @@ select#dark-background option {
 }
 
 div#noChart {
-  border: 1px solid #ccc;
-  background: #eee;
-  display: flex;
+  border         : 1px solid #ccc;
+  background     : #eee;
+  display        : flex;
   justify-content: center;
-  align-items: center;
-  color: gray;
-  font-size: 150%;
-  border-radius: 6px;
+  align-items    : center;
+  color          : gray;
+  font-size      : 150%;
+  border-radius  : 6px;
 }
 
 #copySuccess {
@@ -299,22 +263,22 @@ div#noChart {
 }
 
 .formControl {
-  display: flex;
+  display       : flex;
   flex-direction: column;
-  margin-bottom: 0.6em;
+  margin-bottom : 0.6em;
 }
 
 .spreadWidth {
   display: flex;
 }
 
-.spreadWidth > * {
-  flex: 1;
+.spreadWidth>* {
+  flex       : 1;
   margin-left: 0.5em;
-  display: flex;
+  display    : flex;
 }
 
-.spreadWidth > *:first-child {
+.spreadWidth>*:first-child {
   margin-left: 0;
 }
 
