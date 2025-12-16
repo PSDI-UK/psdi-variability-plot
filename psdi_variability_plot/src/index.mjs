@@ -72,6 +72,7 @@ function generatePlot() {
     const chartWidth = parseInt(chartWidthInput.value);
     const chartHeight = parseInt(chartHeightInput.value);
     const chartType = chartTypeSelect.value;
+    const otherDef = otherTypeInput.value;
     const chartTitle = chartTitleInput.value;
     const compound = compoundInput.value;
     const significance = parseFloat(significanceInput.value);
@@ -83,27 +84,39 @@ function generatePlot() {
         .filter(value => !isNaN(value));
 
     let validated = true;
+    let alertText = 'You need to:\n';
+    let valuesText = '    enter at least three reaction outcome values\n';
+    let outcomeText = '    select a reaction outcome\n';
+    let otherText = "    enter a definition of 'Other'\n";
+    let productText = '    enter a product label\n';
 
-    resetAlerts();
+    //resetAlerts();
 
     if ((values === null) || (values.length < 3)) {
-        showAlert("notEnoughValues");
+        //showAlert("notEnoughValues");
         validated = false;
+        alertText += valuesText;
     }
 
     if (chartType === "noSelection") {
-        showAlert("noChartSelection");
+        //showAlert("noChartSelection");
         validated = false;
+        alertText += outcomeText;
     }
 
-    if (chartTitle === "") {
-        showAlert("noChartTitle");
+    if ((chartType === "other") && (otherDef === "")) {
         validated = false;
+        alertText += otherText;
     }
 
     if (compound === "") {
-        showAlert("noCompound");
+        //showAlert("noCompound");
         validated = false;
+        alertText += productText;
+    }
+
+    if (alertText !== 'You need to:\n') {
+        window.alert(alertText);
     }
 
     if (validated) {
