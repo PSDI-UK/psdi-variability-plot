@@ -171,4 +171,4 @@ def test_initial_frontpage(driver: WebDriver):
     # Check that the front page contains the header "PSDI Variability Plot".
 
     element = wait_for_element(driver, "//header//h5")
-    assert element.text == "PSDI Variability Plot"
+    assert element.text == "Variability Plot Generator"
