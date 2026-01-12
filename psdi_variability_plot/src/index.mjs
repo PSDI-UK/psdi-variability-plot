@@ -10,7 +10,7 @@ Chart.register(LinearScale, ScatterController, LineElement, LineController, Poin
 const chartWidthInput = document.querySelector("input#chartWidth");
 const chartHeightInput = document.querySelector("input#chartHeight");
 const chartTypeSelect = document.querySelector("select#chartType");
-const chartTitleInput = document.querySelector("input#chartTitle");
+//const chartTitleInput = document.querySelector("input#chartTitle");
 const compoundInput = document.querySelector("input#compound");
 const significanceInput = document.querySelector("select#significance");
 const variabilityPlotCanvas = document.querySelector("#variabilityPlot");
@@ -24,6 +24,8 @@ const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
 const addNewValueFieldButton = document.querySelector("button#addNewValueField");
+
+var nextValueIndex = 0;
 
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
@@ -73,7 +75,7 @@ function generatePlot() {
     const chartHeight = parseInt(chartHeightInput.value);
     const chartType = chartTypeSelect.value;
     const otherDef = otherTypeInput.value;
-    const chartTitle = chartTitleInput.value;
+//    const chartTitle = chartTitleInput.value;
     const compound = compoundInput.value;
     const significance = parseFloat(significanceInput.value);
 
@@ -225,7 +227,7 @@ function generatePlot() {
         const chartTypeText = chartType !== "other" ? chartTypeLabel[chartType] : otherTypeText;
 
         // const title = 'Yield of Lactam 4a';
-        const title = `${capitalise(chartTitle)} for the ${chartTypeText} of ${compound}`;
+//        const title = `${capitalise(chartTitle)} for the ${chartTypeText} of ${compound}`;
 
         const xLabel = "Iteration";
         const yLabel = `${capitalise(chartTypeText)} of ${compound} (%)`;
@@ -304,10 +306,10 @@ function generatePlot() {
                     datalabels: {
                         display: false,
                     },
-                    title: {
-                        display: true,
-                        text: title,
-                    },
+//                    title: {
+//                        display: true,
+//                        text: title,
+//                    },
                     legend: {
                         display: false,
                     },
@@ -415,14 +417,42 @@ function downloadChart() {
     anchor.click();
 }
 
+function deleteValueField(e) {
+    const id = e.target.id.split('-');
+
+    if (id[0] == 'remove') {
+        e.target.nextSibling.remove();
+        e.target.remove();
+
+        nextValueIndex--;
+
+        for (var i = parseInt(id[1]) + 1; i <= nextValueIndex; i++) {
+            var button = document.getElementById('remove-' + i);
+            button.id = 'remove-' + (i - 1);
+        }
+    }
+}
+
 function addNewValueField(count) {
 
-    for (let n = 0; n < count; n++) {
+    for (let n = nextValueIndex; n < nextValueIndex + count; n++) {
 
-        const newValue = document.querySelector(`template#newValueField`).content.cloneNode(true)
+        var newValue = document.querySelector(`template#newValueField`).content.cloneNode(true);
+        var newDiv = document.querySelector(`template#newValueDiv`).content.cloneNode(true);
+        var newButton = document.createElement("button");
 
-        valuesAreaDiv.append(newValue)
+        newButton.id = 'remove-' + n;
+        newButton.style.width = '24px';
+        newButton.style.height = '30px';
+        newButton.textContent = '-';
+
+        newDiv.appendChild(newButton);
+        newDiv.appendChild(newValue);
+        valuesAreaDiv.appendChild(newDiv);
     }
+
+    valuesAreaDiv.addEventListener("click", deleteValueField);
+    nextValueIndex += count;
 }
 
 generatePlotButton.addEventListener("click", generatePlot);
