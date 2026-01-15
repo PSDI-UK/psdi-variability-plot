@@ -10,7 +10,6 @@ Chart.register(LinearScale, ScatterController, LineElement, LineController, Poin
 const chartWidthInput = document.querySelector("input#chartWidth");
 const chartHeightInput = document.querySelector("input#chartHeight");
 const chartTypeSelect = document.querySelector("select#chartType");
-//const chartTitleInput = document.querySelector("input#chartTitle");
 const compoundInput = document.querySelector("input#compound");
 const significanceInput = document.querySelector("select#significance");
 const variabilityPlotCanvas = document.querySelector("#variabilityPlot");
@@ -24,6 +23,7 @@ const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
 const addNewValueFieldButton = document.querySelector("button#addNewValueField");
+const confirmCopyButton = document.querySelector("button#confirmCopy");
 
 var nextValueIndex = 0;
 
@@ -367,6 +367,20 @@ function changeOtherTypeVisibility() {
     }
 }
 
+async function confirmCopy(e) {
+
+    // Finishes copying the plot to the clipboard when a NotAllowedError
+    // occurs in function copyToClipboard()
+
+    await navigator.clipboard.write(e.currentTarget.data);
+
+    confirmCopyButton.style.display = "none";
+
+    copySuccess.hidden = false;
+
+    setTimeout(() => copySuccess.hidden = true, 2000);
+}
+
 async function copyToClipboard() {
 
     // Async/await method replacing toBlob() callback
@@ -390,15 +404,27 @@ async function copyToClipboard() {
 
     try {
         const blob = await getBlobFromCanvas(variabilityPlotCanvas);
-        // Create ClipboardItem with blob and it's type, and add to an array
+        // Create ClipboardItem with blob and its type, and add to an array
         const data = [new ClipboardItem({ [blob.type]: blob })];
         // Write the data to the clipboard
-        await navigator.clipboard.write(data);
+        try {
+            // The following line causes an error in Safari, because it
+            // needs to be explicitly initiated by a physical user gesture
+            // such as a click (a software click does not work)
 
-        copySuccess.hidden = false;
+            await navigator.clipboard.write(data);
 
-        setTimeout(() => copySuccess.hidden = true, 2000);
+            copySuccess.hidden = false;
 
+            setTimeout(() => copySuccess.hidden = true, 2000);
+        }
+        catch (NotAllowedError) {
+
+            // Shows the 'Confirm copy' button
+
+            confirmCopyButton.data = data;
+            confirmCopyButton.style.display = "inline";
+        }
     } catch (error) {
 
         copyFailure.hidden = false;
@@ -460,5 +486,6 @@ chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
 addNewValueFieldButton.addEventListener("click", () => addNewValueField(1));
+confirmCopyButton.addEventListener("click", confirmCopy);
 
 addNewValueField(5)
