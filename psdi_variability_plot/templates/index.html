@@ -104,8 +104,8 @@
     <div class="formControl">
       <label id="chartSizeLabel">Chart width / height (pixels)</label>
       <div class="spreadWidth">
-        <input type="number" aria-labelledby="chartSizeLabel" id="chartWidth" value="640">
-        <input type="number" aria-labelledby="chartSizeLabel" id="chartHeight" value="480">
+        <input type="number" aria-labelledby="chartSizeLabel" id="chartWidth" value="640" step="10">
+        <input type="number" aria-labelledby="chartSizeLabel" id="chartHeight" value="480" step="10">
       </div>
     </div>
 
@@ -132,7 +132,6 @@
       <div>
         <button id="downloadChart">Download plot</button>
         <button id="copyToClipboard">Copy plot to clipboard</button>
-        <button id="confirmCopy" style="display: none">Confirm copy</button>
         <span hidden id="copySuccess">Copied!</span>
         <span hidden id="copyFailure">Copy failed.</span>
       </div>

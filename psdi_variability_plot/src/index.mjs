@@ -23,8 +23,10 @@ const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
 const addNewValueFieldButton = document.querySelector("button#addNewValueField");
-const confirmCopyButton = document.querySelector("button#confirmCopy");
+const copySuccess = document.querySelector("#copySuccess");
+const copyFailure = document.querySelector("#copyFailure");
 
+var data;
 var nextValueIndex = 0;
 
 // This is the cutoff value for when to stop using the t-distribution and use
@@ -354,6 +356,8 @@ function generatePlot() {
 
         noChartDiv.hidden = true;
         noChartDiv.style.display = "none";
+
+        prepareToCopy();
     }
 }
 
@@ -367,21 +371,25 @@ function changeOtherTypeVisibility() {
     }
 }
 
-async function confirmCopy(e) {
+async function copyToClipboard(e) {
 
-    // Finishes copying the plot to the clipboard when a NotAllowedError
-    // occurs in function copyToClipboard()
+    // Write the data to the clipboard
 
-    await navigator.clipboard.write(e.currentTarget.data);
+    try {
+        await navigator.clipboard.write(e.currentTarget.data);
 
-    confirmCopyButton.style.display = "none";
+        copySuccess.hidden = false;
 
-    copySuccess.hidden = false;
+        setTimeout(() => copySuccess.hidden = true, 2000);
+    } catch (error) {
 
-    setTimeout(() => copySuccess.hidden = true, 2000);
+        copyFailure.hidden = false;
+
+        setTimeout(() => copyFailure.hidden = true, 2000);
+    }
 }
 
-async function copyToClipboard() {
+async function prepareToCopy() {
 
     // Async/await method replacing toBlob() callback
 
@@ -399,32 +407,11 @@ async function copyToClipboard() {
 
     // Copy canvas to blob
 
-    const copySuccess = document.querySelector("#copySuccess");
-    const copyFailure = document.querySelector("#copyFailure");
-
     try {
         const blob = await getBlobFromCanvas(variabilityPlotCanvas);
         // Create ClipboardItem with blob and its type, and add to an array
-        const data = [new ClipboardItem({ [blob.type]: blob })];
-        // Write the data to the clipboard
-        try {
-            // The following line causes an error in Safari, because it
-            // needs to be explicitly initiated by a physical user gesture
-            // such as a click (a software click does not work)
-
-            await navigator.clipboard.write(data);
-
-            copySuccess.hidden = false;
-
-            setTimeout(() => copySuccess.hidden = true, 2000);
-        }
-        catch (NotAllowedError) {
-
-            // Shows the 'Confirm copy' button
-
-            confirmCopyButton.data = data;
-            confirmCopyButton.style.display = "inline";
-        }
+        data = [new ClipboardItem({ [blob.type]: blob })];
+        copyToClipboardButton.data = data;
     } catch (error) {
 
         copyFailure.hidden = false;
@@ -446,7 +433,7 @@ function downloadChart() {
 function deleteValueField(e) {
     const id = e.target.id.split('-');
 
-    if (id[0] == 'remove') {
+    if (id[0] == 'remove' && nextValueIndex > 3) {
         e.target.nextSibling.remove();
         e.target.remove();
 
@@ -486,6 +473,5 @@ chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
 addNewValueFieldButton.addEventListener("click", () => addNewValueField(1));
-confirmCopyButton.addEventListener("click", confirmCopy);
 
 addNewValueField(5)
