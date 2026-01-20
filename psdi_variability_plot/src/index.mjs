@@ -26,7 +26,6 @@ const addNewValueFieldButton = document.querySelector("button#addNewValueField")
 const copySuccess = document.querySelector("#copySuccess");
 const copyFailure = document.querySelector("#copyFailure");
 
-var data;
 var nextValueIndex = 0;
 
 // This is the cutoff value for when to stop using the t-distribution and use
@@ -69,6 +68,20 @@ const chartTypeLabel = {
 
 function capitalise(text) {
     return `${text.substring(0, 1).toUpperCase()}${text.substring(1)}`;
+} 
+
+function getValues() {
+    var values = [];
+
+    for (var i = 0; i < nextValueIndex; i++) {
+        const val = parseFloat(document.getElementById("value-" + i).value);
+
+        if (!isNaN(val)) {
+            values.push(val);
+        }
+    }
+
+    return values;
 }
 
 function generatePlot() {
@@ -81,11 +94,12 @@ function generatePlot() {
     const compound = compoundInput.value;
     const significance = parseFloat(significanceInput.value);
 
-    const valueFields = Array.from(document.querySelectorAll("#valuesArea input.valueField"));
+    //const valueFields = Array.from(document.querySelectorAll("#valuesArea input.valueField"));
+    const values = getValues();
 
-    const values = valueFields
-        .map(field => parseFloat(field.value))
-        .filter(value => !isNaN(value));
+    //const values = valueFields
+        //.map(field => parseFloat(field.value))
+        //.filter(value => !isNaN(value));
 
     let validated = true;
     let alertText = 'You need to:\n';
@@ -94,16 +108,12 @@ function generatePlot() {
     let otherText = "    enter a definition of 'Other'\n";
     let productText = '    enter a product label\n';
 
-    //resetAlerts();
-
     if ((values === null) || (values.length < 3)) {
-        //showAlert("notEnoughValues");
         validated = false;
         alertText += valuesText;
     }
 
     if (chartType === "noSelection") {
-        //showAlert("noChartSelection");
         validated = false;
         alertText += outcomeText;
     }
@@ -114,7 +124,6 @@ function generatePlot() {
     }
 
     if (compound === "") {
-        //showAlert("noCompound");
         validated = false;
         alertText += productText;
     }
@@ -410,7 +419,7 @@ async function prepareToCopy() {
     try {
         const blob = await getBlobFromCanvas(variabilityPlotCanvas);
         // Create ClipboardItem with blob and its type, and add to an array
-        data = [new ClipboardItem({ [blob.type]: blob })];
+        const data = [new ClipboardItem({ [blob.type]: blob })];
         copyToClipboardButton.data = data;
     } catch (error) {
 
@@ -441,8 +450,44 @@ function deleteValueField(e) {
 
         for (var i = parseInt(id[1]) + 1; i <= nextValueIndex; i++) {
             var button = document.getElementById('remove-' + i);
+            var value = document.getElementById('value-' + i);
+
             button.id = 'remove-' + (i - 1);
+            value.id = 'value-' + (i - 1);
         }
+    }
+}
+
+function nextField(e) {
+    const id = e.target.id.split('-');
+
+    if ((e.key === 'Enter' || e.key === 'NumpadEnter' || e.keyCode === 40) &&
+        !e.shiftKey && id[0] === 'value') {
+
+        // Enter or down arrow
+        if (id[1] === '' + (nextValueIndex - 1)) {
+            id[1] = 0;  // To top box
+        } else {
+            id[1]++;
+        }
+
+        const valueBox = document.getElementById('value-' + id[1]);
+        valueBox.focus();
+    } else if ((e.keyCode === 38 && id[0] === 'value') ||
+        (e.key === 'Enter' || e.key === 'NumpadEnter') && e.shiftKey) {
+
+        // Shift + enter or up arrow
+        if (id[1] === '0') {
+            id[1] = nextValueIndex - 1;  // To bottom box
+        } else {
+            id[1]--;
+        }
+
+        const valueBox = document.getElementById('value-' + id[1]);
+        valueBox.focus();
+
+        // Cursor to end of input
+        setTimeout(function() { valueBox.selectionStart = valueBox.selectionEnd = 10000; }, 0 );
     }
 }
 
@@ -450,14 +495,18 @@ function addNewValueField(count) {
 
     for (let n = nextValueIndex; n < nextValueIndex + count; n++) {
 
-        var newValue = document.querySelector(`template#newValueField`).content.cloneNode(true);
         var newDiv = document.querySelector(`template#newValueDiv`).content.cloneNode(true);
         var newButton = document.createElement("button");
+        var newValue = document.createElement("input");
 
         newButton.id = 'remove-' + n;
         newButton.style.width = '24px';
         newButton.style.height = '30px';
         newButton.textContent = '-';
+
+        newValue.type = 'text';
+        newValue.id = 'value-' + n;
+        newValue.style.width = '102px';
 
         newDiv.appendChild(newButton);
         newDiv.appendChild(newValue);
@@ -465,6 +514,8 @@ function addNewValueField(count) {
     }
 
     valuesAreaDiv.addEventListener("click", deleteValueField);
+    valuesAreaDiv.addEventListener("keydown", nextField);
+
     nextValueIndex += count;
 }
 
