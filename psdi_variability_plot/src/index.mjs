@@ -1,4 +1,4 @@
-// variability.mjs
+// index.mjs
 
 import ttest from '../node_modules/@stdlib/stats-ttest/lib/index.js';
 import ztest from '../node_modules/@stdlib/stats-ztest/lib/index.js';
@@ -22,7 +22,6 @@ const generatePlotButton = document.querySelector("button#generatePlot");
 const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
-const addNewValueFieldButton = document.querySelector("button#addNewValueField");
 const copySuccess = document.querySelector("#copySuccess");
 const copyFailure = document.querySelector("#copyFailure");
 
@@ -442,18 +441,56 @@ function downloadChart() {
 function deleteValueField(e) {
     const id = e.target.id.split('-');
 
-    if (id[0] == 'remove' && nextValueIndex > 3) {
+    if (id[0] === 'remove' && nextValueIndex > 3) {
+        e.target.nextSibling.remove();
         e.target.nextSibling.remove();
         e.target.remove();
 
         nextValueIndex--;
 
         for (var i = parseInt(id[1]) + 1; i <= nextValueIndex; i++) {
-            var button = document.getElementById('remove-' + i);
+            var removeButton = document.getElementById('remove-' + i);
+            var addButton = document.getElementById('add-' + i);
             var value = document.getElementById('value-' + i);
 
-            button.id = 'remove-' + (i - 1);
+            removeButton.id = 'remove-' + (i - 1);
+            addButton.id = 'add-' + (i - 1);
             value.id = 'value-' + (i - 1);
+        }
+    }
+}
+
+function insertValueField(e) {
+
+    // Insert -/+ butttons and value field immediately below the + button clicked
+
+    const id = e.target.id.split('-');
+
+    if (id[0] === 'add') {
+        var newNode = e.target.parentNode.cloneNode(true);
+
+        newNode.children[0].id = 'remove-' + nextValueIndex;
+        newNode.children[1].id = 'add-' + nextValueIndex;
+        newNode.children[2].id = 'value-' + nextValueIndex;
+
+        valuesAreaDiv.appendChild(newNode);
+
+        nextValueIndex++;
+
+        for (var i = nextValueIndex - 2; i >= parseInt(id[1]) + 1; i--) {
+            var removeButtonHi = document.getElementById('remove-' + i);
+            var removeButtonLo = document.getElementById('remove-' + (i + 1));
+            var addButtonHi = document.getElementById('add-' + i);
+            var addButtonLo = document.getElementById('add-' + (i + 1));
+            var valueHi = document.getElementById('value-' + i);
+            var valueLo = document.getElementById('value-' + (i + 1));
+
+            removeButtonLo.id = 'remove-' + (i + 1);
+            addButtonLo.id = 'add-' + (i + 1);
+            valueLo.id = 'value-' + (i + 1);
+
+            valueLo.value = valueHi.value;
+            valueHi.value = '';
         }
     }
 }
@@ -495,34 +532,48 @@ function addNewValueField(count) {
 
     for (let n = nextValueIndex; n < nextValueIndex + count; n++) {
 
-        var newDiv = document.querySelector(`template#newValueDiv`).content.cloneNode(true);
-        var newButton = document.createElement("button");
+        var newDiv = document.createElement("div");
+        var removeButton = createButton('remove-' + n, '-');
+        var addButton = createButton('add-' + n, '+');
         var newValue = document.createElement("input");
 
-        newButton.id = 'remove-' + n;
-        newButton.style.width = '24px';
-        newButton.style.height = '30px';
-        newButton.textContent = '-';
+        var removeButton = createButton('remove-' + n, '-');
+        var addButton = createButton('add-' + n, '+');
+
+        addButton.style.marginLeft = '0px';
+        addButton.style.marginRight = '7px';
 
         newValue.type = 'text';
         newValue.id = 'value-' + n;
         newValue.style.width = '102px';
 
-        newDiv.appendChild(newButton);
+        newDiv.appendChild(removeButton);
+        newDiv.appendChild(addButton);
         newDiv.appendChild(newValue);
         valuesAreaDiv.appendChild(newDiv);
     }
 
     valuesAreaDiv.addEventListener("click", deleteValueField);
+    valuesAreaDiv.addEventListener("click", insertValueField);
     valuesAreaDiv.addEventListener("keydown", nextField);
 
     nextValueIndex += count;
+}
+
+function createButton(id, sign) {
+    var newButton = document.createElement("button");
+
+    newButton.id = id;
+    newButton.style.width = '24px';
+    newButton.style.height = '30px';
+    newButton.textContent = sign;
+
+    return newButton;
 }
 
 generatePlotButton.addEventListener("click", generatePlot);
 chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
-addNewValueFieldButton.addEventListener("click", () => addNewValueField(1));
 
 addNewValueField(5)
