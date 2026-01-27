@@ -7,6 +7,7 @@ import { Chart, LinearScale, ScatterController, LineElement, LineController, Poi
 
 Chart.register(LinearScale, ScatterController, LineElement, LineController, PointElement, Filler);
 
+const numberOfValuesInput = document.querySelector("input#numValues");
 const chartWidthInput = document.querySelector("input#chartWidth");
 const chartHeightInput = document.querySelector("input#chartHeight");
 const chartTypeSelect = document.querySelector("select#chartType");
@@ -472,6 +473,7 @@ function insertValueField(e) {
         newNode.children[0].id = 'remove-' + nextValueIndex;
         newNode.children[1].id = 'add-' + nextValueIndex;
         newNode.children[2].id = 'value-' + nextValueIndex;
+        newNode.children[2].value = '';
 
         valuesAreaDiv.appendChild(newNode);
 
@@ -491,6 +493,28 @@ function insertValueField(e) {
 
             valueLo.value = valueHi.value;
             valueHi.value = '';
+        }
+    }
+
+    numberOfValuesInput.value = nextValueIndex;
+}
+
+function changeNumberOfValueFields() {
+    const currentNumberOfFields = nextValueIndex;
+    const newNumberOfFields = numberOfValuesInput.value;
+
+    if (newNumberOfFields < 3) {
+        numberOfValuesInput.value = 3;
+    }
+
+    if (newNumberOfFields > currentNumberOfFields) {
+        for (var i = currentNumberOfFields - 1; i < newNumberOfFields - 1; i++) {
+            document.getElementById('add-' + i).click();
+        }
+    }
+    else if (newNumberOfFields < currentNumberOfFields) {
+        for (var i = currentNumberOfFields - 1; i > newNumberOfFields - 1; i--) {
+            document.getElementById('remove-' + i).click();
         }
     }
 }
@@ -571,9 +595,11 @@ function createButton(id, sign) {
     return newButton;
 }
 
+numberOfValuesInput.addEventListener("change", changeNumberOfValueFields);
 generatePlotButton.addEventListener("click", generatePlot);
 chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
 
+numberOfValuesInput.style.width = '165px';
 addNewValueField(5)
