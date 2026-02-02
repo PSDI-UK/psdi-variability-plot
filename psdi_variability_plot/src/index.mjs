@@ -58,11 +58,11 @@ function showAlert(type) {
 }
 
 const chartTypeLabel = {
-    "isolatedYield": "isolated yield",
-    "spectroscopicYield": "spectroscopic yield",
-    "chromatographicYield": "chromatographic yield",
-    "de": "diastereomeric excess",
-    "ee": "enantiomeric excess",
+    "isolatedYield": "Isolated yield",
+    "spectroscopicYield": "Spectroscopic yield",
+    "chromatographicYield": "Chromatographic yield",
+    "ee": "ee",
+    "de": "de",
     "other": "other"
 }
 
@@ -237,11 +237,8 @@ function generatePlot() {
 
         const chartTypeText = chartType !== "other" ? chartTypeLabel[chartType] : otherTypeText;
 
-        // const title = 'Yield of Lactam 4a';
-//        const title = `${capitalise(chartTitle)} for the ${chartTypeText} of ${compound}`;
-
         const xLabel = "Iteration";
-        const yLabel = `${capitalise(chartTypeText)} of ${compound} (%)`;
+        const yLabel = `${chartTypeText} of ${compound} (%)`;
 
         const ctx = document.getElementById('variabilityPlot').getContext('2d');
 
