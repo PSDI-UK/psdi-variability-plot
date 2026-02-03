@@ -20,6 +20,7 @@ const otherTypeInput = document.querySelector("input#otherType");
 const otherTypeRowDiv = document.querySelector("div#otherTypeRow");
 const noChartDiv = document.querySelector("div#noChart");
 const generatePlotButton = document.querySelector("button#generatePlot");
+const exampleDataButton = document.querySelector("button#exampleData");
 const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
@@ -27,6 +28,7 @@ const copySuccess = document.querySelector("#copySuccess");
 const copyFailure = document.querySelector("#copyFailure");
 
 var nextValueIndex = 0;
+var manualEntry = false;
 
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
@@ -82,6 +84,22 @@ function getValues() {
     }
 
     return values;
+}
+
+function fillWithExampleData() {
+    if (!manualEntry ||
+        confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
+        const data = [56, 66, 45, 58, 59];
+
+        numberOfValuesInput.value = 5;
+        changeNumberOfValueFields();
+
+        for (var i = 0; i < 5; i++) {
+            document.getElementById("value-" + i).value = data[i];
+        }
+
+        manualEntry = false;
+    }
 }
 
 function generatePlot() {
@@ -558,8 +576,8 @@ function addNewValueField(count) {
         var addButton = createButton('add-' + n, '+');
         var newValue = document.createElement("input");
 
-        var removeButton = createButton('remove-' + n, '-');
-        var addButton = createButton('add-' + n, '+');
+//        var removeButton = createButton('remove-' + n, '-');
+  //      var addButton = createButton('add-' + n, '+');
 
         addButton.style.marginLeft = '0px';
         addButton.style.marginRight = '7px';
@@ -567,6 +585,7 @@ function addNewValueField(count) {
         newValue.type = 'text';
         newValue.id = 'value-' + n;
         newValue.style.width = '102px';
+        newValue.addEventListener("change", () => manualEntry = true);
 
         newDiv.appendChild(removeButton);
         newDiv.appendChild(addButton);
@@ -592,8 +611,21 @@ function createButton(id, sign) {
     return newButton;
 }
 
+/**
+ * Enable all tooltips on the page
+ */
+function initTooltips() {
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+}
+
+$(document).ready(function () {
+    initTooltips();
+});
+
 numberOfValuesInput.addEventListener("change", changeNumberOfValueFields);
 generatePlotButton.addEventListener("click", generatePlot);
+exampleDataButton.addEventListener("click", fillWithExampleData);
 chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
