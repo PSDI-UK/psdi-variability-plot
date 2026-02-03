@@ -30,6 +30,22 @@ input:invalid {
   color           : var(--ifm-hero-text-color);
 }
 
+/* How to indicate text which has a tooltip on mouseover */
+.mouseover-tooltip::before {
+  display         : inline-flex;
+  justify-content : center;
+  align-items     : center;
+  content         : "i";
+  background-color: var(--ifm-color-info);
+  color           : var(--psdi-light-text-color-body);
+  font-family     : serif;
+  font-weight     : bold;
+  width           : 1rem;
+  height          : 1rem;
+  border-radius   : 0.5rem;
+  margin-right    : 0.125rem;
+}
+
 /* Dotted underline to indicate text that will show a tooltip on mouseover */
 .mouseover {
   text-decoration: underline dotted;
@@ -38,6 +54,11 @@ input:invalid {
 /* Style the popup tooltips */
 .tooltip {
   --bs-tooltip-opacity: 1;
+  max-width           : 17.5rem !important;
+}
+
+.tooltip-inner {
+  max-width: 17.5rem !important;
 }
 
 .tooltip-on-light {
