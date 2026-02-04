@@ -247,6 +247,7 @@ export class Chart {
     #pointSize;
     #bandColor;
     #meanColor;
+    #meanWeight;
     #title;
     #xLabel;
     #yLabel;
@@ -263,7 +264,7 @@ export class Chart {
     #canvasContext;
 
     constructor({ targetElement, width, height, pointType, pointColor, pointWeight, pointSize,
-        bandColor, meanColor, title, xLabel, yLabel, titleFontSize, axisFontSize, tickfontSize,
+        bandColor, meanColor, meanWeight, title, xLabel, yLabel, titleFontSize, axisFontSize, tickfontSize,
         data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines }) {
 
         this.#targetElement = targetElement;
@@ -279,6 +280,7 @@ export class Chart {
         this.#pointSize = pointSize;
         this.#bandColor = bandColor;
         this.#meanColor = meanColor;
+        this.#meanWeight = meanWeight;
         this.#title = title;
         this.#xLabel = xLabel;
         this.#yLabel = yLabel;
@@ -513,7 +515,7 @@ export class Chart {
 
         confidenceElement.append(this.createSVGElement("line", {
             stroke: this.#meanColor,
-            "stroke-width": 4,
+            "stroke-width": this.#meanWeight,
             fill: "none",
             x1: this.chart.plotArea.left,
             y1: meanPos,

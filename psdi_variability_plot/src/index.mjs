@@ -36,6 +36,7 @@ const pointSizeInput = document.querySelector("input#pointSize");
 const pointWeightInput = document.querySelector("input#pointWeight");
 const bandColorInput = document.querySelector("input#bandColor");
 const meanColorInput = document.querySelector("input#meanColor");
+const meanWeightInput = document.querySelector("input#meanWeight");
 const titleFontSizeInput = document.querySelector("input#titleFontSize");
 const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
@@ -456,6 +457,7 @@ function setupChangeEvents() {
     pointSizeInput.addEventListener("change", updateDesign);
     bandColorInput.addEventListener("change", updateDesign);
     meanColorInput.addEventListener("change", updateDesign);
+    meanWeightInput.addEventListener("change", updateDesign);
     axisFontSizeInput.addEventListener("input", updateDesign);
     tickfontSizeInput.addEventListener("input", updateDesign);
 }
@@ -477,6 +479,7 @@ function getProjectData() {
         pointSize: parseInt(pointSizeInput.value),
         bandColor: bandColorInput.value,
         meanColor: meanColorInput.value,
+        meanWeight: meanWeightInput.value,
         titleFontSize: parseInt(titleFontSizeInput.value),
         axisFontSize: parseInt(axisFontSizeInput.value),
         tickfontSize: parseInt(tickfontSizeInput.value),
@@ -524,6 +527,10 @@ function setProjectData(data) {
 
     if (data.meanColor) {
         meanColorInput.value = data.meanColor;
+    }
+
+    if (data.meanWeight) {
+        meanWeightInput.value = data.meanWeight;
     }
 
     if (data.titleFontSize) {
@@ -682,6 +689,7 @@ function renderChart(element) {
             pointSize: projectData.pointSize,
             bandColor: projectData.bandColor,
             meanColor: projectData.meanColor,
+            meanWeight: projectData.meanWeight,
             title: autoTitleEditorObject,
             xLabel: xLabelEditorObject,
             yLabel: yLabelEditorObject,
