@@ -356,7 +356,7 @@ export class Chart {
             plotArea: {
             },
             margin: {
-                left: 60,
+                left: 70,
                 top: 70,
                 right: 20,
                 bottom: 60,
@@ -756,6 +756,11 @@ export class Chart {
         for (const legendLine of legendLines) {
             legendLine.element.textContent = legendLine.text;
             legendElement.append(legendLine.element);
+        }
+
+        for (const legendLine of legendLines) {
+            legendLine.element.setAttribute("textLength", legendLine.element.getBBox().width);
+            legendLine.element.setAttribute("lengthAdjust", "spacingAndGlyphs");
         }
 
         // Calculate box size.

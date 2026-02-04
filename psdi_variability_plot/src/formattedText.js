@@ -491,6 +491,8 @@ export class FormattedText {
 
             text.setAttribute("x", xOffset + textSpan.boundingBox.left);
             text.setAttribute("y", yOffset + textSpan.boundingBox.top);
+            text.setAttribute("textLength", textSpan.boundingBox.right - textSpan.boundingBox.left);
+            text.setAttribute("lengthAdjust", "spacingAndGlyphs");
 
             text.setAttribute("font-size", textSpan.fontSize);
 
