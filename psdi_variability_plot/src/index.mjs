@@ -35,7 +35,7 @@ const pointColorInput = document.querySelector("input#pointColor");
 const pointSizeInput = document.querySelector("input#pointSize");
 const pointWeightInput = document.querySelector("input#pointWeight");
 const bandColorInput = document.querySelector("input#bandColor");
-const medianColorInput = document.querySelector("input#medianColor");
+const meanColorInput = document.querySelector("input#meanColor");
 const titleFontSizeInput = document.querySelector("input#titleFontSize");
 const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
@@ -455,7 +455,7 @@ function setupChangeEvents() {
     pointWeightInput.addEventListener("change", updateDesign);
     pointSizeInput.addEventListener("change", updateDesign);
     bandColorInput.addEventListener("change", updateDesign);
-    medianColorInput.addEventListener("change", updateDesign);
+    meanColorInput.addEventListener("change", updateDesign);
     axisFontSizeInput.addEventListener("input", updateDesign);
     tickfontSizeInput.addEventListener("input", updateDesign);
 }
@@ -476,7 +476,7 @@ function getProjectData() {
         pointWeight: parseInt(pointWeightInput.value),
         pointSize: parseInt(pointSizeInput.value),
         bandColor: bandColorInput.value,
-        medianColor: medianColorInput.value,
+        meanColor: meanColorInput.value,
         titleFontSize: parseInt(titleFontSizeInput.value),
         axisFontSize: parseInt(axisFontSizeInput.value),
         tickfontSize: parseInt(tickfontSizeInput.value),
@@ -522,8 +522,8 @@ function setProjectData(data) {
         bandColorInput.value = data.bandColor;
     }
 
-    if (data.medianColor) {
-        medianColorInput.value = data.medianColor;
+    if (data.meanColor) {
+        meanColorInput.value = data.meanColor;
     }
 
     if (data.titleFontSize) {
@@ -670,18 +670,18 @@ function renderChart(element) {
         new Chart({
             data,
             targetElement: element,
-            medianValue: results.mean,
+            meanValue: results.mean,
             confidenceUpperLimit: results.ci[1],
             confidenceLowerLimit: results.ci[0],
             legendLines: [legendText1, legendText2],
-            width: `${projectData.chartWidth}px`,
-            height: `${projectData.chartHeight}px`,
+            width: projectData.chartWidth,
+            height: projectData.chartHeight,
             pointType: projectData.pointType,
             pointColor: projectData.pointColor,
             pointWeight: projectData.pointWeight,
             pointSize: projectData.pointSize,
             bandColor: projectData.bandColor,
-            medianColor: projectData.medianColor,
+            meanColor: projectData.meanColor,
             title: autoTitleEditorObject,
             xLabel: xLabelEditorObject,
             yLabel: yLabelEditorObject,

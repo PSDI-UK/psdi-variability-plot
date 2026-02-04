@@ -235,7 +235,7 @@ export class Chart {
     // Target element to contain the SVG element.
     #targetElement;
 
-    #medianValue;
+    #meanValue;
     #confidenceUpperLimit;
     #confidenceLowerLimit;
 
@@ -246,7 +246,7 @@ export class Chart {
     #pointWeight;
     #pointSize;
     #bandColor;
-    #medianColor;
+    #meanColor;
     #title;
     #xLabel;
     #yLabel;
@@ -263,12 +263,12 @@ export class Chart {
     #canvasContext;
 
     constructor({ targetElement, width, height, pointType, pointColor, pointWeight, pointSize,
-        bandColor, medianColor, title, xLabel, yLabel, titleFontSize, axisFontSize, tickfontSize,
-        data, medianValue, confidenceUpperLimit, confidenceLowerLimit, legendLines }) {
+        bandColor, meanColor, title, xLabel, yLabel, titleFontSize, axisFontSize, tickfontSize,
+        data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines }) {
 
         this.#targetElement = targetElement;
         this.#data = data;
-        this.#medianValue = medianValue;
+        this.#meanValue = meanValue;
         this.#confidenceUpperLimit = confidenceUpperLimit;
         this.#confidenceLowerLimit = confidenceLowerLimit;
         this.#width = width;
@@ -278,7 +278,7 @@ export class Chart {
         this.#pointWeight = pointWeight;
         this.#pointSize = pointSize;
         this.#bandColor = bandColor;
-        this.#medianColor = medianColor;
+        this.#meanColor = meanColor;
         this.#title = title;
         this.#xLabel = xLabel;
         this.#yLabel = yLabel;
@@ -507,18 +507,18 @@ export class Chart {
             height: bandBottom - bandTop,
         }));
 
-        // Median line.
+        // Mean line.
 
-        const medianPos = this.chart.scales.y.pos(this.#medianValue);
+        const meanPos = this.chart.scales.y.pos(this.#meanValue);
 
         confidenceElement.append(this.createSVGElement("line", {
-            stroke: this.#medianColor,
+            stroke: this.#meanColor,
             "stroke-width": 4,
             fill: "none",
             x1: this.chart.plotArea.left,
-            y1: medianPos,
+            y1: meanPos,
             x2: this.chart.plotArea.right,
-            y2: medianPos,
+            y2: meanPos,
         }));
 
         // Points.
