@@ -500,6 +500,7 @@ export class Chart {
         confidenceElement.append(this.createSVGElement("rect", {
             fill: this.#bandColor,
             stroke: "none",
+            "fill-opacity": 0.5,
             x: this.chart.plotArea.left,
             y: bandTop,
             width: this.chart.plotArea.width,
@@ -512,6 +513,7 @@ export class Chart {
 
         confidenceElement.append(this.createSVGElement("line", {
             stroke: this.#medianColor,
+            "stroke-width": 4,
             fill: "none",
             x1: this.chart.plotArea.left,
             y1: medianPos,
