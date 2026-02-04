@@ -3,17 +3,15 @@
 import ttest from '../node_modules/@stdlib/stats-ttest/lib/index.js';
 import ztest from '../node_modules/@stdlib/stats-ztest/lib/index.js';
 import stdev from '../node_modules/@stdlib/stats-base-stdev/lib/index.js';
-import { Chart, LinearScale, ScatterController, LineElement, LineController, PointElement, Filler } from '../node_modules/chart.js/dist/chart.js';
-
-Chart.register(LinearScale, ScatterController, LineElement, LineController, PointElement, Filler);
+import { saveAs } from 'file-saver';
+import { Chart } from "./plot.js";
+import { FormattedText } from './formattedText.js';
 
 const numberOfValuesInput = document.querySelector("input#numValues");
 const chartWidthInput = document.querySelector("input#chartWidth");
 const chartHeightInput = document.querySelector("input#chartHeight");
 const chartTypeSelect = document.querySelector("select#chartType");
-const compoundInput = document.querySelector("input#compound");
 const significanceInput = document.querySelector("select#significance");
-const variabilityPlotCanvas = document.querySelector("#variabilityPlot");
 const variabilityPlotContainer = document.querySelector("#variabilityPlotContainer");
 const notificationsDiv = document.querySelector("div#notifications");
 const otherTypeInput = document.querySelector("input#otherType");
@@ -26,6 +24,21 @@ const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
 const copySuccess = document.querySelector("#copySuccess");
 const copyFailure = document.querySelector("#copyFailure");
+const variabilityChart = document.querySelector("#variabilityChart");
+const plotDesignElement = document.querySelector("#plotDesign");
+const autoTitleEditor = document.querySelector("div#autoTitleEditor");
+const xLabelEditor = document.querySelector("div#xLabelEditor");
+const yLabelEditor = document.querySelector("div#yLabelEditor");
+const compoundEditor = document.querySelector("div#compoundEditor");
+const pointTypeSelect = document.querySelector("select#pointType");
+const pointColorInput = document.querySelector("input#pointColor");
+const pointSizeInput = document.querySelector("input#pointSize");
+const pointWeightInput = document.querySelector("input#pointWeight");
+const bandColorInput = document.querySelector("input#bandColor");
+const medianColorInput = document.querySelector("input#medianColor");
+const titleFontSizeInput = document.querySelector("input#titleFontSize");
+const axisFontSizeInput = document.querySelector("input#axisFontSize");
+const tickfontSizeInput = document.querySelector("input#tickfontSize");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -45,8 +58,6 @@ function calculateVariabilityData(data, alpha) {
         return ztest(data, stdev(data), { alpha });
     }
 }
-
-let currentChart;
 
 function resetAlerts() {
     notificationsDiv.replaceChildren();
@@ -68,9 +79,18 @@ const chartTypeLabel = {
     "other": "other"
 }
 
+const chartTypeLabelLoweCase = {
+    "isolatedYield": "isolated yield",
+    "spectroscopicYield": "spectroscopic yield",
+    "chromatographicYield": "chromatographic yield",
+    "ee": "ee",
+    "de": "de",
+    "other": "other"
+}
+
 function capitalise(text) {
     return `${text.substring(0, 1).toUpperCase()}${text.substring(1)}`;
-} 
+}
 
 function getValues() {
     var values = [];
@@ -84,6 +104,17 @@ function getValues() {
     }
 
     return values;
+}
+
+function setValues(values) {
+
+    numberOfValuesInput.value = values.length;
+
+    changeNumberOfValueFields();
+
+    for (let valueIndex = 0; valueIndex < values.length; valueIndex++) {
+        document.getElementById(`value-${valueIndex}`).value = values[valueIndex];
+    }
 }
 
 function fillWithExampleData() {
@@ -104,20 +135,11 @@ function fillWithExampleData() {
 
 function generatePlot() {
 
-    const chartWidth = parseInt(chartWidthInput.value);
-    const chartHeight = parseInt(chartHeightInput.value);
     const chartType = chartTypeSelect.value;
     const otherDef = otherTypeInput.value;
-//    const chartTitle = chartTitleInput.value;
-    const compound = compoundInput.value;
-    const significance = parseFloat(significanceInput.value);
+    const compound = compoundEditor.textContent;
 
-    //const valueFields = Array.from(document.querySelectorAll("#valuesArea input.valueField"));
     const values = getValues();
-
-    //const values = valueFields
-        //.map(field => parseFloat(field.value))
-        //.filter(value => !isNaN(value));
 
     let validated = true;
     let alertText = 'You need to:\n';
@@ -152,234 +174,14 @@ function generatePlot() {
 
     if (validated) {
 
-        const results = calculateVariabilityData(values, 1 - (significance / 100));
-
-        const customTextboxOverlayPlugin = {
-
-            id: 'customTextboxOverlay',
-
-            afterRender: (chart, args, options) => {
-
-                const { ctx, chartArea } = chart;
-
-                ctx.save();
-
-                ctx.globalCompositeOperation = 'source-over';
-
-                let maxWidth = 0;
-                let lineTop = options.vertPadding
-                let lineInfo = [];
-
-                for (const line of options.lines) {
-
-                    const measure = ctx.measureText(line);
-                    const lineHeight = measure.fontBoundingBoxAscent + measure.fontBoundingBoxDescent;
-
-                    maxWidth = Math.max(maxWidth, measure.width);
-
-                    lineInfo.push({ line, measure, lineTop, lineHeight });
-
-                    lineTop += lineHeight + options.interLinePadding;
-                }
-
-                const lastLine = lineInfo[lineInfo.length - 1];
-
-                const boxWidth = options.horizPadding * 2 + maxWidth;
-                const boxHeight = lastLine.lineTop + lastLine.lineHeight + options.vertPadding;
-                const boxLeft = chartArea.right - boxWidth - options.rightMargin;
-                const boxTop = chartArea.bottom - boxHeight - options.bottomMargin;
-
-                ctx.fillStyle = options.backgroundColor;
-                ctx.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
-
-                ctx.strokeStyle = options.borderColor;
-                ctx.lineWidth = options.borderWidth;
-                ctx.strokeRect(boxLeft, boxTop, boxWidth, boxHeight);
-
-                for (const line of lineInfo) {
-
-                    ctx.fillStyle = options.fontColor;
-                    ctx.fillText(line.line,
-                        boxLeft + options.horizPadding + (maxWidth - line.measure.width) / 2,
-                        boxTop + line.lineTop + line.measure.fontBoundingBoxAscent);
-                }
-
-                // ctx.fillRect(
-                //     chartArea.right - textboxWidth - rightMargin,
-                //     chartArea.bottom - textboxHeight - bottomMargin,
-                //     textboxWidth,
-                //     textboxHeight);
-
-                ctx.restore();
-            },
-            defaults: {
-                lines: ["Legend line 1", "Second line"],
-                backgroundColor: "#eee",
-                borderColor: "#888",
-                fontColor: "black",
-                borderWidth: 1,
-                horizPadding: 5,
-                vertPadding: 5,
-                rightMargin: 10,
-                bottomMargin: 10,
-                interLinePadding: 0
-            }
-        }
-
-        const customBackgroundPlugin = {
-            id: 'customBackgroundPlugin',
-            beforeDraw: (chart, args, options) => {
-                const { ctx } = chart;
-                ctx.save();
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.fillStyle = "white";
-                ctx.fillRect(0, 0, chart.width, chart.height);
-                ctx.restore();
-            }
-        };
-
         // Generate the chart.
-
-        const mean = values.reduce((acc, current) => acc + current, 0.0) / values.length;
-
-        const lowerConfidenceBound = Math.round(results.ci[0]);
-        const upperConfidenceBound = Math.round(results.ci[1]);
-
-        const legendText1 = `Mean yield = ${Math.round(mean)}%`;
-        const legendText2 =
-            `${significance}% Confidence interval: ${lowerConfidenceBound}% to ${upperConfidenceBound}%`;
-
-        var otherTypeText = otherTypeInput.value.trim();
-        otherTypeText = otherTypeText.replace('(%)', '').trim();
-        otherTypeText = otherTypeText.replace('%', '').trim();
-
-        const chartTypeText = chartType !== "other" ? chartTypeLabel[chartType] : otherTypeText;
-
-        const xLabel = "Iteration";
-        const yLabel = `${chartTypeText} of ${compound} (%)`;
-
-        const ctx = document.getElementById('variabilityPlot').getContext('2d');
-
-        const labels = values;
-
-        if (currentChart !== undefined) {
-            currentChart.destroy();
-        }
-
-        variabilityPlotCanvas.setAttribute("width", chartWidth);
-        variabilityPlotCanvas.setAttribute("height", chartHeight);
-
-        const scatterPlotData = values.map((number, index) => ({ x: index + 1, y: number }));
-
-        const devicePixelRatio = parseInt(document.querySelector("#devicePixelRatio").value);
-
-        currentChart = new Chart(ctx, {
-
-            data: {
-
-                labels,
-
-                datasets: [
-                    {
-                        // Reaction outcomes.
-
-                        type: 'scatter',
-                        data: scatterPlotData,
-                        backgroundColor: 'rgba(75, 92, 92, 1)',
-                    },
-                    {
-                        // Lower confidence bound.
-
-                        type: 'line',
-                        data: [[0, lowerConfidenceBound], [values.length + 1, lowerConfidenceBound]],
-                        borderColor: 'rgba(0, 0, 0, 0)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        pointStyle: false,
-                        fill: "+2",
-                    },
-                    {
-                        // Mean line.
-
-                        type: 'line',
-                        data: [[0, mean], [values.length + 1, mean]],
-                        borderColor: 'rgba(64, 64, 255)',
-                        pointStyle: false,
-                    },
-                    {
-                        // Upper confidence bound.
-
-                        type: 'line',
-                        data: [[0, upperConfidenceBound], [values.length + 1, upperConfidenceBound]],
-                        borderColor: 'rgba(0, 0, 0, 0)',
-                        pointStyle: false,
-                    },
-                ],
-            },
-
-            plugins: [customBackgroundPlugin, customTextboxOverlayPlugin],
-
-            options: {
-
-                responsive: false,
-
-                devicePixelRatio,
-
-                animation: {
-                    duration: 0,
-                },
-
-                plugins: {
-                    datalabels: {
-                        display: false,
-                    },
-//                    title: {
-//                        display: true,
-//                        text: title,
-//                    },
-                    legend: {
-                        display: false,
-                    },
-                    customTextboxOverlay: {
-                        lines: [legendText1, legendText2],
-                        backgroundColor: "#ffffff80",
-                        borderColor: "#888"
-                    },
-                },
-
-                scales: {
-                    y: {
-                        type: 'linear',
-                        min: 0,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20
-                        },
-                        title: {
-                            display: true,
-                            text: yLabel
-                        },
-                    },
-                    x: {
-                        type: 'linear',
-                        min: 0.8,
-                        max: values.length + 0.2,
-                        ticks: {
-                            precision: 0,
-                            includeBounds: false,
-                        },
-                        title: {
-                            display: true,
-                            text: xLabel
-                        },
-                    },
-                },
-            },
-        });
 
         variabilityPlotContainer.hidden = false;
 
         noChartDiv.hidden = true;
         noChartDiv.style.display = "none";
+
+        renderChart(variabilityChart);
 
         prepareToCopy();
     }
@@ -393,6 +195,36 @@ function changeOtherTypeVisibility() {
     } else {
         otherTypeInput.focus();
     }
+}
+
+async function loadImage(src) {
+
+    const img = document.createElement("img");
+
+    img.src = src;
+
+    return new Promise((resolve, reject) => {
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+    });
+}
+
+async function convertSVGToDataURL(svgElement, format, quality) {
+
+    const xmlSerializer = new XMLSerializer();
+    const svgXML = xmlSerializer.serializeToString(svgElement);
+    const svgDataURL = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXML)}`;
+
+    const svgImage = await loadImage(svgDataURL);
+
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    canvas.width = svgImage.naturalWidth;
+    canvas.height = svgImage.naturalHeight;
+    context.drawImage(svgImage, 0, 0, svgImage.naturalWidth, svgImage.naturalHeight);
+
+    return canvas.toDataURL(`image/${format}`, quality);
 }
 
 async function copyToClipboard(e) {
@@ -415,24 +247,9 @@ async function copyToClipboard(e) {
 
 async function prepareToCopy() {
 
-    // Async/await method replacing toBlob() callback
-
-    async function getBlobFromCanvas(canvas) {
-        return new Promise((resolve, reject) => {
-            canvas.toBlob((blob) => {
-                if (blob) {
-                    resolve(blob);
-                } else {
-                    reject(new Error("Canvas toBlob failed"));
-                }
-            });
-        });
-    }
-
-    // Copy canvas to blob
-
     try {
-        const blob = await getBlobFromCanvas(variabilityPlotCanvas);
+        const blob = await getExportBlob("png");
+
         // Create ClipboardItem with blob and its type, and add to an array
         const data = [new ClipboardItem({ [blob.type]: blob })];
         copyToClipboardButton.data = data;
@@ -442,16 +259,6 @@ async function prepareToCopy() {
 
         setTimeout(() => copyFailure.hidden = true, 2000);
     }
-}
-
-function downloadChart() {
-
-    const anchor = document.createElement('a');
-
-    anchor.href = currentChart.toBase64Image();
-    anchor.download = 'plot.png';
-
-    anchor.click();
 }
 
 function deleteValueField(e) {
@@ -563,7 +370,7 @@ function nextField(e) {
         valueBox.focus();
 
         // Cursor to end of input
-        setTimeout(function() { valueBox.selectionStart = valueBox.selectionEnd = 10000; }, 0 );
+        setTimeout(function () { valueBox.selectionStart = valueBox.selectionEnd = 10000; }, 0);
     }
 }
 
@@ -610,6 +417,293 @@ function createButton(id, sign) {
 
     return newButton;
 }
+const compoundEditorObject = new FormattedText({
+    element: compoundEditor,
+    initialValue: ""
+});
+
+const xLabelEditorObject = new FormattedText({
+    element: xLabelEditor,
+    initialValue: "Iterations"
+});
+
+const autoTitleEditorObject = new FormattedText({
+    element: autoTitleEditor
+});
+
+const yLabelEditorObject = new FormattedText({
+    element: yLabelEditor
+});
+
+function setupChangeEvents() {
+
+    function updateDesign() {
+        renderChart(plotDesignElement);
+    }
+
+    function updateMain() {
+        renderChart(variabilityChart);
+    }
+
+    chartWidthInput.addEventListener("change", updateMain);
+    chartHeightInput.addEventListener("change", updateMain);
+    compoundEditor.addEventListener("input", updateMain);
+
+    titleFontSizeInput.addEventListener("input", updateDesign);
+    pointTypeSelect.addEventListener("change", updateDesign);
+    pointColorInput.addEventListener("change", updateDesign);
+    pointWeightInput.addEventListener("change", updateDesign);
+    pointSizeInput.addEventListener("change", updateDesign);
+    bandColorInput.addEventListener("change", updateDesign);
+    medianColorInput.addEventListener("change", updateDesign);
+    axisFontSizeInput.addEventListener("input", updateDesign);
+    tickfontSizeInput.addEventListener("input", updateDesign);
+}
+
+function getProjectData() {
+
+    return {
+
+        type: "variabilityPlotProject",
+        version: 1,
+
+        values: getValues(),
+        chartType: chartTypeSelect.value,
+        chartWidth: parseInt(chartWidthInput.value),
+        chartHeight: parseInt(chartHeightInput.value),
+        pointType: pointTypeSelect.value,
+        pointColor: pointColorInput.value,
+        pointWeight: parseInt(pointWeightInput.value),
+        pointSize: parseInt(pointSizeInput.value),
+        bandColor: bandColorInput.value,
+        medianColor: medianColorInput.value,
+        titleFontSize: parseInt(titleFontSizeInput.value),
+        axisFontSize: parseInt(axisFontSizeInput.value),
+        tickfontSize: parseInt(tickfontSizeInput.value),
+        compound: compoundEditor.innerHTML,
+    };
+}
+
+function setProjectData(data) {
+
+    if (data.values) {
+        setValues(data.values);
+    }
+
+    if (data.chartType) {
+        chartTypeSelect.value = data.chartType;
+    }
+
+    if (data.width) {
+        chartWidthInput.value = data.width;
+    }
+
+    if (data.height) {
+        chartHeightInput.value = data.height;
+    }
+
+    if (data.pointType) {
+        pointTypeSelect.value = data.pointType;
+    }
+
+    if (data.pointColor) {
+        pointColorInput.value = data.pointColor;
+    }
+
+    if (data.pointWeight) {
+        pointWeightInput.value = data.pointWeight;
+    }
+
+    if (data.pointSize) {
+        pointSizeInput.value = data.pointSize;
+    }
+
+    if (data.bandColor) {
+        bandColorInput.value = data.bandColor;
+    }
+
+    if (data.medianColor) {
+        medianColorInput.value = data.medianColor;
+    }
+
+    if (data.titleFontSize) {
+        titleFontSizeInput.value = data.titleFontSize;
+    }
+
+    if (data.axisFontSize) {
+        axisFontSizeInput.value = data.axisFontSize;
+    }
+
+    if (data.tickfontSize) {
+        tickfontSizeInput.value = data.tickfontSize;
+    }
+
+    if (data.compound) {
+        compoundEditor.innerHTML = data.compound;
+    }
+}
+
+function saveProject() {
+
+    const data = getProjectData();
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "text/plain;charset=utf-8" });
+
+    saveAs(blob, "variability.json");
+}
+
+function loadProject() {
+    document.querySelector("input#loadProjectFile").click();
+}
+
+async function getExportBlob(format) {
+
+    const svg = variabilityChart.querySelector(":scope > svg");
+
+    let blob;
+
+    if (format === "svg") {
+
+        // Embed font.
+
+        // const fontRequest = await fetch("fonts/OpenSans-Regular.ttf");
+
+        // const base64 = (new Uint8Array(await fontRequest.bytes())).toBase64();
+
+        // const dataURL = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
+
+        blob = new Blob([svg.outerHTML], { type: "image/svg+xml; charset=utf-8" });
+
+    } else if ((format === "png") || (format == "jpeg")) {
+
+        const dataURL = await convertSVGToDataURL(svg, format, 1);
+        const response = await fetch(dataURL);
+
+        blob = await response.blob();
+
+    } else {
+
+        throw "Unknown export type";
+    }
+
+    return blob;
+}
+
+async function downloadChart() {
+
+    const format = document.querySelector("select#downloadFormat").value;
+
+    saveAs(await getExportBlob(format), `variability.${format}`);
+}
+
+async function loadProjectFile(event) {
+
+    const files = event.srcElement.files;
+
+    if (files.length > 0) {
+
+        let data;
+
+        try {
+
+            data = JSON.parse(await files[0].text());
+
+            if (data.type !== "variabilityPlotProject") {
+                throw new Error("Incorrect type");
+            }
+
+            setProjectData(data);
+
+            renderChart(variabilityChart);
+
+        } catch {
+
+            alert("File does not appear to be a variability plot project");
+        }
+    }
+}
+
+function renderChart(element) {
+
+    const values = getValues();
+
+    if (values.length >= 3) {
+
+        const projectData = getProjectData();
+
+        const significance = parseFloat(significanceInput.value);
+
+        const results = calculateVariabilityData(values, 1 - (significance / 100));
+
+        const mean = values.reduce((acc, current) => acc + current, 0.0) / values.length;
+
+        let otherTypeText = otherTypeInput.value.trim();
+        otherTypeText = otherTypeText.replace('(%)', '').trim();
+        otherTypeText = otherTypeText.replace('%', '').trim();
+
+        const chartType = chartTypeSelect.value;
+        const compound = compoundEditor.innerHTML;
+        const chartTypeText = chartType !== "other" ? chartTypeLabelLoweCase[chartType] : otherTypeText;
+        const yLabel = `${capitalise(chartTypeText)} of ${compound} (%)`;
+
+        autoTitleEditor.innerHTML = `Variability plot for the ${chartTypeText} of ${compound}`;
+
+        yLabelEditor.innerHTML = yLabel;
+
+        const lowerConfidenceBound = Math.round(results.ci[0]);
+        const upperConfidenceBound = Math.round(results.ci[1]);
+
+        const legendText1 = `Mean yield = ${Math.round(mean)}%`;
+        const legendText2 =
+            `${significance}% Confidence interval: ${lowerConfidenceBound}% to ${upperConfidenceBound}%`;
+
+        let data = [];
+
+        for (let sampleIndex = 0; sampleIndex < values.length; sampleIndex++) {
+
+            data.push({
+                x: sampleIndex + 1,
+                y: values[sampleIndex]
+            });
+        }
+
+        new Chart({
+            data,
+            targetElement: element,
+            medianValue: results.mean,
+            confidenceUpperLimit: results.ci[1],
+            confidenceLowerLimit: results.ci[0],
+            legendLines: [legendText1, legendText2],
+            width: `${projectData.chartWidth}px`,
+            height: `${projectData.chartHeight}px`,
+            pointType: projectData.pointType,
+            pointColor: projectData.pointColor,
+            pointWeight: projectData.pointWeight,
+            pointSize: projectData.pointSize,
+            bandColor: projectData.bandColor,
+            medianColor: projectData.medianColor,
+            title: autoTitleEditorObject,
+            xLabel: xLabelEditorObject,
+            yLabel: yLabelEditorObject,
+            titleFontSize: projectData.titleFontSize,
+            axisFontSize: projectData.axisFontSize,
+            tickfontSize: projectData.tickfontSize,
+        });
+    }
+}
+
+function showVariabilityPlotDesign() {
+
+    variabilityPlotDialog.showModal();
+
+    renderChart(plotDesignElement);
+
+}
+
+function hideVariabilityPlotDesign() {
+    variabilityPlotDialog.close();
+    renderChart(variabilityChart);
+}
 
 /**
  * Enable all tooltips on the page
@@ -632,3 +726,15 @@ downloadChartButton.addEventListener("click", downloadChart);
 
 numberOfValuesInput.style.width = '165px';
 addNewValueField(5)
+setupChangeEvents();
+
+customiseChart.addEventListener("click", showVariabilityPlotDesign);
+
+closeVariabilityPlotDialog.addEventListener("click", hideVariabilityPlotDesign);
+
+document.querySelector("button#saveProject").addEventListener("click", saveProject);
+document.querySelector("button#loadProject").addEventListener("click", loadProject);
+document.querySelector("button#downloadChart").addEventListener("click", downloadChart);
+document.querySelector("input#loadProjectFile").addEventListener("change", loadProjectFile);
+
+renderChart(variabilityChart);

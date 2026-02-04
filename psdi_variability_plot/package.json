@@ -7,7 +7,6 @@
     "buildWatch": "esbuild src/index.mjs --bundle --outfile=static/js/variability.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Don Cruickshank",
   "license": "",
   "description": "",
   "dependencies": {
@@ -16,8 +15,7 @@
     "@stdlib/stats-base-stdev": "^0.2.2",
     "@stdlib/stats-ttest": "^0.2.2",
     "@stdlib/stats-ztest": "^0.2.2",
-    "chart.js": "^4.5.1",
     "esbuild": "^0.25.11",
-    "typescript": "^5.9.3"
+    "file-saver": "^2.0.5"
   }
 }

@@ -311,3 +311,50 @@ input.valueField {
 button#addNewValueField {
     width: fit-content;
 }
+
+.plotDesignHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.plotDesignHeader > * {
+    align-self: start;
+}
+
+.plotDesignSections {
+    display: flex;
+}
+
+select {
+    padding: 3px;
+    border: 2px inset #767676; 
+}
+
+dialog#variabilityPlotDialog summary { 
+    background: var(--psdi-bg-color-primary);
+    color: white;
+    padding: 4px 12px 4px 12px;
+    margin: 4px 0 4px 0;
+    border: 2px inset #767676; 
+    border-radius: 4px;
+}
+
+#variabilityChart {
+    max-width: 800px;
+    max-height: 600px;
+    overflow: auto;
+}
+
+.intro {
+    display: flex;
+}
+
+.intro > p {
+    flex-shrink: 1;
+}
+
+.intro > button {
+    flex-shrink: 0;
+    width: fit-content;
+    height: fit-content;
+}
