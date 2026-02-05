@@ -43,6 +43,7 @@ const tickfontSizeInput = document.querySelector("input#tickfontSize");
 
 var nextValueIndex = 0;
 var manualEntry = false;
+var tooltipList;
 
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
@@ -130,6 +131,8 @@ function fillWithExampleData() {
             document.getElementById("value-" + i).value = data[i];
         }
 
+        chartTypeSelect.options[1].selected = true;
+        compoundEditor.innerHTML = 'Example <b>product</b>';
         manualEntry = false;
     }
 }
