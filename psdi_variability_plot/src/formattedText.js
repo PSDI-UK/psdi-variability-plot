@@ -41,20 +41,75 @@ const paletteMarkup = `
 const symbolPopoverMarkup = `
     <div popover class="symbolPopover" id="symbolPopover1">
         <div class="symbolSelector">
-            <button>°</button> <button>Å</button> <button>→</button> <button>⟹</button> <button>+</button>
-            <button>-</button> <button>×</button> <button>÷</button> <button>±</button> <button>∓</button>
-            <button>=</button> <button>≠</button> <button>&lt;</button> <button>></button> <button>≤</button>
-            <button>≥</button> <button>≲</button> <button>≳</button> <button>≪</button> <button>≫</button>
-            <button>α</button> <button>β</button> <button>γ</button> <button>δ</button> <button>ε</button>
-            <button>ζ</button> <button>η</button> <button>θ</button> <button>ι</button> <button>κ</button>
-            <button>λ</button> <button>μ</button> <button>ν</button> <button>ξ</button> <button>ο</button>
-            <button>π</button> <button>ρ</button> <button>ς</button> <button>σ</button> <button>τ</button>
-            <button>υ</button> <button>φ</button> <button>χ</button> <button>ψ</button> <button>ω</button>
-            <button>Α</button> <button>Β</button> <button>Γ</button> <button>Δ</button> <button>Ε</button>
-            <button>Ζ</button> <button>Η</button> <button>Θ</button> <button>Ι</button> <button>Κ</button>
-            <button>Λ</button> <button>Μ</button> <button>Ν</button> <button>Ξ</button> <button>Ο</button>
-            <button>Π</button> <button>Ρ</button> <button>Σ</button> <button>Τ</button> <button>Υ</button>
-            <button>Φ</button> <button>Χ</button> <button>Ψ</button> <button>Ω</button>
+            <button type="button" tabindex="0">°</button>
+            <button type="button" tabindex="0">Å</button>
+            <button type="button" tabindex="0">→</button>
+            <button type="button" tabindex="0">⟹</button>
+            <button type="button" tabindex="0">+</button>
+            <button type="button" tabindex="0">-</button>
+            <button type="button" tabindex="0">×</button>
+            <button type="button" tabindex="0">÷</button>
+            <button type="button" tabindex="0">±</button>
+            <button type="button" tabindex="0">∓</button>
+            <button type="button" tabindex="0">=</button>
+            <button type="button" tabindex="0">≠</button>
+            <button type="button" tabindex="0">&lt;</button>
+            <button type="button" tabindex="0">></button>
+            <button type="button" tabindex="0">≤</button>
+            <button type="button" tabindex="0">≥</button>
+            <button type="button" tabindex="0">≲</button>
+            <button type="button" tabindex="0">≳</button>
+            <button type="button" tabindex="0">≪</button>
+            <button type="button" tabindex="0">≫</button>
+            <button type="button" tabindex="0">α</button>
+            <button type="button" tabindex="0">β</button>
+            <button type="button" tabindex="0">γ</button>
+            <button type="button" tabindex="0">δ</button>
+            <button type="button" tabindex="0">ε</button>
+            <button type="button" tabindex="0">ζ</button>
+            <button type="button" tabindex="0">η</button>
+            <button type="button" tabindex="0">θ</button>
+            <button type="button" tabindex="0">ι</button>
+            <button type="button" tabindex="0">κ</button>
+            <button type="button" tabindex="0">λ</button>
+            <button type="button" tabindex="0">μ</button>
+            <button type="button" tabindex="0">ν</button>
+            <button type="button" tabindex="0">ξ</button>
+            <button type="button" tabindex="0">ο</button>
+            <button type="button" tabindex="0">π</button>
+            <button type="button" tabindex="0">ρ</button>
+            <button type="button" tabindex="0">ς</button>
+            <button type="button" tabindex="0">σ</button>
+            <button type="button" tabindex="0">τ</button>
+            <button type="button" tabindex="0">υ</button>
+            <button type="button" tabindex="0">φ</button>
+            <button type="button" tabindex="0">χ</button>
+            <button type="button" tabindex="0">ψ</button>
+            <button type="button" tabindex="0">ω</button>
+            <button type="button" tabindex="0">Α</button>
+            <button type="button" tabindex="0">Β</button>
+            <button type="button" tabindex="0">Γ</button>
+            <button type="button" tabindex="0">Δ</button>
+            <button type="button" tabindex="0">Ε</button>
+            <button type="button" tabindex="0">Ζ</button>
+            <button type="button" tabindex="0">Η</button>
+            <button type="button" tabindex="0">Θ</button>
+            <button type="button" tabindex="0">Ι</button>
+            <button type="button" tabindex="0">Κ</button>
+            <button type="button" tabindex="0">Λ</button>
+            <button type="button" tabindex="0">Μ</button>
+            <button type="button" tabindex="0">Ν</button>
+            <button type="button" tabindex="0">Ξ</button>
+            <button type="button" tabindex="0">Ο</button>
+            <button type="button" tabindex="0">Π</button>
+            <button type="button" tabindex="0">Ρ</button>
+            <button type="button" tabindex="0">Σ</button>
+            <button type="button" tabindex="0">Τ</button>
+            <button type="button" tabindex="0">Υ</button>
+            <button type="button" tabindex="0">Φ</button>
+            <button type="button" tabindex="0">Χ</button>
+            <button type="button" tabindex="0">Ψ</button>
+            <button type="button" tabindex="0">Ω</button>
         </div>
     </div>
 `;
