@@ -2,42 +2,39 @@
 
 const paletteMarkup = `
     <div>
-        <button type="button" class="boldButton">
+        <button tabindex="0" type="button" class="boldButton">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-type-bold" viewBox="0 0 16 16">
                 <path
                     d="M8.21 13c2.106 0 3.412-1.087 3.412-2.823 0-1.306-.984-2.283-2.324-2.386v-.055a2.176 2.176 0 0 0 1.852-2.14c0-1.51-1.162-2.46-3.014-2.46H3.843V13zM5.908 4.674h1.696c.963 0 1.517.451 1.517 1.244 0 .834-.629 1.32-1.73 1.32H5.908V4.673zm0 6.788V8.598h1.73c1.217 0 1.88.492 1.88 1.415 0 .943-.643 1.449-1.832 1.449H5.907z" />
             </svg>
-        </button><button type="button" class="italicButton">
+        </button><button tabindex="0" type="button" class="italicButton">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-type-italic" viewBox="0 0 16 16">
                 <path
                     d="M7.991 11.674 9.53 4.455c.123-.595.246-.71 1.347-.807l.11-.52H7.211l-.11.52c1.06.096 1.128.212 1.005.807L6.57 11.674c-.123.595-.246.71-1.346.806l-.11.52h3.774l.11-.52c-1.06-.095-1.129-.211-1.006-.806z" />
             </svg>
-        </button><button type="button" class="underlineButton">
+        </button><button tabindex="0" type="button" class="underlineButton">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-type-underline" viewBox="0 0 16 16">
                 <path
                     d="M5.313 3.136h-1.23V9.54c0 2.105 1.47 3.623 3.917 3.623s3.917-1.518 3.917-3.623V3.136h-1.23v6.323c0 1.49-.978 2.57-2.687 2.57s-2.687-1.08-2.687-2.57zM12.5 15h-9v-1h9z" />
             </svg>
-        </button><button type="button" class="superscriptButton">
+        </button><button tabindex="0" type="button" class="superscriptButton">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-superscript" viewBox="0 0 16 16">
                 <path
                     d="m4.266 12.496.96-2.853H8.76l.96 2.853H11L7.62 3H6.38L3 12.496zm2.748-8.063 1.419 4.23h-2.88l1.426-4.23zm5.132-1.797v-.075c0-.332.234-.618.619-.618.354 0 .618.256.618.58 0 .362-.271.649-.52.898l-1.788 1.832V6h3.59v-.958h-1.923v-.045l.973-1.04c.415-.438.867-.845.867-1.547 0-.8-.701-1.41-1.787-1.41C11.565 1 11 1.8 11 2.576v.06z" />
             </svg>
-        </button><button type="button" class="subscriptButton">
+        </button><button tabindex="0" type="button" class="subscriptButton">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-subscript" viewBox="0 0 16 16">
                 <path
                     d="m3.266 12.496.96-2.853H7.76l.96 2.853H10L6.62 3H5.38L2 12.496zm2.748-8.063 1.419 4.23h-2.88l1.426-4.23zm6.132 7.203v-.075c0-.332.234-.618.619-.618.354 0 .618.256.618.58 0 .362-.271.649-.52.898l-1.788 1.832V15h3.59v-.958h-1.923v-.045l.973-1.04c.415-.438.867-.845.867-1.547 0-.8-.701-1.41-1.787-1.41-1.23 0-1.795.8-1.795 1.576v.06z" />
             </svg>
-        </button><button type="button" popovertarget="symbolPopover1" class="insertSymbolButton" style="width: 24px; height: 24px">
+        </button><button tabindex="0" type="button" popovertarget="symbolPopover1" class="insertSymbolButton" style="width: 24px; height: 24px">
             Ω
         </button>
-        <!-- <button type="button" class="multiscriptsButton">
-            Multiscripts
-        </button> -->
     </div>
 `;
 
