@@ -236,26 +236,6 @@
     </p>
 
     <div class="formControl">
-      <label id="numValuesLabel">Number of reaction outcome values</label>
-      <input type="number" aria-labelledby="numValuesLabel" id="numValues" value="5" min="3">
-    </div>
-
-    <div class="formControl">
-      <label id="valuesLabel">Reaction outcome values</label>
-      <div id="valuesArea"></div>
-    </div>
-
-<!--    <div>
-      <button id="exampleData">Fill with example data</button>
-    </div> -->
-
-    <div>
-      <button type="button" id="exampleData" class="mouseover-tooltip" data-bs-toggle="tooltip"
-        data-bs-custom-class="tooltip-on-light" data-bs-placement="top"
-        title="This fills the above fields with an example set of 5 values, illustrating how a point can fall outside of the confidence interval.">Fill with example data</button>
-    </div>
-
-    <div class="formControl">
       <label for="chartType">Reaction outcome</label>
       <select id="chartType" aria-label="Plot Type">
         <option value="noSelection" selected>Select reaction outcome</option>
@@ -271,6 +251,22 @@
           <input id="otherType" placeholder="Define outcome">
         </div>
       </div>
+    </div>
+
+    <div class="formControl">
+      <label id="numValuesLabel">Number of reaction outcome values</label>
+      <input type="number" aria-labelledby="numValuesLabel" id="numValues" value="5" min="3">
+    </div>
+
+    <div class="formControl">
+      <label id="valuesLabel">Reaction outcome values</label>
+      <div id="valuesArea"></div>
+    </div>
+
+    <div>
+      <button type="button" id="exampleData" class="mouseover-tooltip" data-bs-toggle="tooltip"
+        data-bs-custom-class="tooltip-on-light" data-bs-placement="top"
+        title="This fills the above fields with an example set of 5 values, illustrating how a point can fall outside of the confidence interval.">Fill with example data</button>
     </div>
 
     <div class="formControl">
@@ -310,24 +306,7 @@
 
     <div id="variabilityPlotContainer" hidden>
 
-      <div>
-        <button id="customiseChart">Customise plot</button>
-        <button id="downloadChart">Download plot</button>
-        <button id="copyToClipboard">Copy plot to clipboard</button>
-        <span hidden id="copySuccess">Copied!</span>
-        <span hidden id="copyFailure">Copy failed.</span>
-      </div>
-
-      <div id="variabilityChart"></div>
-
-      <div class="formControl">
-        <label for="downloadFormat">Download format</label>
-        <select id="downloadFormat">
-          <option value="svg" selected>SVG</option>
-          <option value="png">PNG</option>
-          <option value="jpeg">JPEG</option>
-        </select>
-      </div>
+      <div style="margin-top:-15px;" id="variabilityChart"></div>
 
       <div class="formControl">
         <label id="chartSizeLabel">Chart width / height (pixels)</label>
@@ -344,6 +323,23 @@
           <option value="2">Website (hi resolution)</option>
           <option value="4">Print</option>
         </select>
+      </div>
+
+      <div class="formControl">
+        <label for="downloadFormat">Download format</label>
+        <select id="downloadFormat">
+          <option value="svg" selected>SVG</option>
+          <option value="png">PNG</option>
+          <option value="jpeg">JPEG</option>
+        </select>
+      </div>
+
+      <div>
+        <button id="customiseChart">Customise plot</button>
+        <button id="downloadChart">Download plot</button>
+        <button id="copyToClipboard">Copy plot to clipboard</button>
+        <span hidden id="copySuccess">Copied!</span>
+        <span hidden id="copyFailure">Copy failed.</span>
       </div>
 
     </div>
