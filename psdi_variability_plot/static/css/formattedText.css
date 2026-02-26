@@ -1,14 +1,8 @@
 /* formatted text editor style */
 
-.formattedTextEditor {
-    padding: 3px;
-    border: 2px inset #767676;
-}
-
-.formattedTextEditor[contenteditable=true].empty:after {
-    content: attr(data-placeholder);
-    color: grey;
-    font-style: italic;
+.formattedEditor {
+    border: 2px inset #888;
+    height: fit-content;
 }
 
 .formattedEditorPalette {
@@ -17,71 +11,75 @@
 
 .formattedEditorPalette>div {
     position: absolute;
-    right: 0;
-    bottom: 0px;
-    border-top: 2px inset #767676;
-    border-left: 2px inset #767676;
-    border-right: 2px inset #767676;
+    right: 1px;
+    bottom: -1px;
+    outline: 1px solid gray;
+    display: flex;
+    border: none;
+    width: fit-content;
 }
 
-.formattedEditorPalette button {
-    display: inline-block;
-    margin: 0;
-    padding: 4px;
-    border: 0;
-    border-radius: 0;
-}
-
-.formattedEditorPalette>div,
-.formattedEditorPalette button {
-    display: inline-flex;
-    justify-content: center;
+.formattedEditorPalette>div button {
+    display: flex;
+    border: 1px solid #444;
     align-items: center;
-}
-
-.formattedEditorPalette button {
-    color: #444;
+    justify-content: center;
+    border-radius: 0;
     background: white;
+    color: black;
+    min-width: 32px;
+    padding: 0;
+    margin: 0;
 }
 
-.formattedEditorPalette button.active {
-    color: white;
+.formattedEditorPalette>div button.ql-active {
+    border: 1px solid #444;
     background: #444;
+    color: white;
 }
 
-.formattedEditorPalette button:hover {
-    background: #ddd;
+.ql-editor {
+    padding: 3px 3px;
+    height: fit-content;
 }
 
-.formattedEditorPalette button.active:hover {
-    background: #777;
-}
-
-.symbolPopover {
-    position-area: block-end span-inline-start;
-    border: 2px inset #767676;
+.ql-editor.ql-blank::before {
+    left: inherit;
+    right: inherit;
 }
 
 .symbolSelector {
+    position: relative;
+}
+
+.symbolSelector>div {
+    box-sizing: content-box;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 2px solid #444;
+    background: white;
     display: flex;
-    width: 192px;
+    width: 256px;
     flex-wrap: wrap;
     user-select: none;
+    z-index: 1;
 }
 
 .symbolSelector button {
+    border-radius: 0;
+    box-sizing: content-box;
+    padding: 0;
+    margin: 0;
     background: white;
     color: black;
     border: none;
     display: inline-flex;
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    padding: 16px;
-    margin: 0;
-    border-radius: 0;
 }
 
 .symbolSelector button:hover {

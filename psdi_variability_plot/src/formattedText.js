@@ -1,138 +1,153 @@
 // formattedText.js
 
-const paletteMarkup = `
-    <div>
-        <button tabindex="0" type="button" class="boldButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-type-bold" viewBox="0 0 16 16">
-                <path
-                    d="M8.21 13c2.106 0 3.412-1.087 3.412-2.823 0-1.306-.984-2.283-2.324-2.386v-.055a2.176 2.176 0 0 0 1.852-2.14c0-1.51-1.162-2.46-3.014-2.46H3.843V13zM5.908 4.674h1.696c.963 0 1.517.451 1.517 1.244 0 .834-.629 1.32-1.73 1.32H5.908V4.673zm0 6.788V8.598h1.73c1.217 0 1.88.492 1.88 1.415 0 .943-.643 1.449-1.832 1.449H5.907z" />
-            </svg>
-        </button><button tabindex="0" type="button" class="italicButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-type-italic" viewBox="0 0 16 16">
-                <path
-                    d="M7.991 11.674 9.53 4.455c.123-.595.246-.71 1.347-.807l.11-.52H7.211l-.11.52c1.06.096 1.128.212 1.005.807L6.57 11.674c-.123.595-.246.71-1.346.806l-.11.52h3.774l.11-.52c-1.06-.095-1.129-.211-1.006-.806z" />
-            </svg>
-        </button><button tabindex="0" type="button" class="underlineButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-type-underline" viewBox="0 0 16 16">
-                <path
-                    d="M5.313 3.136h-1.23V9.54c0 2.105 1.47 3.623 3.917 3.623s3.917-1.518 3.917-3.623V3.136h-1.23v6.323c0 1.49-.978 2.57-2.687 2.57s-2.687-1.08-2.687-2.57zM12.5 15h-9v-1h9z" />
-            </svg>
-        </button><button tabindex="0" type="button" class="superscriptButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-superscript" viewBox="0 0 16 16">
-                <path
-                    d="m4.266 12.496.96-2.853H8.76l.96 2.853H11L7.62 3H6.38L3 12.496zm2.748-8.063 1.419 4.23h-2.88l1.426-4.23zm5.132-1.797v-.075c0-.332.234-.618.619-.618.354 0 .618.256.618.58 0 .362-.271.649-.52.898l-1.788 1.832V6h3.59v-.958h-1.923v-.045l.973-1.04c.415-.438.867-.845.867-1.547 0-.8-.701-1.41-1.787-1.41C11.565 1 11 1.8 11 2.576v.06z" />
-            </svg>
-        </button><button tabindex="0" type="button" class="subscriptButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-subscript" viewBox="0 0 16 16">
-                <path
-                    d="m3.266 12.496.96-2.853H7.76l.96 2.853H10L6.62 3H5.38L2 12.496zm2.748-8.063 1.419 4.23h-2.88l1.426-4.23zm6.132 7.203v-.075c0-.332.234-.618.619-.618.354 0 .618.256.618.58 0 .362-.271.649-.52.898l-1.788 1.832V15h3.59v-.958h-1.923v-.045l.973-1.04c.415-.438.867-.845.867-1.547 0-.8-.701-1.41-1.787-1.41-1.23 0-1.795.8-1.795 1.576v.06z" />
-            </svg>
-        </button><button tabindex="0" type="button" popovertarget="symbolPopover1" class="insertSymbolButton" style="width: 24px; height: 24px">
-            Ω
-        </button>
-    </div>
-`;
-
-const symbolPopoverMarkup = `
-    <div popover class="symbolPopover" id="symbolPopover1">
-        <div class="symbolSelector">
-            <button type="button" tabindex="0">°</button>
-            <button type="button" tabindex="0">Å</button>
-            <button type="button" tabindex="0">→</button>
-            <button type="button" tabindex="0">⟹</button>
-            <button type="button" tabindex="0">+</button>
-            <button type="button" tabindex="0">-</button>
-            <button type="button" tabindex="0">×</button>
-            <button type="button" tabindex="0">÷</button>
-            <button type="button" tabindex="0">±</button>
-            <button type="button" tabindex="0">∓</button>
-            <button type="button" tabindex="0">=</button>
-            <button type="button" tabindex="0">≠</button>
-            <button type="button" tabindex="0">&lt;</button>
-            <button type="button" tabindex="0">></button>
-            <button type="button" tabindex="0">≤</button>
-            <button type="button" tabindex="0">≥</button>
-            <button type="button" tabindex="0">≲</button>
-            <button type="button" tabindex="0">≳</button>
-            <button type="button" tabindex="0">≪</button>
-            <button type="button" tabindex="0">≫</button>
-            <button type="button" tabindex="0">α</button>
-            <button type="button" tabindex="0">β</button>
-            <button type="button" tabindex="0">γ</button>
-            <button type="button" tabindex="0">δ</button>
-            <button type="button" tabindex="0">ε</button>
-            <button type="button" tabindex="0">ζ</button>
-            <button type="button" tabindex="0">η</button>
-            <button type="button" tabindex="0">θ</button>
-            <button type="button" tabindex="0">ι</button>
-            <button type="button" tabindex="0">κ</button>
-            <button type="button" tabindex="0">λ</button>
-            <button type="button" tabindex="0">μ</button>
-            <button type="button" tabindex="0">ν</button>
-            <button type="button" tabindex="0">ξ</button>
-            <button type="button" tabindex="0">ο</button>
-            <button type="button" tabindex="0">π</button>
-            <button type="button" tabindex="0">ρ</button>
-            <button type="button" tabindex="0">ς</button>
-            <button type="button" tabindex="0">σ</button>
-            <button type="button" tabindex="0">τ</button>
-            <button type="button" tabindex="0">υ</button>
-            <button type="button" tabindex="0">φ</button>
-            <button type="button" tabindex="0">χ</button>
-            <button type="button" tabindex="0">ψ</button>
-            <button type="button" tabindex="0">ω</button>
-            <button type="button" tabindex="0">Α</button>
-            <button type="button" tabindex="0">Β</button>
-            <button type="button" tabindex="0">Γ</button>
-            <button type="button" tabindex="0">Δ</button>
-            <button type="button" tabindex="0">Ε</button>
-            <button type="button" tabindex="0">Ζ</button>
-            <button type="button" tabindex="0">Η</button>
-            <button type="button" tabindex="0">Θ</button>
-            <button type="button" tabindex="0">Ι</button>
-            <button type="button" tabindex="0">Κ</button>
-            <button type="button" tabindex="0">Λ</button>
-            <button type="button" tabindex="0">Μ</button>
-            <button type="button" tabindex="0">Ν</button>
-            <button type="button" tabindex="0">Ξ</button>
-            <button type="button" tabindex="0">Ο</button>
-            <button type="button" tabindex="0">Π</button>
-            <button type="button" tabindex="0">Ρ</button>
-            <button type="button" tabindex="0">Σ</button>
-            <button type="button" tabindex="0">Τ</button>
-            <button type="button" tabindex="0">Υ</button>
-            <button type="button" tabindex="0">Φ</button>
-            <button type="button" tabindex="0">Χ</button>
-            <button type="button" tabindex="0">Ψ</button>
-            <button type="button" tabindex="0">Ω</button>
-        </div>
-    </div>
-`;
-
-const styleTags = {
-    bold: "b",
-    italic: "i",
-    underline: "u",
-    superscript: "sup",
-    subscript: "sub"
-};
-
 export class FormattedText {
 
+    #quill;
     #editArea;
 
-    #observer;
+    constructor({ element, value: initialValue, changeFunc }) {
 
-    #commandPalette;
-    #symbolPopover;
-    #symbolSelector;
+        if (element === undefined) {
 
-    #eventHandlers = [];
+            this.#editArea = document.createElement("span");
+            this.#editArea.innerHTML = initialValue;
+
+        } else {
+
+            this.#editArea = element;
+
+            const toolbarTemplate = document.querySelector("template#formattedEditor");
+
+            const templateContent = document.createElement("div");
+            templateContent.append(...toolbarTemplate.content.cloneNode(true).children);
+
+            const toolbar = templateContent.querySelector(".formattedEditorPalette");
+            const symbolSelector = templateContent.querySelector(".symbolSelector");
+
+            this.#editArea.insertAdjacentElement("beforebegin", toolbar);
+            this.#editArea.insertAdjacentElement("beforebegin", symbolSelector);
+
+            const insertSymbolButton = toolbar.querySelector('.insertSymbolButton');
+
+            let bindings = {
+
+                tab: {
+                    key: [9, "tab", "Tab"],
+                    handler: () => true
+                },
+                enter: {
+                    key: [13, "enter", "Enter"],
+                    handler: () => false
+                },
+                shiftEnter: {
+                    key: [13, "enter", "Enter"],
+                    shiftKey: true,
+                    handler: () => false
+                }
+            };
+
+            const quill = new Quill(this.#editArea, {
+                placeholder: this.#editArea.getAttribute("data-placeholder"),
+                formats: ['italic', 'bold', 'underline', 'script'],
+                modules: {
+                    toolbar,
+                    keyboard: {
+                        bindings
+                    }
+                },
+            });
+
+            this.#quill = quill;
+
+            const contentEditableArea = this.#editArea.querySelector("[contenteditable=true]");
+
+            function replaceText(quill, text) {
+
+                const selection = quill.getSelection();
+
+                if (selection !== null) {
+                    quill.deleteText(selection.index, selection.length);
+                }
+
+                quill.insertText(selection ? selection.index : 0, text);
+            }
+
+            for (const symbolButton of symbolSelector.querySelectorAll("button")) {
+
+                symbolButton.addEventListener("click", function () {
+                    replaceText(quill, symbolButton.textContent);
+                    symbolSelector.hidden = true;
+                });
+            }
+
+            insertSymbolButton.addEventListener("click", function () {
+                symbolSelector.hidden = !symbolSelector.hidden;
+            })
+
+            function processSelectedElementChange(event) {
+
+                const nextElement = event.type === "focusin" ? event.target : event.relatedTarget;
+
+                // Process symbol selector.
+
+                if (symbolSelector.hidden == false) {
+
+                    let hideSymbolSelector = true;
+
+                    if (nextElement?.parentElement?.parentElement === symbolSelector) {
+                        hideSymbolSelector = false;
+                    }
+
+                    if (hideSymbolSelector) {
+                        symbolSelector.hidden = true
+                    }
+                }
+
+                let inactive = true;
+
+                // Not finished if Quill's content editable area is active.
+
+                if (nextElement === contentEditableArea) {
+                    inactive = false;
+                }
+
+                // Not finished if one of the toolbar buttons is active.
+
+                if (nextElement?.parentElement?.parentElement === toolbar) {
+                    inactive = false;
+                }
+
+                // Not finished if one of the symbols in the symbol selector is active.
+
+                if (nextElement?.parentElement?.parentElement === symbolSelector) {
+                    inactive = false;
+                }
+
+                toolbar.hidden = inactive;
+
+                if (inactive) {
+                    symbolSelector.hidden = true;
+                }
+            }
+
+            element.addEventListener("focusin", processSelectedElementChange);
+            element.addEventListener("focusout", processSelectedElementChange);
+            toolbar.addEventListener("focusin", processSelectedElementChange, { capture: true });
+            toolbar.addEventListener("focusout", processSelectedElementChange, { capture: true });
+            symbolSelector.addEventListener("focusin", processSelectedElementChange, { capture: true });
+            symbolSelector.addEventListener("focusout", processSelectedElementChange, { capture: true });
+
+            if (initialValue) {
+                this.setFormattedContent(initialValue);
+            }
+
+            quill.on('text-change', (delta, oldDelta, source) => {
+                if (changeFunc) {
+                    changeFunc({ delta, oldDelta, source });
+                }
+            });
+        }
+    }
 
     #createSVGElement(tag, attributes) {
 
@@ -286,238 +301,6 @@ export class FormattedText {
         return box;
     }
 
-    #toggleStyle(type) {
-        this.#editArea.focus();
-        document.execCommand(type);
-        this.#updatePaletteButtons();
-    }
-
-    #documentFocusInOut(event) {
-
-        if (!this.#editArea.isConnected) {
-            this.#removeEvents();
-            return;
-        }
-
-        const nextElement = event.type === "focusin" ? event.target : event.relatedTarget;
-
-        const hidden = (nextElement === null) ||
-            !(nextElement === this.#editArea || this.#commandPalette.contains(nextElement) || this.#symbolPopover.contains(nextElement))
-
-        this.#commandPalette.hidden = hidden;
-
-        if (hidden) {
-            if (this.#symbolSelector) {
-                this.#symbolSelector.hidePopover();
-            }
-        }
-    }
-
-    #updatePaletteButtons() {
-
-        for (const styleTag in styleTags) {
-
-            const button = this.#commandPalette.querySelector(`button.${styleTag}Button`);
-
-            if (document.queryCommandState(styleTag)) {
-                button.classList.add("active");
-            } else {
-                button.classList.remove("active");
-            }
-        }
-    }
-
-    #updateEmptyClass() {
-
-        for (const br of this.#editArea.querySelectorAll("br")) {
-            br.remove();
-        }
-
-        if (this.#editArea.textContent.trim() === "") {
-            this.#editArea.classList.add("empty");
-        } else {
-            this.#editArea.classList.remove("empty");
-        }
-    }
-
-    #editAreaBeforeInput(event) {
-
-        if (!this.#editArea.isConnected) {
-            removeEvents();
-            return;
-        }
-
-        if (event.inputType === "insertParagraph") {
-            event.preventDefault();
-        }
-    }
-
-    #editAreaKeyDown(event) {
-
-        if (!this.#editArea.isConnected) {
-            this.#removeEvents();
-            return;
-        }
-
-        if (event.ctrlKey) {
-
-            switch (event.key) {
-
-                case "u":
-                    event.preventDefault();
-                    this.#toggleStyle("underline");
-                    break;
-
-                case "i":
-                    event.preventDefault();
-                    this.#toggleStyle("italic");
-                    break;
-
-                case "b":
-                    event.preventDefault();
-                    this.#toggleStyle("bold");
-                    break;
-            }
-        }
-    }
-
-    #insertSymbol(element) {
-
-        this.#symbolSelector.hidePopover();
-        this.#editArea.focus();
-        document.execCommand("insertText", false, element.textContent);
-    }
-
-    #removeEvents() {
-
-        this.#observer.disconnect();
-
-        for (const eventHandler of this.#eventHandlers) {
-            eventHandler.object.removeEventListener(eventHandler.type, eventHandler.function);
-        }
-
-        this.#eventHandlers = [];
-    }
-
-    #addEvents() {
-
-        this.#observer.observe(this.#editArea, { subtree: true, childList: true, characterData: true });
-
-        this.#eventHandlers = [
-            {
-                object: this.#editArea,
-                type: "beforeinput",
-                function: (event) => this.#editAreaBeforeInput(event)
-            },
-            {
-                object: this.#editArea,
-                type: "keydown",
-                function: (event) => this.#editAreaKeyDown(event)
-            },
-            {
-                object: document,
-                type: "focusout",
-                function: (event) => this.#documentFocusInOut(event)
-            },
-            {
-                object: document,
-                type: "focusin",
-                function: (event) => this.#documentFocusInOut(event)
-            },
-            {
-                object: document,
-                type: "selectionchange",
-                function: (event) => this.#updatePaletteButtons(event)
-            },
-            {
-                object: document,
-                type: "keyup",
-                function: (event) => this.#updatePaletteButtons(event)
-            },
-            {
-                object: this.#commandPalette.querySelector("button.boldButton"),
-                type: "click",
-                function: (event) => this.#toggleStyle("bold")
-            },
-            {
-                object: this.#commandPalette.querySelector("button.italicButton"),
-                type: "click",
-                function: (event) => this.#toggleStyle("italic")
-            },
-            {
-                object: this.#commandPalette.querySelector("button.underlineButton"),
-                type: "click",
-                function: (event) => this.#toggleStyle("underline")
-            },
-            {
-                object: this.#commandPalette.querySelector("button.superscriptButton"),
-                type: "click",
-                function: (event) => this.#toggleStyle("superscript")
-            },
-            {
-                object: this.#commandPalette.querySelector("button.subscriptButton"),
-                type: "click",
-                function: (event) => this.#toggleStyle("subscript")
-            },
-        ];
-
-        for (const symbol of this.#symbolPopover.querySelectorAll("div.symbolSelector button")) {
-
-            this.#eventHandlers.push({
-                object: symbol,
-                type: "click",
-                function: () => this.#insertSymbol(symbol)
-            });
-        }
-
-        for (const eventHandler of this.#eventHandlers) {
-            eventHandler.object.addEventListener(eventHandler.type, eventHandler.function);
-        }
-
-        this.#commandPalette.hidden = true;
-
-        this.#editArea.setAttribute("contenteditable", true);
-    }
-
-    constructor({ element, initialValue }) {
-
-        this.#editArea = element;
-
-        // Create the command palette.
-
-        this.#commandPalette = document.createElement("div");
-
-        this.#commandPalette.classList.add("formattedEditorPalette");
-        this.#commandPalette.innerHTML = paletteMarkup;
-        this.#commandPalette.hidden = true;
-
-        this.#symbolPopover = document.createElement("div");
-
-        this.#symbolPopover.innerHTML = symbolPopoverMarkup;
-
-        this.#editArea.classList.add("formattedTextEditor");
-
-        this.#editArea.insertAdjacentElement("beforebegin", this.#commandPalette);
-        this.#editArea.insertAdjacentElement("beforebegin", this.#symbolPopover);
-
-        if (initialValue !== undefined) {
-            this.#editArea.innerHTML = initialValue;
-        }
-
-        this.#observer = new MutationObserver(() => this.#updateEmptyClass());
-
-        const symbolPopoverId = `popover-${crypto.randomUUID()}`;
-
-        this.#commandPalette.querySelector("button.insertSymbolButton").setAttribute("popovertarget", symbolPopoverId);
-        this.#symbolPopover.querySelector("div.symbolPopover").setAttribute("id", symbolPopoverId);
-
-        this.#symbolSelector = this.#symbolPopover.querySelector("div.symbolPopover");
-
-        this.#addEvents();
-
-        this.#updateEmptyClass();
-    }
-
     renderSVG({ element, x, y, rotation, fontFamily, fontSize }) {
 
         const { textSpans, overallBaseline } = this.#generateCopy({ fontFamily, fontSize });
@@ -543,8 +326,6 @@ export class FormattedText {
 
             text.setAttribute("x", xOffset + textSpan.boundingBox.left);
             text.setAttribute("y", yOffset + textSpan.boundingBox.top);
-            text.setAttribute("textLength", textSpan.boundingBox.right - textSpan.boundingBox.left);
-            text.setAttribute("lengthAdjust", "spacingAndGlyphs");
 
             text.setAttribute("font-size", textSpan.fontSize);
 
@@ -569,5 +350,58 @@ export class FormattedText {
         const { textSpans, overallBaseline } = this.#generateCopy({ fontFamily, fontSize });
 
         return this.#calculateBoundingBox({ textSpans, overallBaseline });
+    }
+
+    getFormattedContent() {
+
+        if (this.#quill) {
+
+            const rootElement = document.createElement("div");
+
+            rootElement.innerHTML = this.#quill.getSemanticHTML();
+
+            function aux(element) {
+
+                for (const child of element.children) {
+
+                    aux(child);
+
+                    if (child.tagName === "STRONG") {
+                        const newElement = document.createElement("B");
+
+                        newElement.replaceChildren(...child.childNodes);
+                        child.replaceWith(newElement);
+                    }
+
+                    if (child.tagName === "EM") {
+                        const newElement = document.createElement("I");
+
+                        newElement.replaceChildren(...child.childNodes);
+                        child.replaceWith(newElement);
+                    }
+                }
+            }
+
+            aux(rootElement);
+
+            return rootElement.querySelector("p").innerHTML;
+
+        } else {
+
+            return this.#editArea.innerHTML;
+        }
+    }
+
+    setFormattedContent(content) {
+
+        if (this.#quill) {
+            this.#quill.setContents(this.#quill.clipboard.convert({ html: content }), 'silent');
+        } else {
+            this.#editArea.innerHTML = content;
+        }
+    }
+
+    getTextContent() {
+        return this.#quill.getText().trim();
     }
 }
