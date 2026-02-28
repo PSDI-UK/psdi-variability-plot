@@ -273,6 +273,7 @@ div#noChart {
   color          : gray;
   font-size      : 150%;
   border-radius  : 6px;
+  flex-direction : column;
 }
 
 #copySuccess {

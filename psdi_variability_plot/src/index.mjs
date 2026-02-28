@@ -17,7 +17,6 @@ const notificationsDiv = document.querySelector("div#notifications");
 const otherTypeInput = document.querySelector("input#otherType");
 const otherTypeRowDiv = document.querySelector("div#otherTypeRow");
 const noChartDiv = document.querySelector("div#noChart");
-const generatePlotButton = document.querySelector("button#generatePlot");
 const exampleDataButton = document.querySelector("button#exampleData");
 const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
@@ -131,6 +130,8 @@ function fillWithExampleData() {
         chartTypeSelect.options[1].selected = true;
         compoundEditorObject.setFormattedContent('Example <b>product</b>');
         manualEntry = false;
+
+        updateMain();
     }
 }
 
@@ -154,39 +155,6 @@ function validatePlot() {
         needOtherOutcome,
         needProductLabel
     }
-}
-
-function generatePlot() {
-
-    const validationResult = validatePlot();
-
-    let alertText = 'You need to:\n';
-    let valuesText = '    enter at least three reaction outcome values\n';
-    let outcomeText = '    select a reaction outcome\n';
-    let otherText = "    enter a definition of 'Other'\n";
-    let productText = '    enter a product label\n';
-
-    if (validationResult.needThreeValues) {
-        alertText += valuesText;
-    }
-
-    if (validationResult.needReactionOutcome) {
-        alertText += outcomeText;
-    }
-
-    if (validationResult.needOtherOutcome) {
-        alertText += otherText;
-    }
-
-    if (validationResult.needProductLabel) {
-        alertText += productText;
-    }
-
-    if (!validationResult.validated) {
-        window.alert(alertText);
-    }
-
-    renderChart(variabilityChart);
 }
 
 function changeOtherTypeVisibility() {
@@ -275,6 +243,8 @@ function deleteValueField(e) {
             addButton.id = 'add-' + (i - 1);
             value.id = 'value-' + (i - 1);
         }
+
+        updateMain();
     }
 }
 
@@ -293,6 +263,11 @@ function insertValueField(e) {
         newNode.children[2].value = '';
 
         valuesAreaDiv.appendChild(newNode);
+
+        newNode.querySelector("input").addEventListener("change", () => {
+            updateMain();
+            manualEntry = true;
+        });
 
         nextValueIndex++;
 
@@ -387,7 +362,11 @@ function addNewValueField(count) {
         newValue.type = 'text';
         newValue.id = 'value-' + n;
         newValue.style.width = '102px';
-        newValue.addEventListener("change", () => manualEntry = true);
+
+        newValue.addEventListener("change", () => {
+            updateMain();
+            manualEntry = true;
+        });
 
         newDiv.appendChild(removeButton);
         newDiv.appendChild(addButton);
@@ -420,18 +399,21 @@ const compoundEditorObject = new FormattedText({
     }
 });
 
+function updateDesign() {
+    renderChart(plotDesignElement);
+}
+
+function updateMain() {
+    renderChart(variabilityChart);
+}
+
 function setupChangeEvents() {
-
-    function updateDesign() {
-        renderChart(plotDesignElement);
-    }
-
-    function updateMain() {
-        renderChart(variabilityChart);
-    }
 
     chartWidthInput.addEventListener("change", updateMain);
     chartHeightInput.addEventListener("change", updateMain);
+    chartTypeSelect.addEventListener("change", updateMain);
+    otherTypeInput.addEventListener("input", updateMain);
+    significanceInput.addEventListener("input", updateMain);
 
     titleFontSizeInput.addEventListener("input", updateDesign);
     pointTypeSelect.addEventListener("change", updateDesign);
@@ -688,20 +670,45 @@ function renderChartAux(element) {
 
 let loadedFonts = false;
 
+function showNoChartMessage(enable) {
+
+    if (enable) {
+
+        variabilityPlotContainer.hidden = true;
+
+        noChartDiv.hidden = false;
+        noChartDiv.style.display = "flex";
+
+    } else {
+
+        variabilityPlotContainer.hidden = false;
+
+        noChartDiv.hidden = true;
+        noChartDiv.style.display = "none";
+    }
+}
+
+function statusLine(text) {
+
+    const element = document.createElement("div");
+
+    element.textContent = text;
+
+    return element;
+}
+
 async function renderChart(element) {
 
     const validationResult = validatePlot();
 
     if (validationResult.validated) {
 
-        variabilityPlotContainer.hidden = false;
-
-        noChartDiv.hidden = true;
-        noChartDiv.style.display = "none";
-
         // Ensure that fonts are loaded before rendering.
 
         if (!loadedFonts) {
+
+            noChartDiv.replaceChildren(statusLine("loading fonts"));
+            showNoChartMessage(true);
 
             const font = new FontFace("OpenSans", 'url("static/fonts/OpenSans-Regular.ttf")');
             document.fonts.add(font);
@@ -712,16 +719,35 @@ async function renderChart(element) {
             loadedFonts = true;
         }
 
+        showNoChartMessage(false);
+
         renderChartAux(element);
 
         await prepareBitmapCopy()
 
     } else {
 
-        variabilityPlotContainer.hidden = true;
+        let statusLines = [];
 
-        noChartDiv.hidden = false;
-        noChartDiv.style.display = "flex";
+        if (validationResult.needThreeValues) {
+            statusLines.push(statusLine("enter at least three reaction outcome values"));
+        }
+
+        if (validationResult.needReactionOutcome) {
+            statusLines.push(statusLine("select a reaction outcome"));
+        }
+
+        if (validationResult.needOtherOutcome) {
+            statusLines.push(statusLine("enter a definition of 'Other'"));
+        }
+
+        if (validationResult.needProductLabel) {
+            statusLines.push(statusLine("enter a product label"));
+        }
+
+        noChartDiv.replaceChildren(...statusLines);
+
+        showNoChartMessage(true);
     }
 }
 
@@ -751,7 +777,6 @@ $(document).ready(function () {
 });
 
 numberOfValuesInput.addEventListener("change", changeNumberOfValueFields);
-generatePlotButton.addEventListener("click", generatePlot);
 exampleDataButton.addEventListener("click", fillWithExampleData);
 chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
