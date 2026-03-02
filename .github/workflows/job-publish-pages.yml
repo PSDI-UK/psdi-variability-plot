@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download JS bundle
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: js-bundle
           path: psdi_variability_plot/static/js
