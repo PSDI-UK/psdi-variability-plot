@@ -18,10 +18,18 @@ def index():
                            **get_env_kwargs())
 
 
+def documentation():
+    """Return the documentation page
+    """
+    return render_template("documentation.html",
+                           **get_env_kwargs())
+
+
 # Dict of all pages to be rendered for the site, with the key being the relative path to the page, and the value
 # being the function for rendering the page
 d_pages = {"/": index,
-           "/index.html": index}
+           "/index.html": index,
+           "/documentation.html": documentation}
 
 
 def init_get(app: Flask):
