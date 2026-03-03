@@ -210,15 +210,15 @@ class CartesianScale {
         this.#tickStep = this.#config.tickStep;
         this.#labelStep = this.#config.labelStep;
 
-        if (this.#minorGridStep === undefined) {
+        if ((this.#minorGridStep === undefined) || (this.#minorGridStep === "auto")) {
             this.#minorGridStep = this.findIdealStep(this.#minTickGap);
         }
 
-        if (this.#tickStep === undefined) {
+        if ((this.#tickStep === undefined) || (this.#tickStep === "auto")) {
             this.#tickStep = this.findIdealStep(this.#minTickGap);
         }
 
-        if (this.#labelStep === undefined) {
+        if ((this.#labelStep === undefined) || (this.#labelStep === "auto")) {
             this.#labelStep = this.findIdealStep(this.#minTickGap);
         }
     }
@@ -257,6 +257,7 @@ export class Chart {
     #axisFontSize;
     #tickfontFamily = "OpenSans";
     #tickfontSize;
+    #yTickStep;
 
     #legendLines;
 
@@ -265,7 +266,7 @@ export class Chart {
 
     constructor({ targetElement, width, height, pointType, pointColor, pointWeight, pointSize,
         bandColor, meanColor, meanWeight, title, xLabel, yLabel, titleFontSize, axisFontSize, tickfontSize,
-        data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines }) {
+        data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines, yTickStep }) {
 
         this.#targetElement = targetElement;
         this.#data = data;
@@ -289,6 +290,7 @@ export class Chart {
         this.#axisFontSize = axisFontSize;
         this.#tickfontSize = tickfontSize;
         this.#legendLines = legendLines;
+        this.#yTickStep = yTickStep;
 
         this.render();
     }
@@ -370,11 +372,11 @@ export class Chart {
                 max: this.#data.length + 0.5,
             },
             y: {
-                minorGridStep: 20,
-                tickStep: 20,
+                minorGridStep: this.#yTickStep,
+                tickStep: this.#yTickStep,
                 tickSize: 6,
                 tickLabelOffset: 12,
-                labelStep: 20,
+                labelStep: this.#yTickStep,
                 min: 0,
                 max: 100,
             },

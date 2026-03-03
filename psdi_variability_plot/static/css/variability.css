@@ -359,3 +359,7 @@ dialog#variabilityPlotDialog summary {
     width: fit-content;
     height: fit-content;
 }
+
+.plotDesignOptions input[type=color] {
+  width: 100%;
+}

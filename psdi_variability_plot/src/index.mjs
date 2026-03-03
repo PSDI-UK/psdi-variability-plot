@@ -36,6 +36,7 @@ const meanWeightInput = document.querySelector("input#meanWeight");
 const titleFontSizeInput = document.querySelector("input#titleFontSize");
 const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
+const yAxisIntervalSelect = document.querySelector("select#yAxisInterval");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -425,6 +426,7 @@ function setupChangeEvents() {
     meanWeightInput.addEventListener("change", updateDesign);
     axisFontSizeInput.addEventListener("input", updateDesign);
     tickfontSizeInput.addEventListener("input", updateDesign);
+    yAxisIntervalSelect.addEventListener("input", updateDesign);
 }
 
 function getProjectData() {
@@ -449,6 +451,7 @@ function getProjectData() {
         axisFontSize: parseInt(axisFontSizeInput.value),
         tickfontSize: parseInt(tickfontSizeInput.value),
         compound: compoundEditorObject.getFormattedContent(),
+        yAxisInterval: yAxisIntervalSelect.value === "auto" ? "auto" : parseInt(yAxisIntervalSelect.value),
     };
 }
 
@@ -512,6 +515,10 @@ function setProjectData(data) {
 
     if (data.compound) {
         compoundEditorObject.setFormattedContent(data.compound);
+    }
+
+    if (data.yAxisInterval) {
+        yAxisIntervalSelect.value = data.yAxisInterval;
     }
 }
 
@@ -665,6 +672,7 @@ function renderChartAux(element) {
         titleFontSize: projectData.titleFontSize,
         axisFontSize: projectData.axisFontSize,
         tickfontSize: projectData.tickfontSize,
+        yTickStep: projectData.yAxisInterval ? projectData.yAxisInterval : "auto",
     });
 }
 
