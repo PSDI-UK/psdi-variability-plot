@@ -10,7 +10,7 @@ from argparse import ArgumentParser
 from flask import render_template
 
 import psdi_variability_plot
-from psdi_variability_plot.gui.env import update_env
+from psdi_variability_plot.gui.env import get_env_kwargs, update_env
 from psdi_variability_plot.gui.get import d_pages
 from psdi_variability_plot.gui.setup import get_app
 
@@ -67,11 +67,11 @@ def main():
     project_dir = os.path.abspath(os.path.join(psdi_variability_plot.__path__[0], ".."))
 
     # Copy over the static contents directly to the output directory
-    source_static_dir = "psdi_variability_plot/static"
     target_static_dir = os.path.join(output_dir, "static")
     if os.path.exists(target_static_dir):
         shutil.rmtree(target_static_dir)
-    shutil.copytree(source_static_dir, target_static_dir)
+    shutil.copytree(os.path.join(project_dir, "psdi_variability_plot/static"),
+                    target_static_dir)
 
     # Start the app so we're able to render pages
 
@@ -90,12 +90,11 @@ def main():
             qualified_path = os.path.join(output_dir, stripped_path)
 
             # Fix any relative links in the page, since the structure here will be a bit different
-            page_content = render_template(stripped_path)
+            page_content = render_template(stripped_path, **get_env_kwargs())
             page_content = page_content.replace("../", "./")
 
             open(qualified_path, "w").write(page_content)
 
 
 if __name__ == "__main__":
-    main()
     main()
