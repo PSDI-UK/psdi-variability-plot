@@ -28,7 +28,7 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: Upload JS bundle
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: js-bundle
           path: psdi_variability_plot/static/js/variability.js
