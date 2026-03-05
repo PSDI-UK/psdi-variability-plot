@@ -628,6 +628,7 @@ function renderChartAux(element) {
     const xLabelEditorObject = new FormattedText({});
     const autoTitleEditorObject = new FormattedText({});
     const yLabelEditorObject = new FormattedText({});
+    const warningTextObject = new FormattedText({});
 
     xLabelEditorObject.setFormattedContent("Iterations");
     autoTitleEditorObject.setFormattedContent(`Variability plot for the ${chartTypeText} of ${compound}`);
@@ -648,6 +649,12 @@ function renderChartAux(element) {
             x: sampleIndex + 1,
             y: values[sampleIndex]
         });
+    }
+
+    const showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
+
+    if (showWarningText) {
+        warningTextObject.setFormattedContent("Confidence interval exceeds 0 <= ci <= 100");
     }
 
     new Chart({
@@ -671,8 +678,13 @@ function renderChartAux(element) {
         yLabel: yLabelEditorObject,
         titleFontSize: projectData.titleFontSize,
         axisFontSize: projectData.axisFontSize,
-        tickfontSize: projectData.tickfontSize,
+        tickFontSize: projectData.tickfontSize,
         yTickStep: projectData.yAxisInterval ? projectData.yAxisInterval : "auto",
+        showWarningText,
+        warningText: warningTextObject,
+        elementSpacing: 4,
+        tickAreaSize: 12,
+        titleGap: 18,
     });
 }
 

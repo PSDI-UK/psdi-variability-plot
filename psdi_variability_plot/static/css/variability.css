@@ -363,3 +363,12 @@ dialog#variabilityPlotDialog summary {
 .plotDesignOptions input[type=color] {
   width: 100%;
 }
+
+.plotDesignOptions {
+    margin-left: 16px
+}
+
+div#variabilityPlotContainer svg {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}

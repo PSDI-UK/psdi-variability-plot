@@ -1,5 +1,7 @@
 // plot.js
 
+import { FormattedText } from './formattedText.js';
+
 class CartesianScale {
 
     #chart;
@@ -137,7 +139,9 @@ class CartesianScale {
         }
     }
 
-    renderTickLabels(element) {
+    #generateTickLabels() {
+
+        let lables = [];
 
         for (const value of this.#getDivs(this.#labelStep)) {
 
@@ -150,7 +154,7 @@ class CartesianScale {
                 textElement = this.#chart.createSVGElement("text", {
                     class: "yTickLabel",
                     "font-size": this.#tickFontSize,
-                    x: this.#chart.chart.plotArea.left - this.#chart.chart.y.tickLabelOffset,
+                    x: this.#chart.chart.y.tickLabelPosition,
                     y: this.pos(value),
                 });
 
@@ -160,14 +164,45 @@ class CartesianScale {
                     class: "xTickLabel",
                     "font-size": this.#tickFontSize,
                     x: this.pos(value),
-                    y: this.#chart.chart.plotArea.bottom + this.#chart.chart.x.tickLabelOffset,
+                    y: this.#chart.chart.x.tickLabelPosition,
                 });
             }
 
             textElement.textContent = labelText;
 
-            element.append(textElement);
+            lables.push(textElement);
         }
+
+        return lables;
+    }
+
+    renderTickLabels(element) {
+        element.append(...this.#generateTickLabels());
+    }
+
+    maxTickLabelSize() {
+
+        const svg = this.#chart.createSVGElement("svg");
+
+        svg.style.position = "absolute";
+        svg.style.left = "0";
+        svg.style.top = "0";
+        svg.style.opacity = 0
+
+        const labels = this.#generateTickLabels();
+
+        svg.append(...labels);
+
+        document.body.insertAdjacentElement("afterbegin", svg);
+
+        const bBoxes = labels.map(label => label.getBBox());
+
+        const maxWidth = Math.max(...bBoxes.map(box => box.width));
+        const maxHeight = Math.max(...bBoxes.map(box => box.height));
+
+        svg.remove();
+
+        return { maxWidth, maxHeight };
     }
 
     maxIntegerDigits(number) { returnMath.floor(Math.abs(number)).toString().length; }
@@ -255,9 +290,14 @@ export class Chart {
     #titleFontSize;
     #axisFontFamily = "OpenSans";
     #axisFontSize;
-    #tickfontFamily = "OpenSans";
-    #tickfontSize;
+    #tickFontFamily = "OpenSans";
+    #tickFontSize;
     #yTickStep;
+    #showWarningText;
+    #warningText;
+    #elementSpacing;
+    #tickAreaSize;
+    #titleGap;
 
     #legendLines;
 
@@ -265,8 +305,9 @@ export class Chart {
     #canvasContext;
 
     constructor({ targetElement, width, height, pointType, pointColor, pointWeight, pointSize,
-        bandColor, meanColor, meanWeight, title, xLabel, yLabel, titleFontSize, axisFontSize, tickfontSize,
-        data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines, yTickStep }) {
+        bandColor, meanColor, meanWeight, title, xLabel, yLabel, titleFontSize, axisFontSize, tickFontSize,
+        data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines, yTickStep,
+        showWarningText, warningText, elementSpacing, tickAreaSize, titleGap }) {
 
         this.#targetElement = targetElement;
         this.#data = data;
@@ -288,9 +329,14 @@ export class Chart {
         this.#canvasContext = document.createElement("canvas").getContext("2d");
         this.#titleFontSize = titleFontSize;
         this.#axisFontSize = axisFontSize;
-        this.#tickfontSize = tickfontSize;
+        this.#tickFontSize = tickFontSize;
         this.#legendLines = legendLines;
         this.#yTickStep = yTickStep;
+        this.#showWarningText = showWarningText;
+        this.#warningText = warningText;
+        this.#elementSpacing = elementSpacing;
+        this.#tickAreaSize = tickAreaSize;
+        this.#titleGap = titleGap;
 
         this.render();
     }
@@ -340,16 +386,76 @@ export class Chart {
         svgElement.setAttribute("width", this.#width);
         svgElement.setAttribute("height", this.#height);
 
+        // Arrange positions of chart elements.
+
         const chartWidth = svgElement.clientWidth;
         const chartHeight = svgElement.clientHeight;
 
-        // Calculate positions of chart elements.
+        const hundred = new FormattedText({ value: "100" });
+        const titleBoundingBox = this.#title.getBoundingBox({ fontFamily: this.#titleFontFamily, fontSize: `${this.#titleFontSize}px`, });
+        const xLabelBoundingBox = this.#xLabel.getBoundingBox({ fontFamily: this.#axisFontFamily, fontSize: `${this.#axisFontSize}px`, });
+        const yLabelBoundingBox = this.#yLabel.getBoundingBox({ fontFamily: this.#axisFontFamily, fontSize: `${this.#axisFontSize}px`, });
+        const hundredBoundingBox = hundred.getBoundingBox({ fontFamily: this.#tickFontFamily, fontSize: `${this.#tickFontSize}px` });
 
-        if (this.#title) {
-            // console.log(this.#title.getBoundingBox({
-            //     fontFamily: this.#titleFontFamily,
-            //     fontSize: `${this.#titleFontSize}pt`,
-            // }));
+        const warningTextBoundingBox = this.#showWarningText ? this.#warningText.getBoundingBox({
+            fontFamily: this.#titleFontFamily,
+            fontSize: `${this.#titleFontSize}px`,
+        }) : null;
+
+        let positions = {
+            title: { left: null, top: null, width: null, height: null },
+            plotArea: { left: null, top: null, width: null, height: null },
+            xTick: { left: null, top: null, width: null, height: null },
+            yTick: { left: null, top: null, width: null, height: null },
+            xLabel: { left: null, top: null, width: null, height: null },
+            yLabel: { left: null, top: null, width: null, height: null },
+            xScale: { left: null, top: null, width: null, height: null },
+            yScale: { left: null, top: null, width: null, height: null },
+            warning: { left: null, top: null, width: null, height: null },
+        };
+
+        const padding = {
+            left: 2,
+            top: 2,
+            right: 2,
+            bottom: 2,
+        };
+
+        let xLabelBottom = this.#showWarningText ? chartHeight - this.#elementSpacing - warningTextBoundingBox.height - padding.bottom : chartHeight - padding.bottom;
+
+        positions.title.top = padding.top;
+        positions.title.baseline = positions.title.top + titleBoundingBox.baseline - titleBoundingBox.top;
+        positions.title.width = titleBoundingBox.width;
+        positions.title.height = titleBoundingBox.height;
+
+        positions.xTick.height = this.#tickAreaSize;
+        positions.yTick.width = this.#tickAreaSize;
+
+        positions.xLabel.width = xLabelBoundingBox.width;
+        positions.xLabel.height = xLabelBoundingBox.height;
+        positions.xLabel.top = xLabelBottom - positions.xLabel.height;
+        positions.xLabel.baseline = positions.xLabel.top + xLabelBoundingBox.baseline - xLabelBoundingBox.top;
+
+        positions.yLabel.left = padding.left;
+        positions.yLabel.width = yLabelBoundingBox.height;
+        positions.yLabel.height = yLabelBoundingBox.width;
+        positions.yLabel.baseline = positions.yLabel.left + yLabelBoundingBox.baseline - yLabelBoundingBox.top;
+
+        positions.xScale.height = hundredBoundingBox.height;
+        positions.xScale.top = positions.xLabel.top - this.#elementSpacing - positions.xScale.height;
+        positions.xScale.baseline = positions.xScale.top + hundredBoundingBox.baseline - hundredBoundingBox.top;
+
+        positions.yScale.width = hundredBoundingBox.width;
+        positions.yScale.left = padding.left + positions.yLabel.width + this.#elementSpacing + positions.yScale.width;
+
+        positions.plotArea.left = padding.left + positions.yLabel.width + this.#elementSpacing + positions.yScale.width + positions.yTick.width;
+        positions.plotArea.width = chartWidth - positions.plotArea.left - padding.right;
+        positions.plotArea.top = positions.title.top + positions.title.height + this.#titleGap;
+        positions.plotArea.height = positions.xScale.top - positions.xTick.height - positions.plotArea.top;
+
+        for (let element in positions) {
+            positions[element].right = positions[element].left + positions[element].width;
+            positions[element].bottom = positions[element].top + positions[element].height;
         }
 
         this.chart = {
@@ -358,6 +464,12 @@ export class Chart {
                 height: chartHeight
             },
             plotArea: {
+                left: positions.plotArea.left,
+                right: positions.plotArea.left + positions.plotArea.width,
+                top: positions.plotArea.top,
+                bottom: positions.plotArea.top + positions.plotArea.height,
+                width: positions.plotArea.width,
+                height: positions.plotArea.height
             },
             margin: {
                 left: 70,
@@ -367,7 +479,8 @@ export class Chart {
             },
             x: {
                 tickSize: 6,
-                tickLabelOffset: 12,
+                tickAreaSize: positions.xTick.height,
+                tickLabelPosition: positions.xScale.baseline,
                 min: 0.5,
                 max: this.#data.length + 0.5,
             },
@@ -375,7 +488,8 @@ export class Chart {
                 minorGridStep: this.#yTickStep,
                 tickStep: this.#yTickStep,
                 tickSize: 6,
-                tickLabelOffset: 12,
+                tickAreaSize: positions.yTick.width,
+                tickLabelPosition: positions.yScale.left,
                 labelStep: this.#yTickStep,
                 min: 0,
                 max: 100,
@@ -390,42 +504,35 @@ export class Chart {
             }
         }
 
-        this.chart.plotArea.left = this.chart.margin.left;
-        this.chart.plotArea.top = this.chart.margin.top;
-        this.chart.plotArea.right = this.chart.chartArea.width - this.chart.margin.right;
-        this.chart.plotArea.bottom = this.chart.chartArea.height - this.chart.margin.bottom;
-        this.chart.plotArea.width = this.chart.chartArea.width - this.chart.margin.left - this.chart.margin.right;
-        this.chart.plotArea.height = this.chart.chartArea.height - this.chart.margin.top - this.chart.margin.bottom;
-
         this.chart.scales.x = new CartesianScale({
             chart: this,
             scaleConfig: this.chart.x,
-            plotStart: this.chart.plotArea.left,
-            plotEnd: this.chart.plotArea.right,
+            plotStart: positions.plotArea.left,
+            plotEnd: positions.plotArea.right,
             data: this.#data.map(pair => pair.x),
             min: this.chart.x.min,
             max: this.chart.x.max,
-            tickFontSize: `${this.#tickfontSize}pt`,
+            tickFontSize: `${this.#tickFontSize}px`,
             vertical: false,
         });
 
         this.chart.scales.y = new CartesianScale({
             chart: this,
             scaleConfig: this.chart.y,
-            plotStart: this.chart.plotArea.top,
+            plotStart: positions.plotArea.top,
             plotEnd: this.chart.plotArea.bottom,
             data: this.#data.map(pair => pair.y),
             min: this.chart.y.min,
             max: this.chart.y.max,
-            tickFontSize: `${this.#tickfontSize}pt`,
+            tickFontSize: `${this.#tickFontSize}px`,
             vertical: true,
         });
 
         // Plot area mask.
 
         plotAreaMaskElement.append(this.createSVGElement("rect", {
-            x: this.chart.plotArea.left,
-            y: this.chart.plotArea.top,
+            x: positions.plotArea.left,
+            y: positions.plotArea.top,
             width: this.chart.plotArea.width,
             height: this.chart.plotArea.height
         }));
@@ -445,9 +552,9 @@ export class Chart {
             this.#title.renderSVG({
                 element: svgElement,
                 x: this.chart.plotArea.left + Math.floor(this.chart.plotArea.width / 2),
-                y: 50,
+                y: positions.title.baseline,
                 fontFamily: this.#titleFontFamily,
-                fontSize: `${this.#titleFontSize}pt`,
+                fontSize: `${this.#titleFontSize}px`,
                 rotation: 0
             });
         }
@@ -457,9 +564,9 @@ export class Chart {
             this.#xLabel.renderSVG({
                 element: svgElement,
                 x: this.chart.plotArea.left + Math.floor(this.chart.plotArea.width / 2),
-                y: this.chart.plotArea.bottom + 50,
+                y: positions.xLabel.baseline,
                 fontFamily: this.#axisFontFamily,
-                fontSize: `${this.#axisFontSize}pt`,
+                fontSize: `${this.#axisFontSize}px`,
                 rotation: 0
             });
         }
@@ -468,11 +575,23 @@ export class Chart {
 
             this.#yLabel.renderSVG({
                 element: svgElement,
-                x: 20,
-                y: this.chart.plotArea.top + Math.floor(this.chart.plotArea.height / 2),
+                x: positions.yLabel.baseline,
+                y: positions.plotArea.top + Math.floor(this.chart.plotArea.height / 2),
                 fontFamily: this.#axisFontFamily,
-                fontSize: `${this.#axisFontSize}pt`,
+                fontSize: `${this.#axisFontSize}px`,
                 rotation: -90
+            });
+        }
+
+        if (this.#showWarningText) {
+
+            this.#warningText.renderSVG({
+                element: svgElement,
+                x: this.chart.plotArea.left + Math.floor(this.chart.plotArea.width / 2),
+                y: this.chart.plotArea.bottom + 20,
+                fontFamily: this.#axisFontFamily,
+                fontSize: `${this.#axisFontSize}px`,
+                rotation: 0
             });
         }
 
@@ -481,7 +600,7 @@ export class Chart {
         plotAreaElement.insertAdjacentElement("beforebegin", this.createSVGElement("rect", {
             class: "plotBackground",
             x: this.chart.plotArea.left,
-            y: this.chart.plotArea.top,
+            y: positions.plotArea.top,
             width: this.chart.plotArea.width,
             height: this.chart.plotArea.height
         }));
@@ -491,7 +610,7 @@ export class Chart {
         svgElement.append(this.createSVGElement("rect", {
             class: "axisLines",
             x: this.chart.plotArea.left,
-            y: this.chart.plotArea.top,
+            y: positions.plotArea.top,
             width: this.chart.plotArea.width,
             height: this.chart.plotArea.height
         }));
@@ -792,7 +911,7 @@ export class Chart {
         legendBorder.setAttribute("height", legendBoxHeight);
 
         const legendBoxLeft = this.chart.plotArea.left + this.chart.plotArea.width - legendBoxWidth + legendBoxOffsetX;
-        const legendBoxTop = this.chart.plotArea.top + this.chart.plotArea.height - legendBoxHeight + legendBoxOffsetY;
+        const legendBoxTop = positions.plotArea.top + this.chart.plotArea.height - legendBoxHeight + legendBoxOffsetY;
 
         legendElement.setAttribute("transform", `translate(${legendBoxLeft}, ${legendBoxTop})`);
     }

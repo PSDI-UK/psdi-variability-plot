@@ -242,6 +242,8 @@ export class FormattedText {
 
         copy(this.#editArea, {});
 
+        const container = working.getBoundingClientRect()
+
         // Collect bounding boxes and font metrics.
 
         for (const textSpan of textSpans) {
@@ -252,16 +254,16 @@ export class FormattedText {
 
             const fontMetrics = context.measureText(textSpan.node.textContent);
 
-            const container = working.getBoundingClientRect();
             const rect = textSpan.node.getBoundingClientRect();
 
             textSpan.fontSize = style.fontSize;
 
             textSpan.boundingBox = {
                 left: rect.left - container.left,
-                top: rect.top - container.top + fontMetrics.fontBoundingBoxAscent,
+                top: rect.top - container.top,
                 right: rect.right - container.left,
-                bottom: rect.bottom - container.top + fontMetrics.fontBoundingBoxAscent
+                bottom: rect.bottom - container.top,
+                baseline: rect.top - container.top + fontMetrics.fontBoundingBoxAscent
             };
         }
 
@@ -278,10 +280,7 @@ export class FormattedText {
 
         context.font = firstSpanStyle.font;
 
-        const firstSpanFontMetrics = context.measureText(testContent);
-        const firstSpanRect = firstSpan.getBoundingClientRect();
-
-        const overallBaseline = firstSpanRect.top - working.getBoundingClientRect().top + firstSpanFontMetrics.fontBoundingBoxAscent;
+        const overallBaseline = textSpans[0].boundingBox.baseline;
 
         working.remove();
 
@@ -290,12 +289,16 @@ export class FormattedText {
 
     #calculateBoundingBox({ textSpans, overallBaseline }) {
 
+        const left = Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.left)));
+        const top = Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.top)));
+        const right = Math.ceil(Math.max(...textSpans.map(textSpan => textSpan.boundingBox.right)));
+        const bottom = Math.ceil(Math.max(...textSpans.map(textSpan => textSpan.boundingBox.bottom)));
+        const baseline = overallBaseline;
+
         const box = {
-            left: Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.left))),
-            top: Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.top))),
-            right: Math.ceil(Math.max(...textSpans.map(textSpan => textSpan.boundingBox.right))),
-            bottom: Math.ceil(Math.max(...textSpans.map(textSpan => textSpan.boundingBox.bottom))),
-            baseline: overallBaseline
+            left, top, right, bottom, baseline,
+            width: right - left,
+            height: bottom - top
         }
 
         return box;
@@ -325,7 +328,9 @@ export class FormattedText {
             text.textContent = textSpan.node.textContent;
 
             text.setAttribute("x", xOffset + textSpan.boundingBox.left);
-            text.setAttribute("y", yOffset + textSpan.boundingBox.top);
+            text.setAttribute("y", yOffset + textSpan.boundingBox.baseline);
+            text.setAttribute("textLength", textSpan.boundingBox.right - textSpan.boundingBox.left);
+            text.setAttribute("lengthAdjust", "spacingAndGlyphs");
 
             text.setAttribute("font-size", textSpan.fontSize);
 
@@ -342,7 +347,40 @@ export class FormattedText {
             }
 
             group.append(text);
+
+            // Bounding box.
+
+            // group.append(this.#createSVGElement("rect", {
+            //     stroke: "#808",
+            //     "stroke-width": 1,
+            //     fill: "none",
+            //     x: xOffset + textSpan.boundingBox.left,
+            //     y: yOffset + textSpan.boundingBox.top,
+            //     width: textSpan.boundingBox.right - textSpan.boundingBox.left,
+            //     height: textSpan.boundingBox.bottom - textSpan.boundingBox.top
+            // }));
         }
+
+        // group.append(this.#createSVGElement("rect", {
+        //     stroke: "#626",
+        //     "stroke-width": 1,
+        //     fill: "none",
+        //     x: xOffset + boundingBox.left,
+        //     y: yOffset + boundingBox.top,
+        //     width: boundingBox.right - boundingBox.left,
+        //     height: boundingBox.bottom - boundingBox.top
+        // }));
+
+        // // Text origin marker.
+
+        // element.append(this.#createSVGElement("circle", {
+        //     stroke: "#808",
+        //     "stroke-width": 1,
+        //     fill: "none",
+        //     cx: x,
+        //     cy: y,
+        //     r: 2
+        // }));
     }
 
     getBoundingBox({ fontFamily, fontSize }) {
