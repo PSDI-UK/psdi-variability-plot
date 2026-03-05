@@ -18,6 +18,13 @@ DEFAULT_TARGET_DIR = "public"
 DEFAULT_SERVER_ROOT = "psdi-uk.github.io/"
 
 
+def copy2_verbose(src, dst):
+    """Custom copy functions which logs the file being copied
+    """
+    print(f"Copying: {src} -> {dst}")
+    shutil.copy2(src, dst)
+
+
 def main():
     """Standard entry-point function for this script.
     """
@@ -71,7 +78,8 @@ def main():
     if os.path.exists(target_static_dir):
         shutil.rmtree(target_static_dir)
     shutil.copytree(os.path.join(project_dir, "psdi_variability_plot/static"),
-                    target_static_dir)
+                    target_static_dir,
+                    copy_function=copy2_verbose)
 
     # Start the app so we're able to render pages
 
@@ -90,6 +98,7 @@ def main():
             qualified_path = os.path.join(output_dir, stripped_path)
 
             # Render the template and write it to the desired output location
+            print("Rendering: " + qualified_path)
             open(qualified_path, "w").write(render_template(stripped_path, **get_env_kwargs()))
 
 
