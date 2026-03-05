@@ -24,7 +24,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
+          node-version: "22.x"
       - run: npm install
       - run: npm run build
       - name: Upload JS bundle
@@ -34,7 +34,7 @@ jobs:
           path: psdi_variability_plot/static/js/variability.js
 
   test-all:
-    if: ${{ github.event_name == 'push' || ! github.event.inputs.skip-tests }} && (needs.build.result == 'success')
+    if: ${{ github.event_name == 'push' || ! github.event.inputs.skip-tests && (needs.build.result == 'success') }}
 
     uses: ./.github/workflows/job-test-main.yml
     needs: [build]
