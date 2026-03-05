@@ -73,7 +73,7 @@ exclude = [
   "scripts/make-index-html.sh",
   "Dockerfile",
 ]
-include = ["psdi_variability_plot/static/**"]
+artifacts = ["psdi_variability_plot/static/**"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
