@@ -30,11 +30,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Download JS bundle
-        uses: actions/download-artifact@v8
+      - name: Use Node.js
+        uses: actions/setup-node@v6
         with:
-          name: js-bundle
-          path: psdi_variability_plot/static/js
+          node-version: "22.x"
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v6
