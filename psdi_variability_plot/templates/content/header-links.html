@@ -1,7 +1,7 @@
 <!-- This file contains the links that will appear in the top-right of the header bar for .html files in the
  index.htm page. -->
-<a href="{{url_for('static', filename='../index.html')}}" class="navbar__item navbar__link">Home</a>
-<a href="{{url_for('static', filename='../documentation.html')}}" class="navbar__item navbar__link">Documentation</a>
+<a href="{{get_url('index.html')}}" class="navbar__item navbar__link">Home</a>
+<a href="{{get_url('documentation.html')}}" class="navbar__item navbar__link">Documentation</a>
 <a href="https://psdi-uk.github.io/psdi-organic-toolkit/" class="navbar__item navbar__link">Organic Toolkit Home</a>
 <a href="https://forms.office.com/e/Y88H0XCEzN" class="navbar__item navbar__link" id="feedback-link">Provide
   Feedback</a>
