@@ -35,11 +35,6 @@ fi
 
 # Get the directory name within the archive
 ASSET_SUBDIR=`tar tf $PACKAGE_FILENAME | head -n 1`
-if [ -z "$ASSET_SUBDIR" ]; then
-    echo "ERROR: Unable to open downloaded tarball $PACKAGE_FILENAME"
-    exit 1
-fi
-
 ASSET_DIR=$ROOTDIR/$ASSET_SUBDIR
 
 if [ -d $ASSET_DIR ]; then
