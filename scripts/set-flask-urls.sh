@@ -7,6 +7,5 @@ for filename in $TARGET_HTML_DIR/*.html; do
     [ -e "$filename" ] || continue
     
     REPLACE_CMD='sed -i -E -e "s/URL_FOR:\/(\S+?)\"/{{url_for\('\''static'\'', filename='\''img\/\1'\'')}}\"/g" '$filename
-    echo "Executing command: $REPLACE_CMD"
     eval $REPLACE_CMD
 done
