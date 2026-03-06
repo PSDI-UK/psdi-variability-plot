@@ -38,13 +38,27 @@ def _patch_flask_warning():
     cli.show_server_banner = lambda *_: None
 
 
+def _get_flask_kwargs() -> dict[str, Any]:
+    """Get the kwargs we want to pass to the initialisation of the Flask app based on env settings"""
+
+    env = get_env()
+    flask_kwargs = {}
+
+    # Only set the static URL path to something custom in service mode, as in local mode it will always just be the
+    # Flask default
+    if env.service_mode:
+        flask_kwargs["static_url_path"] = env.static_url_path
+
+    return flask_kwargs
+
+
 def _init_app():
     """Create and return the Flask app with appropriate settings"""
 
     # Suppress Flask's warning, since we're using the dev server as a GUI
     _patch_flask_warning()
 
-    app = Flask(const.APP_NAME)
+    app = Flask(const.APP_NAME, **_get_flask_kwargs())
 
     # Connect the app to the various pages and methods of the website
     init_get(app)
