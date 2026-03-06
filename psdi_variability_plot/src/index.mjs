@@ -37,6 +37,8 @@ const titleFontSizeInput = document.querySelector("input#titleFontSize");
 const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
 const yAxisIntervalSelect = document.querySelector("select#yAxisInterval");
+const outsideRangeWarning = document.querySelector("#outsideRangeWarning");
+const outsideWarningSignificance = document.querySelector("#outsideWarningSignificance");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -653,8 +655,11 @@ function renderChartAux(element) {
 
     const showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
 
+    outsideRangeWarning.hidden = !showWarningText;
+
     if (showWarningText) {
-        warningTextObject.setFormattedContent("Confidence interval exceeds 0 <= ci <= 100");
+        outsideWarningSignificance.textContent = significance;
+        warningTextObject.setFormattedContent(`The ${significance}% CI extends outside the range of 0–100%`);
     }
 
     new Chart({

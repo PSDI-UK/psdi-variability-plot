@@ -453,8 +453,17 @@ export class Chart {
         positions.plotArea.top = positions.title.top + positions.title.height + this.#titleGap;
         positions.plotArea.height = positions.xScale.top - positions.xTick.height - positions.plotArea.top;
 
+        if (this.#showWarningText) {
+            positions.warning.top = chartHeight - padding.bottom - warningTextBoundingBox.height;
+            positions.warning.left = Math.floor(positions.plotArea.left + (positions.plotArea.width / 2) - (warningTextBoundingBox.width / 2));
+            positions.warning.width = warningTextBoundingBox.width;
+            positions.warning.height = warningTextBoundingBox.height;
+            positions.warning.baseline = chartHeight - padding.bottom - warningTextBoundingBox.height + warningTextBoundingBox.baseline - warningTextBoundingBox.top
+        }
+
         for (let element in positions) {
             positions[element].right = positions[element].left + positions[element].width;
+            positions[element].middle = positions[element].left + Math.floor(positions[element].width / 2);
             positions[element].bottom = positions[element].top + positions[element].height;
         }
 
@@ -587,12 +596,30 @@ export class Chart {
 
             this.#warningText.renderSVG({
                 element: svgElement,
-                x: this.chart.plotArea.left + Math.floor(this.chart.plotArea.width / 2),
-                y: this.chart.plotArea.bottom + 20,
-                fontFamily: this.#axisFontFamily,
-                fontSize: `${this.#axisFontSize}px`,
+                x: positions.warning.middle,
+                y: positions.warning.baseline,
+                fontFamily: this.#titleFontFamily,
+                fontSize: `${this.#titleFontSize}px`,
                 rotation: 0
             });
+
+            const warningTriangleGap = 10;
+
+            const warningTriangle = this.createSVGElement("g", {
+                "transform": `translate(${positions.warning.left - warningTriangleGap - positions.warning.height}, ${positions.warning.top}) scale(${positions.warning.height / 16})`
+            });
+
+            warningTriangle.append(this.createSVGElement("path", {
+                fill: "#fb5",
+                d: "M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"
+            }));
+
+            warningTriangle.append(this.createSVGElement("path", {
+                fill: "black",
+                d: "M8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"
+            }));
+
+            svgElement.append(warningTriangle);
         }
 
         // Plot backgroud.

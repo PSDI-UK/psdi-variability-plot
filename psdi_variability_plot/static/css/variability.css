@@ -372,3 +372,11 @@ div#variabilityPlotContainer svg {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+#outsideRangeWarning {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 16px;
+    background: #ffa;
+    border: 2px solid gray;
+}
