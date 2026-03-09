@@ -36,8 +36,6 @@ jobs:
       tag: ${{ steps.get-tag.outputs.TARGET_TAG }}
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
       - name: Get latest tag in the relase branch
         id: get-tag
         run: |
