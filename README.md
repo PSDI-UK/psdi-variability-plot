@@ -218,7 +218,8 @@ This section presents solutions for commonly-encountered issues.
 
 ## Contributors
 
-- (Add your name here)
+- Raymond Whorley
+- Don Cruickshank
 - Bryan Gillis (7204836+brgillis@users.noreply.github.com)
 
 ## Funding
