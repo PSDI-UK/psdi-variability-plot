@@ -20,6 +20,8 @@ jobs:
     runs-on: psdi-variability-plot-runners
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Setup docker auth
         run: |
           mkdir -p ~/.docker
