@@ -209,14 +209,11 @@
       }
 
       rect.legendBackground {
-        fill-opacity: 0.8;
-        fill: white;
         stroke: none;
       }
 
       rect.legendBorder {
         fill: none;
-        stroke: gray;
       }
     </style>
     <defs>
@@ -226,7 +223,7 @@
       <g class="gridLines"></g>
       <g class="confidence"></g>
       <g class="markers"></g>
-      <g class="legend"></g>
+      <g class="box"></g>
     </g>
   </svg>
 </template>
@@ -341,6 +338,51 @@
           <input type="number" min="9" max="24" id="tickfontSize" value="16">
         </div>
 
+        <div class="formControl">
+          <label for="boxFontSize">Box overlay font size</label>
+          <input type="number" min="9" max="24" id="boxFontSize" value="16">
+        </div>
+
+      </details>
+
+      <details name="chartOptions">
+
+        <summary>Box overlay</summary>
+
+        <div class="formControl">
+          <label for="boxPosition">Box position</label>
+          <select id="boxPosition">
+            <option value="bottomRight">Bottom right</option>
+            <option value="bottomLeft">Bottom left</option>
+            <option value="topRight">Top right</option>
+            <option value="topLeft">Top left</option>
+            <option value="manual">Manual placement</option>
+          </select>
+        </div>
+
+        <div class="formControl boxCoordinatesContainer">
+          <label for="boxOpacity">Box coordinates</label>
+          <div class="boxCoords">
+            <input id="boxLeft" type="number" value="20" step="10" min="0">
+            <input id="boxTop" type="number" value="20" step="10" min="0">
+          </div>
+        </div>
+
+        <div class="formControl">
+          <label for="boxBorderColor">Box border colour</label>
+          <input id="boxBorderColor" type="color" value="#888888">
+        </div>
+
+        <div class="formControl">
+          <label for="boxBackgroundColor">Box background colour</label>
+          <input id="boxBackgroundColor" type="color" value="#ffffff">
+        </div>
+
+        <div class="formControl">
+          <label for="boxOpacity">Box opacity</label>
+          <input id="boxOpacity" type="number" value="0.8" step="0.1" min="0" max="1">
+        </div>
+
       </details>
 
     </div>
@@ -398,7 +440,7 @@
     </p>
 
     <p>Note that an example plot can be quickly created by clicking on "Fill with
-       example data."
+      example data."
     </p>
 
     <div class="formControl">
@@ -432,13 +474,14 @@
     <div>
       <button type="button" id="exampleData" class="mouseover-tooltip" data-bs-toggle="tooltip"
         data-bs-custom-class="tooltip-on-light" data-bs-placement="top"
-        title="This fills the above fields with an example set of 5 values, illustrating how a point can fall outside of the confidence interval.">Fill with example data</button>
+        title="This fills the above fields with an example set of 5 values, illustrating how a point can fall outside of the confidence interval.">Fill
+        with example data</button>
     </div>
 
     <div class="formControl">
       <label for="compoundEditor">Product label</label>
-      <div data-placeholder="e.g., Amine 2" id="compoundEditor" class="formattedEditor" autocomplete="off" autocorrect="off"
-        autocapitalize="off" spellcheck="false"></div>
+      <div data-placeholder="e.g., Amine 2" id="compoundEditor" class="formattedEditor" autocomplete="off"
+        autocorrect="off" autocapitalize="off" spellcheck="false"></div>
     </div>
 
     <div class="formControl">
@@ -467,7 +510,8 @@
       <div style="margin-top:-15px;" id="variabilityChart"></div>
 
       <div id="outsideRangeWarning" hidden>
-        The <span id="outsideWarningSignificance">95</span>% CI extends outside the range of the reaction outcome. This feature of the
+        The <span id="outsideWarningSignificance">95</span>% CI extends outside the range of the reaction outcome. This
+        feature of the
         data should be addressed in a discussion of sources of variability that affect the measured outcome.
       </div>
 

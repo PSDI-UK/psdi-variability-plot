@@ -39,6 +39,14 @@ const tickfontSizeInput = document.querySelector("input#tickfontSize");
 const yAxisIntervalSelect = document.querySelector("select#yAxisInterval");
 const outsideRangeWarning = document.querySelector("#outsideRangeWarning");
 const outsideWarningSignificance = document.querySelector("#outsideWarningSignificance");
+const boxFontSizeInput = document.querySelector("input#boxFontSize");
+const boxPositionSelect = document.querySelector("select#boxPosition");
+const boxBorderColorInput = document.querySelector("input#boxBorderColor");
+const boxBackgroundColorInput = document.querySelector("input#boxBackgroundColor");
+const boxOpacityInput = document.querySelector("input#boxOpacity");
+const boxLeftInput = document.querySelector("input#boxLeft");
+const boxTopInput = document.querySelector("input#boxTop");
+const boxCoordinatesContainer = document.querySelector(".boxCoordinatesContainer");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -427,6 +435,13 @@ function setupChangeEvents() {
     axisFontSizeInput.addEventListener("input", updateDesign);
     tickfontSizeInput.addEventListener("input", updateDesign);
     yAxisIntervalSelect.addEventListener("input", updateDesign);
+    boxFontSizeInput.addEventListener("change", updateDesign);
+    boxPositionSelect.addEventListener("change", updateDesign);
+    boxBorderColorInput.addEventListener("change", updateDesign);
+    boxBackgroundColorInput.addEventListener("change", updateDesign);
+    boxOpacityInput.addEventListener("change", updateDesign);
+    boxLeftInput.addEventListener("change", updateDesign);
+    boxTopInput.addEventListener("change", updateDesign);
 }
 
 function getProjectData() {
@@ -452,6 +467,13 @@ function getProjectData() {
         tickfontSize: parseInt(tickfontSizeInput.value),
         compound: compoundEditorObject.getFormattedContent(),
         yAxisInterval: yAxisIntervalSelect.value === "auto" ? "auto" : parseInt(yAxisIntervalSelect.value),
+        boxFontSize: parseInt(boxFontSizeInput.value),
+        boxPosition: boxPositionSelect.value,
+        boxBorderColor: boxBorderColorInput.value,
+        boxBackgroundColor: boxBackgroundColorInput.value,
+        boxOpacity: parseFloat(boxOpacityInput.value),
+        boxLeft: parseInt(boxLeftInput.value),
+        boxTop: parseInt(boxTopInput.value)
     };
 }
 
@@ -519,6 +541,34 @@ function setProjectData(data) {
 
     if (data.yAxisInterval) {
         yAxisIntervalSelect.value = data.yAxisInterval;
+    }
+
+    if (data.boxFontSize) {
+        boxFontSizeInput.value = data.boxFontSize;
+    }
+
+    if (data.boxPosition) {
+        boxPositionSelect.value = data.boxPosition;
+    }
+
+    if (data.boxBorderColor) {
+        boxBorderColorInput.value = data.boxBorderColor;
+    }
+
+    if (data.boxBackgroundColor) {
+        boxBackgroundColorInput.value = data.boxBackgroundColor;
+    }
+
+    if (data.boxOpacity) {
+        boxOpacityInput.value = data.boxOpacity;
+    }
+
+    if (data.boxLeft) {
+        boxLeftInput.value = data.boxLeft;
+    }
+
+    if (data.boxTop) {
+        boxTopInput.value = data.boxTop;
     }
 }
 
@@ -688,6 +738,13 @@ function renderChartAux(element) {
         elementSpacing: 4,
         tickAreaSize: 12,
         titleGap: 18,
+        boxFontSize: projectData.boxFontSize,
+        boxPosition: projectData.boxPosition,
+        boxBorderColor: projectData.boxBorderColor,
+        boxBackgroundColor: projectData.boxBackgroundColor,
+        boxOpacity: projectData.boxOpacity,
+        boxLeft: projectData.boxLeft,
+        boxTop: projectData.boxTop,
     });
 }
 
@@ -778,6 +835,8 @@ function showVariabilityPlotDesign() {
     reversionData = getProjectData()
     variabilityPlotDialog.showModal();
     renderChart(plotDesignElement);
+
+    updateDesignOptions();
 }
 
 function hideVariabilityPlotDesign() {
@@ -814,6 +873,32 @@ exampleDataButton.addEventListener("click", fillWithExampleData);
 chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
+
+const shouldShowBoxCoordinates = () => boxPositionSelect.value === "manual";
+
+function updateDesignOptions() {
+    boxCoordinatesContainer.hidden = !shouldShowBoxCoordinates();
+}
+
+function highlightElement(element) {
+
+    element.animate([
+        { "outline": "4px solid #ee4", "background": "#ee4" },
+        { "outline": "4px solid #ee4", "background": "#ee4" }
+    ], {
+        "duration": 1500,
+        iterations: 1
+    });
+}
+
+boxPositionSelect.addEventListener("change", function (event) {
+
+    updateDesignOptions();
+
+    if (shouldShowBoxCoordinates()) {
+        highlightElement(boxCoordinatesContainer);
+    }
+});
 
 numberOfValuesInput.style.width = '165px';
 addNewValueField(5)

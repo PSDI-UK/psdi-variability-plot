@@ -365,7 +365,8 @@ dialog#variabilityPlotDialog summary {
 }
 
 .plotDesignOptions {
-    margin-left: 16px
+    margin-left: 16px;
+    min-height: 600px;
 }
 
 .cancelButton {
@@ -397,4 +398,8 @@ div#variabilityPlotContainer svg {
     padding: 16px;
     background: #ffa;
     border: 2px solid gray;
+}
+
+.boxCoords input {
+  width: 88px;
 }
