@@ -35,8 +35,6 @@ If something went wrong, it's easiest to undo this through using git to revert t
 
 5. If you enabled the workflow to publish to GitHub Pages, you'll need to enable Pages in the project settings. To do this, go to the project page on GitHub, then Settings (in the top bar), Pages (in the left column), and in the "Source" section, select "GitHub Actions". Note GitHub pages is not compatible with a backend server; only pages to be served to the user will be rendered as part of the site
 
-6. If you enabled workflows to deploy to STFC infrastructure, you'll need to set up project runners, since these don't get copied over in the templating. These should follow the name pattern `psdi-variability-plot-runners` (you can alternatively name them something else and then change the name in the workflow files to match). To do this, follow the guide at https://stfc.atlassian.net/wiki/spaces/P/pages/990216270/Creating+GitHub+repository+coupled+Runner+Scale+Sets.
-
 ## Table of Contents
 
 - [Project Structure](#project-structure)
