@@ -691,7 +691,7 @@ function renderChartAux(element) {
     });
 }
 
-let loadedFonts = false;
+// let loadedFonts = false;
 
 function showNoChartMessage(enable) {
 
@@ -728,19 +728,19 @@ async function renderChart(element) {
 
         // Ensure that fonts are loaded before rendering.
 
-        if (!loadedFonts) {
+        // if (!loadedFonts) {
 
-            noChartDiv.replaceChildren(statusLine("loading fonts"));
-            showNoChartMessage(true);
+        //     noChartDiv.replaceChildren(statusLine("loading fonts"));
+        //     showNoChartMessage(true);
 
-            const font = new FontFace("OpenSans", 'url("static/fonts/OpenSans-Regular.ttf")');
-            document.fonts.add(font);
-            font.load();
+        //     const font = new FontFace("OpenSans", 'url("static/fonts/OpenSans-Regular.ttf")');
+        //     document.fonts.add(font);
+        //     font.load();
 
-            await document.fonts.ready;
+        //     await document.fonts.ready;
 
-            loadedFonts = true;
-        }
+        //     loadedFonts = true;
+        // }
 
         showNoChartMessage(false);
 

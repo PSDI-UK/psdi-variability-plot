@@ -286,11 +286,11 @@ export class Chart {
     #title;
     #xLabel;
     #yLabel;
-    #titleFontFamily = "OpenSans";
+    #titleFontFamily = "Arial sans-serif";
     #titleFontSize;
-    #axisFontFamily = "OpenSans";
+    #axisFontFamily = "Arial sans-serif";
     #axisFontSize;
-    #tickFontFamily = "OpenSans";
+    #tickFontFamily = "Arial sans-serif";
     #tickFontSize;
     #yTickStep;
     #showWarningText;
