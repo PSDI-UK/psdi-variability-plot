@@ -781,13 +781,19 @@ function showVariabilityPlotDesign() {
 }
 
 function hideVariabilityPlotDesign() {
-    variabilityPlotDialog.close();
-    renderChart(variabilityChart);
+    variabilityPlotDialog.close("accept");
 }
 
 function cancelVariabilityPlotDesign() {
-    setProjectData(reversionData);
-    variabilityPlotDialog.close();
+    variabilityPlotDialog.close("cancel");
+}
+
+function variabilityPlotDesignClosed() {
+
+    if (variabilityPlotDialog.returnValue !== "accept") {
+        setProjectData(reversionData);
+    }
+
     renderChart(variabilityChart);
 }
 
@@ -816,6 +822,7 @@ setupChangeEvents();
 customiseChart.addEventListener("click", showVariabilityPlotDesign);
 
 closeVariabilityPlotDialog.addEventListener("click", hideVariabilityPlotDesign);
+variabilityPlotDialog.addEventListener("close", variabilityPlotDesignClosed);
 cancelVariabilityPlotDialogEntries.addEventListener("click", cancelVariabilityPlotDesign);
 
 document.querySelector("button#saveProject").addEventListener("click", saveProject);
