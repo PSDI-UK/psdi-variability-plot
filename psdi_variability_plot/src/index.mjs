@@ -43,6 +43,7 @@ const outsideWarningSignificance = document.querySelector("#outsideWarningSignif
 var nextValueIndex = 0;
 var manualEntry = false;
 var tooltipList;
+var reversionData;
 
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
@@ -355,9 +356,6 @@ function addNewValueField(count) {
         var removeButton = createButton('remove-' + n, '-');
         var addButton = createButton('add-' + n, '+');
         var newValue = document.createElement("input");
-
-        //        var removeButton = createButton('remove-' + n, '-');
-        //      var addButton = createButton('add-' + n, '+');
 
         addButton.style.marginLeft = '0px';
         addButton.style.marginRight = '7px';
@@ -777,14 +775,18 @@ async function renderChart(element) {
 }
 
 function showVariabilityPlotDesign() {
-
+    reversionData = getProjectData()
     variabilityPlotDialog.showModal();
-
     renderChart(plotDesignElement);
-
 }
 
 function hideVariabilityPlotDesign() {
+    variabilityPlotDialog.close();
+    renderChart(variabilityChart);
+}
+
+function cancelVariabilityPlotDesign() {
+    setProjectData(reversionData);
     variabilityPlotDialog.close();
     renderChart(variabilityChart);
 }
@@ -814,6 +816,7 @@ setupChangeEvents();
 customiseChart.addEventListener("click", showVariabilityPlotDesign);
 
 closeVariabilityPlotDialog.addEventListener("click", hideVariabilityPlotDesign);
+cancelVariabilityPlotDialogEntries.addEventListener("click", cancelVariabilityPlotDesign);
 
 document.querySelector("button#saveProject").addEventListener("click", saveProject);
 document.querySelector("button#loadProject").addEventListener("click", loadProject);
