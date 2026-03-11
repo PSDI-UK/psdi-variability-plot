@@ -368,6 +368,24 @@ dialog#variabilityPlotDialog summary {
     margin-left: 16px
 }
 
+.cancelButton {
+    background: #696969;
+    color: #ffffff;
+}
+
+.cancelButton:hover {
+    background: #727272;
+}
+
+.applyButton {
+    background: #041e42;
+    color: #ffffff;
+}
+
+.applyButton:hover {
+    background: #06326a;
+}
+
 div#variabilityPlotContainer svg {
     margin-top: 8px;
     margin-bottom: 8px;
