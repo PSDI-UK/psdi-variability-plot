@@ -13,8 +13,9 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:400" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Lexend:400" rel="stylesheet" type="text/css"> 
+  <link href="https://fonts.googleapis.com/css?family=Lexend:400" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/cookieconsent.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/psdi-common.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/formattedText.css')}}">
 
@@ -22,6 +23,7 @@
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="{{url_for('static', filename='js/cookieconsent-config.js')}}"></script>
   <script type="module" src="{{url_for('static', filename='js/psdi-common.js')}}"></script>
   {% endblock %}
 </head>
@@ -33,14 +35,14 @@
   <div id="cover"></div>
 
   {% block announcement %}
-    <div class="announcementBar_mb4j mathjax_ignore" role="banner">
-      <div class="max-width-box announcementBarContent_xLdY"><strong>Alert:</strong> This page is currently under
-        construction.
-        <br>
-        It is not yet fully-featured, and features may change or be removed at any time as we
-        continue development.
-      </div>
+  <div class="announcementBar_mb4j mathjax_ignore" role="banner">
+    <div class="max-width-box announcementBarContent_xLdY"><strong>Alert:</strong> This page is currently under
+      construction.
+      <br>
+      It is not yet fully-featured, and features may change or be removed at any time as we
+      continue development.
     </div>
+  </div>
   {% endblock %}
 
   {% block header %}
