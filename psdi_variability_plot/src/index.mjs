@@ -38,7 +38,6 @@ const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
 const yAxisIntervalSelect = document.querySelector("select#yAxisInterval");
 const outsideRangeWarning = document.querySelector("#outsideRangeWarning");
-const outsideWarningSignificance = document.querySelector("#outsideWarningSignificance");
 const boxFontSizeInput = document.querySelector("input#boxFontSize");
 const boxPositionSelect = document.querySelector("select#boxPosition");
 const boxBorderColorInput = document.querySelector("input#boxBorderColor");
@@ -684,8 +683,18 @@ function renderChartAux(element) {
     autoTitleEditorObject.setFormattedContent(`Variability plot for the ${chartTypeText} of ${compound}`);
     yLabelEditorObject.setFormattedContent(yLabel);
 
-    const lowerConfidenceBound = Math.round(results.ci[0]);
-    const upperConfidenceBound = Math.round(results.ci[1]);
+    let lowerConfidenceBound = Math.round(results.ci[0]);
+    let upperConfidenceBound = Math.round(results.ci[1]);
+
+    const showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
+
+    if (lowerConfidenceBound < 0) {
+        lowerConfidenceBound = 0;
+    }
+
+    if (upperConfidenceBound > 100) {
+        upperConfidenceBound = 100;
+    }
 
     const legendText1 = `Mean yield = ${Math.round(mean)}%`;
     const legendText2 =
@@ -701,13 +710,15 @@ function renderChartAux(element) {
         });
     }
 
-    const showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
-
     outsideRangeWarning.hidden = !showWarningText;
 
     if (showWarningText) {
-        outsideWarningSignificance.textContent = significance;
-        warningTextObject.setFormattedContent(`The ${significance}% CI extends outside the range of 0–100%`);
+
+        for (const element of document.querySelectorAll(".outsideWarningSignificance")) {
+            element.textContent = significance;
+        }
+
+        warningTextObject.setFormattedContent(`The ${significance}% CI extends outside the range 0-100% and has been restricted to these limits`);
     }
 
     new Chart({
