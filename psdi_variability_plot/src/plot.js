@@ -397,6 +397,11 @@ export class Chart {
 
         const graph = document.querySelector("template#variabilityPlot").content.cloneNode(true);
 
+        const maskId = `mask-${crypto.randomUUID()}`;
+
+        graph.querySelector("clippath").setAttribute("id", maskId);
+        graph.querySelector("g.plotArea").setAttribute("clip-path", `url(#${maskId})`);
+
         this.#targetElement.replaceChildren(graph);
 
         const svgElement = this.#targetElement.querySelector("svg");
@@ -405,7 +410,7 @@ export class Chart {
         const confidenceElement = svgElement.querySelector("g.confidence");
         const boxElement = svgElement.querySelector("g.box");
         const plotAreaElement = svgElement.querySelector("g.plotArea");
-        const plotAreaMaskElement = svgElement.querySelector("clipPath#plotAreaMask");
+        const plotAreaMaskElement = svgElement.querySelector(`clipPath#${maskId}`);
 
         svgElement.setAttribute("width", this.#width);
         svgElement.setAttribute("height", this.#height);
