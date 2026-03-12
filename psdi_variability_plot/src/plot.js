@@ -399,7 +399,7 @@ export class Chart {
 
         const maskId = `mask-${crypto.randomUUID()}`;
 
-        graph.querySelector("clippath").setAttribute("id", maskId);
+        graph.querySelector("clipPath").setAttribute("id", maskId);
         graph.querySelector("g.plotArea").setAttribute("clip-path", `url(#${maskId})`);
 
         this.#targetElement.replaceChildren(graph);
