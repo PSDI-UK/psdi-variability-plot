@@ -18,13 +18,6 @@ DEFAULT_TARGET_DIR = "public"
 DEFAULT_SERVER_ROOT = "psdi-uk.github.io/"
 
 
-def copy2_verbose(src, dst):
-    """Custom copy functions which logs the file being copied
-    """
-    print(f"Copying: {src} -> {dst}")
-    shutil.copy2(src, dst)
-
-
 def main():
     """Standard entry-point function for this script.
     """
@@ -54,10 +47,6 @@ def main():
                         help="If set, will run the Flask server in debug mode, which will cause it to automatically "
                         "reload if code changes and show an interactive debugger in the case of errors")
 
-    parser.add_argument("--static-url-path", type=str, default=None,
-                        help="In service mode, will set the path to static content relative to the site root "
-                        "directory. Has no effect if not in service mode.")
-
     parser.add_argument("--log-level", type=str, default=None,
                         help="The desired level to log at. Allowed values are: 'DEBUG', 'INFO', 'WARNING', 'ERROR, "
                              "'CRITICAL'. Default: 'INFO' for logging to file, 'WARNING' for logging to stdout")
@@ -82,8 +71,7 @@ def main():
     if os.path.exists(target_static_dir):
         shutil.rmtree(target_static_dir)
     shutil.copytree(os.path.join(project_dir, "psdi_variability_plot/static"),
-                    target_static_dir,
-                    copy_function=copy2_verbose)
+                    target_static_dir)
 
     # Start the app so we're able to render pages
 
