@@ -286,28 +286,35 @@ export class Chart {
     #title;
     #xLabel;
     #yLabel;
-    #titleFontFamily = "OpenSans";
+    #titleFontFamily = "Arial sans-serif";
     #titleFontSize;
-    #axisFontFamily = "OpenSans";
+    #axisFontFamily = "Arial sans-serif";
     #axisFontSize;
-    #tickFontFamily = "OpenSans";
+    #tickFontFamily = "Arial sans-serif";
     #tickFontSize;
+    #boxFontFamily = "Arial sans-serif";
+    #boxFontSize;
     #yTickStep;
     #showWarningText;
     #warningText;
     #elementSpacing;
     #tickAreaSize;
     #titleGap;
+    #boxPosition;
+    #boxBorderColor;
+    #boxBackgroundColor;
+    #boxOpacity;
+    #boxLeft;
+    #boxTop;
 
     #legendLines;
-
-    // This canvas context is used to get text metrics.
-    #canvasContext;
 
     constructor({ targetElement, width, height, pointType, pointColor, pointWeight, pointSize,
         bandColor, meanColor, meanWeight, title, xLabel, yLabel, titleFontSize, axisFontSize, tickFontSize,
         data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines, yTickStep,
-        showWarningText, warningText, elementSpacing, tickAreaSize, titleGap }) {
+        showWarningText, warningText, elementSpacing, tickAreaSize, titleGap,
+        boxFontSize, boxPosition, boxBorderColor, boxBackgroundColor, boxOpacity,
+        boxLeft, boxTop }) {
 
         this.#targetElement = targetElement;
         this.#data = data;
@@ -326,7 +333,6 @@ export class Chart {
         this.#title = title;
         this.#xLabel = xLabel;
         this.#yLabel = yLabel;
-        this.#canvasContext = document.createElement("canvas").getContext("2d");
         this.#titleFontSize = titleFontSize;
         this.#axisFontSize = axisFontSize;
         this.#tickFontSize = tickFontSize;
@@ -337,6 +343,13 @@ export class Chart {
         this.#elementSpacing = elementSpacing;
         this.#tickAreaSize = tickAreaSize;
         this.#titleGap = titleGap;
+        this.#boxFontSize = boxFontSize;
+        this.#boxPosition = boxPosition;
+        this.#boxBorderColor = boxBorderColor;
+        this.#boxBackgroundColor = boxBackgroundColor;
+        this.#boxOpacity = boxOpacity;
+        this.#boxLeft = boxLeft;
+        this.#boxTop = boxTop;
 
         this.render();
     }
@@ -350,6 +363,17 @@ export class Chart {
         }
 
         return element;
+    }
+
+    #calculateBoxPosition({ boxLeft, boxTop, boxWidth, boxHeight }) {
+
+        const left = Math.max(Math.min(boxLeft, this.chart.plotArea.width - boxWidth), 0);
+        const top = Math.max(Math.min(boxTop, this.chart.plotArea.height - boxHeight), 0);
+
+        return {
+            manualBoxLeft: this.chart.plotArea.left + left,
+            manualBoxTop: this.chart.plotArea.top + top
+        };
     }
 
     render() {
@@ -373,15 +397,20 @@ export class Chart {
 
         const graph = document.querySelector("template#variabilityPlot").content.cloneNode(true);
 
+        const maskId = `mask-${crypto.randomUUID()}`;
+
+        graph.querySelector("clipPath").setAttribute("id", maskId);
+        graph.querySelector("g.plotArea").setAttribute("clip-path", `url(#${maskId})`);
+
         this.#targetElement.replaceChildren(graph);
 
         const svgElement = this.#targetElement.querySelector("svg");
         const gridLinesElement = svgElement.querySelector("g.gridLines");
         const markersElement = svgElement.querySelector("g.markers");
         const confidenceElement = svgElement.querySelector("g.confidence");
-        const legendElement = svgElement.querySelector("g.legend");
+        const boxElement = svgElement.querySelector("g.box");
         const plotAreaElement = svgElement.querySelector("g.plotArea");
-        const plotAreaMaskElement = svgElement.querySelector("clipPath#plotAreaMask");
+        const plotAreaMaskElement = svgElement.querySelector(`clipPath#${maskId}`);
 
         svgElement.setAttribute("width", this.#width);
         svgElement.setAttribute("height", this.#height);
@@ -859,33 +888,16 @@ export class Chart {
             }
         }
 
-        // Legend overlay.
+        // Box overlay.
 
-        const legendBoxMargin = 10;
-        const legendLineGap = 4;
-        const legendLineHeight = 17.33;
+        const boxMargin = 10;
+        const boxLineGap = 4;
+        const boxLineHeight = 17.33;
 
-        const legendBoxOffsetX = -20;
-        const legendBoxOffsetY = -20;
+        const boxOffsetX = 20;
+        const boxOffsetY = 20;
 
-        let legendLines = [
-            {
-                element: this.createSVGElement("text", {
-                    // x: legendBoxMargin,
-                    // y: legendBoxMargin + legendLineHeight,
-                }),
-                text: this.#legendLines[0]
-            },
-            {
-                element: this.createSVGElement("text", {
-                    // x: legendBoxMargin,
-                    // y: legendBoxMargin + legendLineHeight * 2 + legendLineGap,
-                }),
-                text: this.#legendLines[1]
-            }
-        ];
-
-        const legendBackground = this.createSVGElement("rect", {
+        const boxBackground = this.createSVGElement("rect", {
             class: "legendBackground",
             x: 0,
             y: 0,
@@ -893,7 +905,7 @@ export class Chart {
             height: 0
         })
 
-        const legendBorder = this.createSVGElement("rect", {
+        const boxBorder = this.createSVGElement("rect", {
             class: "legendBorder",
             x: 0,
             y: 0,
@@ -901,45 +913,91 @@ export class Chart {
             height: 0
         })
 
-        legendElement.append(legendBackground, legendBorder);
+        boxElement.append(boxBackground, boxBorder);
 
-        for (const legendLine of legendLines) {
-            legendLine.element.textContent = legendLine.text;
-            legendElement.append(legendLine.element);
+        let boxLines = this.#legendLines.map(text => ({ formattedText: new FormattedText({ value: text }) }));
+
+        for (const boxLine of boxLines) {
+            boxLine.bBox = boxLine.formattedText.getBoundingBox({ fontFamily: this.#boxFontFamily, fontSize: `${this.#boxFontSize}px` });
         }
 
-        for (const legendLine of legendLines) {
-            legendLine.element.setAttribute("textLength", legendLine.element.getBBox().width);
-            legendLine.element.setAttribute("lengthAdjust", "spacingAndGlyphs");
-        }
+        const maxTextWidth = Math.max(...boxLines.map(boxLine => boxLine.bBox.width));
 
         // Calculate box size.
 
-        const boundingBoxes = legendLines.map(line => line.element.getBBox());
+        let linePosition = boxMargin;
 
-        const maxTextWidth = Math.max(...boundingBoxes.map(box => box.width));
+        for (const boxLine of boxLines) {
 
-        let linePosition = legendBoxMargin;
+            linePosition += boxLine.bBox.baseline - boxLine.bBox.top;
 
-        for (const legendLine of legendLines) {
+            boxLine.formattedText.renderSVG({
+                element: boxElement,
+                x: boxMargin + (boxLine.bBox.width / 2),
+                y: linePosition,
+                fontFamily: this.#boxFontFamily,
+                fontSize: `${this.#boxFontSize}px`,
+                rotation: 0
+            });
 
-            legendLine.element.setAttribute("x", legendBoxMargin);
-            legendLine.element.setAttribute("y", linePosition + legendLineHeight);
-
-            linePosition += legendLineHeight + legendLineGap;
+            linePosition += boxLineGap + boxLine.bBox.bottom - boxLine.bBox.baseline;
         }
 
-        const legendBoxWidth = maxTextWidth + (legendBoxMargin * 2);
-        const legendBoxHeight = (legendBoxMargin * 2) + (legendLineHeight * legendLines.length) + (legendLineGap * (legendLines.length - 1));
+        const boxWidth = maxTextWidth + (boxMargin * 2);
+        const boxHeight = linePosition - boxLineGap + boxMargin;
 
-        legendBackground.setAttribute("width", legendBoxWidth);
-        legendBackground.setAttribute("height", legendBoxHeight);
-        legendBorder.setAttribute("width", legendBoxWidth);
-        legendBorder.setAttribute("height", legendBoxHeight);
+        boxBackground.setAttribute("width", boxWidth);
+        boxBackground.setAttribute("height", boxHeight);
+        boxBackground.setAttribute("fill", this.#boxBackgroundColor);
+        boxBackground.setAttribute("fill-opacity", this.#boxOpacity);
 
-        const legendBoxLeft = this.chart.plotArea.left + this.chart.plotArea.width - legendBoxWidth + legendBoxOffsetX;
-        const legendBoxTop = positions.plotArea.top + this.chart.plotArea.height - legendBoxHeight + legendBoxOffsetY;
+        boxBorder.setAttribute("width", boxWidth);
+        boxBorder.setAttribute("height", boxHeight);
+        boxBorder.setAttribute("stroke", this.#boxBorderColor);
 
-        legendElement.setAttribute("transform", `translate(${legendBoxLeft}, ${legendBoxTop})`);
+        const leftPosition = this.chart.plotArea.left + boxOffsetX;
+        const rightPosition = this.chart.plotArea.left + this.chart.plotArea.width - boxWidth - boxOffsetX;
+        const topPosition = positions.plotArea.top + boxOffsetY;
+        const bottomPosition = positions.plotArea.top + this.chart.plotArea.height - boxHeight - boxOffsetY;
+
+        const { manualBoxLeft, manualBoxTop } = this.#calculateBoxPosition({
+            boxLeft: this.#boxLeft,
+            boxTop: this.#boxTop,
+            boxWidth,
+            boxHeight
+        });
+
+        let boxLeft;
+        let boxTop;
+
+        switch (this.#boxPosition) {
+
+            case "bottomRight":
+                boxLeft = rightPosition;
+                boxTop = bottomPosition;
+                break;
+
+            case "bottomLeft":
+                boxLeft = leftPosition;
+                boxTop = bottomPosition;
+                break;
+
+            case "topRight":
+                boxLeft = rightPosition;
+                boxTop = topPosition;
+                break;
+
+            case "topLeft":
+                boxLeft = leftPosition;
+                boxTop = topPosition;
+                break;
+
+            case "manual":
+                boxLeft = manualBoxLeft;
+                boxTop = manualBoxTop;
+                break;
+        }
+
+        boxElement.setAttribute("transform", `translate(${boxLeft}, ${boxTop})`);
     }
 }
