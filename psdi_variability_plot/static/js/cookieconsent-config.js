@@ -1,4 +1,4 @@
-import { run, acceptedCategory } from "./cookieconsent.esm.js";
+import "./cookieconsent.umd.js";
 
 // Value in sessionStorage to track state of cookie consent
 sessionStorage["analyticsAllowed"] = false;
@@ -11,7 +11,7 @@ export function getAnalyticsAllowed() {
   return sessionStorage["analyticsAllowed"];
 }
 
-run({
+CookieConsent.run({
 
   categories: {
     necessary: {
@@ -66,7 +66,7 @@ run({
     }
   },
   onConsent: function () {
-    if (acceptedCategory('analytics')) {
+    if (CookieConsent.acceptedCategory('analytics')) {
       sessionStorage["analyticsAllowed"] = true;
     } else {
       sessionStorage["analyticsAllowed"] = false;
@@ -74,7 +74,7 @@ run({
   },
   onChange: function ({ changedCategories, changedServices }) {
     if (changedCategories.includes('analytics')) {
-      if (acceptedCategory('analytics')) {
+      if (CookieConsent.acceptedCategory('analytics')) {
         sessionStorage["analyticsAllowed"] = true;
       } else {
         sessionStorage["analyticsAllowed"] = false;

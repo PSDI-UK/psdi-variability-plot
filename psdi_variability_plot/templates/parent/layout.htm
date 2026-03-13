@@ -19,11 +19,30 @@
   <link rel="stylesheet" href="{{url_for('static', filename='css/psdi-common.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/formattedText.css')}}">
 
+  <script type="module" src="{{url_for('static', filename='js/cookieconsent-config.js')}}"></script>
+
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module" src="{{url_for('static', filename='js/psdi-common.js')}}"></script>
+  <script type="text/plain" data-category="analytics">
+    console.log("Analytics go!")
+  </script>
+  <script type="text/plain" data-category="!analytics">
+    console.log("Analytics not go!")
+  </script>
+  {% if ga_tag %}
+  <!-- Google tag (gtag.js) -->
+  <script type="text/plain" data-category="analytics" async src="https://www.googletagmanager.com/gtag/js?id={{ ga_tag }}"></script>
+  <script type="text/plain" data-category="analytics">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '{{ ga_tag }}');
+  </script>
+  {% endif %}
   {% endblock %}
 </head>
 
