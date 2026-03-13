@@ -4,7 +4,7 @@ import ttest from '../node_modules/@stdlib/stats-ttest/lib/index.js';
 import ztest from '../node_modules/@stdlib/stats-ztest/lib/index.js';
 import stdev from '../node_modules/@stdlib/stats-base-stdev/lib/index.js';
 import { saveAs } from 'file-saver';
-import { getAnalyticsAllowed } from '../static/js/cookieconsent-config.js';
+import { getAnalyticsAllowed } from './cookieconsent-config.js';
 import { Chart } from "./plot.js";
 import { FormattedText } from './formattedText.js';
 
