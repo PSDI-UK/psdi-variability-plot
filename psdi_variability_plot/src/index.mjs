@@ -14,7 +14,6 @@ const chartTypeSelect = document.querySelector("select#chartType");
 const significanceInput = document.querySelector("select#significance");
 const variabilityPlotContainer = document.querySelector("#variabilityPlotContainer");
 const notificationsDiv = document.querySelector("div#notifications");
-const otherTypeInput = document.querySelector("input#otherType");
 const otherTypeRowDiv = document.querySelector("div#otherTypeRow");
 const noChartDiv = document.querySelector("div#noChart");
 const exampleDataButton = document.querySelector("button#exampleData");
@@ -26,6 +25,7 @@ const copyFailure = document.querySelector("#copyFailure");
 const variabilityChart = document.querySelector("#variabilityChart");
 const plotDesignElement = document.querySelector("#plotDesign");
 const compoundEditor = document.querySelector("div#compoundEditor");
+const otherEditor = document.querySelector("div#otherEditor");
 const pointTypeSelect = document.querySelector("select#pointType");
 const pointColorInput = document.querySelector("input#pointColor");
 const pointSizeInput = document.querySelector("input#pointSize");
@@ -98,7 +98,18 @@ const chartTypeLabelLoweCase = {
 }
 
 function capitalise(text) {
-    return `${text.substring(0, 1).toUpperCase()}${text.substring(1)}`;
+
+    const match = text.match(/^(\s*)(\w)(.*)$/);
+
+    if (match) {
+
+        match[2] = match[2].toUpperCase();
+        return match.slice(1, 4).join("");
+
+    } else {
+
+        return text;
+    }
 }
 
 function getValues() {
@@ -143,13 +154,14 @@ function fillWithExampleData() {
         manualEntry = false;
 
         updateMain();
+        changeOtherTypeVisibility();
     }
 }
 
 function validatePlot() {
 
     const chartType = chartTypeSelect.value;
-    const otherDef = otherTypeInput.value;
+    const otherDef = otherEditorObject.getTextContent();
     const compound = compoundEditorObject.getTextContent();
 
     const values = getValues();
@@ -171,10 +183,8 @@ function validatePlot() {
 function changeOtherTypeVisibility() {
     otherTypeRowDiv.hidden = chartTypeSelect.value !== "other";
 
-    if (chartTypeSelect.value !== "other") {
-        otherTypeInput.value = "";
-    } else {
-        otherTypeInput.focus();
+    if (chartTypeSelect.value === "other") {
+        highlightElement(otherTypeRowDiv);
     }
 }
 
@@ -407,6 +417,13 @@ const compoundEditorObject = new FormattedText({
     }
 });
 
+const otherEditorObject = new FormattedText({
+    element: otherEditor,
+    changeFunc: function () {
+        renderChart(variabilityChart);
+    }
+});
+
 function updateDesign() {
     renderChart(plotDesignElement);
 }
@@ -420,7 +437,6 @@ function setupChangeEvents() {
     chartWidthInput.addEventListener("change", updateMain);
     chartHeightInput.addEventListener("change", updateMain);
     chartTypeSelect.addEventListener("change", updateMain);
-    otherTypeInput.addEventListener("input", updateMain);
     significanceInput.addEventListener("input", updateMain);
 
     titleFontSizeInput.addEventListener("input", updateDesign);
@@ -653,6 +669,43 @@ async function loadProjectFile(event) {
     }
 }
 
+function replaceTextInElement(element, match, replace) {
+
+    for (const node of element.childNodes) {
+
+        if (node.nodeType === 3) {
+
+            node.textContent = node.textContent.replace(match, replace);
+
+        } else if (node.nodeType === 1) {
+
+            replaceTextInElement(node, match, replace);
+
+        }
+    }
+}
+
+function capitaliseTextInElement(element, match, replace) {
+
+    for (const node of element.childNodes) {
+
+        if (node.nodeType === 3) {
+
+            if (node.textContent.match(/\w/)) {
+
+                node.textContent = capitalise(node.textContent);
+                return true;
+            }
+
+        } else if (node.nodeType === 1) {
+
+            if (capitaliseTextInElement(node, match, replace)) {
+                return true;
+            }
+        }
+    }
+}
+
 function renderChartAux(element) {
 
     const projectData = getProjectData();
@@ -665,14 +718,28 @@ function renderChartAux(element) {
 
     const mean = values.reduce((acc, current) => acc + current, 0.0) / values.length;
 
-    let otherTypeText = otherTypeInput.value.trim();
-    otherTypeText = otherTypeText.replace('(%)', '').trim();
-    otherTypeText = otherTypeText.replace('%', '').trim();
+    const compound = compoundEditorObject.getFormattedContent();
 
     const chartType = chartTypeSelect.value;
-    const compound = compoundEditorObject.getFormattedContent();
-    const chartTypeText = chartType !== "other" ? chartTypeLabelLoweCase[chartType] : otherTypeText;
-    const yLabel = `${capitalise(chartTypeText)} of ${compound} (%)`;
+    const chartTypeElement = document.createElement("span");
+
+    if (chartType === "other") {
+
+        chartTypeElement.innerHTML = otherEditorObject.getFormattedContent();
+
+        replaceTextInElement(chartTypeElement, '(%)', '');
+        replaceTextInElement(chartTypeElement, '%', '');
+
+    } else {
+
+        chartTypeElement.textContent = chartTypeLabelLoweCase[chartType];
+    }
+
+    const capitalisedTChartTypeElement = chartTypeElement.cloneNode(true);
+
+    capitaliseTextInElement(capitalisedTChartTypeElement);
+
+    const yLabel = `${capitalisedTChartTypeElement.innerHTML} of ${compound} (%)`;
 
     const xLabelEditorObject = new FormattedText({});
     const autoTitleEditorObject = new FormattedText({});
@@ -680,7 +747,7 @@ function renderChartAux(element) {
     const warningTextObject = new FormattedText({});
 
     xLabelEditorObject.setFormattedContent("Iterations");
-    autoTitleEditorObject.setFormattedContent(`Variability plot for the ${chartTypeText} of ${compound}`);
+    autoTitleEditorObject.setFormattedContent(`Variability plot for the ${chartTypeElement.innerHTML} of ${compound}`);
     yLabelEditorObject.setFormattedContent(yLabel);
 
     let lowerConfidenceBound = Math.round(results.ci[0]);
