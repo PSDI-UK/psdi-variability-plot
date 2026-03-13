@@ -31,6 +31,9 @@ class CartesianScale {
     #labelStep;
     #tickFontSize;
 
+    boxWidth;
+    boxHeight;
+
     constructor(opts) {
 
         this.#chart = opts.chart;
@@ -306,6 +309,8 @@ export class Chart {
     #boxOpacity;
     #boxLeft;
     #boxTop;
+    #isDesign;
+    #boxElement;
 
     #legendLines;
 
@@ -314,7 +319,7 @@ export class Chart {
         data, meanValue, confidenceUpperLimit, confidenceLowerLimit, legendLines, yTickStep,
         showWarningText, warningText, elementSpacing, tickAreaSize, titleGap,
         boxFontSize, boxPosition, boxBorderColor, boxBackgroundColor, boxOpacity,
-        boxLeft, boxTop }) {
+        boxLeft, boxTop, isDesign }) {
 
         this.#targetElement = targetElement;
         this.#data = data;
@@ -350,6 +355,7 @@ export class Chart {
         this.#boxOpacity = boxOpacity;
         this.#boxLeft = boxLeft;
         this.#boxTop = boxTop;
+        this.#isDesign = isDesign;
 
         this.render();
     }
@@ -365,15 +371,23 @@ export class Chart {
         return element;
     }
 
-    #calculateBoxPosition({ boxLeft, boxTop, boxWidth, boxHeight }) {
+    calculateBoxPosition({ boxLeft, boxTop }) {
 
-        const left = Math.max(Math.min(boxLeft, this.chart.plotArea.width - boxWidth), 0);
-        const top = Math.max(Math.min(boxTop, this.chart.plotArea.height - boxHeight), 0);
+        const left = Math.max(Math.min(boxLeft, this.chart.plotArea.width - this.boxWidth), 0);
+        const top = Math.max(Math.min(boxTop, this.chart.plotArea.height - this.boxHeight), 0);
 
         return {
-            manualBoxLeft: this.chart.plotArea.left + left,
-            manualBoxTop: this.chart.plotArea.top + top
+            manualBoxLeft: left,
+            manualBoxTop: top
+            // manualBoxLeft: this.chart.plotArea.left + left,
+            // manualBoxTop: this.chart.plotArea.top + top
         };
+    }
+
+    setBoxPosition({ boxLeft, boxTop }) {
+
+
+        this.boxElement.setAttribute("transform", `translate(${boxLeft}, ${boxTop})`);
     }
 
     render() {
@@ -408,9 +422,9 @@ export class Chart {
         const gridLinesElement = svgElement.querySelector("g.gridLines");
         const markersElement = svgElement.querySelector("g.markers");
         const confidenceElement = svgElement.querySelector("g.confidence");
-        const boxElement = svgElement.querySelector("g.box");
         const plotAreaElement = svgElement.querySelector("g.plotArea");
         const plotAreaMaskElement = svgElement.querySelector(`clipPath#${maskId}`);
+        this.boxElement = svgElement.querySelector("g.box");
 
         svgElement.setAttribute("width", this.#width);
         svgElement.setAttribute("height", this.#height);
@@ -896,7 +910,6 @@ export class Chart {
 
         const boxMargin = 10;
         const boxLineGap = 4;
-        const boxLineHeight = 17.33;
 
         const boxOffsetX = 20;
         const boxOffsetY = 20;
@@ -917,7 +930,7 @@ export class Chart {
             height: 0
         })
 
-        boxElement.append(boxBackground, boxBorder);
+        this.boxElement.append(boxBackground, boxBorder);
 
         let boxLines = this.#legendLines.map(text => ({ formattedText: new FormattedText({ value: text }) }));
 
@@ -936,7 +949,7 @@ export class Chart {
             linePosition += boxLine.bBox.baseline - boxLine.bBox.top;
 
             boxLine.formattedText.renderSVG({
-                element: boxElement,
+                element: this.boxElement,
                 x: boxMargin + (boxLine.bBox.width / 2),
                 y: linePosition,
                 fontFamily: this.#boxFontFamily,
@@ -947,28 +960,26 @@ export class Chart {
             linePosition += boxLineGap + boxLine.bBox.bottom - boxLine.bBox.baseline;
         }
 
-        const boxWidth = maxTextWidth + (boxMargin * 2);
-        const boxHeight = linePosition - boxLineGap + boxMargin;
+        this.boxWidth = maxTextWidth + (boxMargin * 2);
+        this.boxHeight = linePosition - boxLineGap + boxMargin;
 
-        boxBackground.setAttribute("width", boxWidth);
-        boxBackground.setAttribute("height", boxHeight);
+        boxBackground.setAttribute("width", this.boxWidth);
+        boxBackground.setAttribute("height", this.boxHeight);
         boxBackground.setAttribute("fill", this.#boxBackgroundColor);
         boxBackground.setAttribute("fill-opacity", this.#boxOpacity);
 
-        boxBorder.setAttribute("width", boxWidth);
-        boxBorder.setAttribute("height", boxHeight);
+        boxBorder.setAttribute("width", this.boxWidth);
+        boxBorder.setAttribute("height", this.boxHeight);
         boxBorder.setAttribute("stroke", this.#boxBorderColor);
 
         const leftPosition = this.chart.plotArea.left + boxOffsetX;
-        const rightPosition = this.chart.plotArea.left + this.chart.plotArea.width - boxWidth - boxOffsetX;
+        const rightPosition = this.chart.plotArea.left + this.chart.plotArea.width - this.boxWidth - boxOffsetX;
         const topPosition = positions.plotArea.top + boxOffsetY;
-        const bottomPosition = positions.plotArea.top + this.chart.plotArea.height - boxHeight - boxOffsetY;
+        const bottomPosition = positions.plotArea.top + this.chart.plotArea.height - this.boxHeight - boxOffsetY;
 
-        const { manualBoxLeft, manualBoxTop } = this.#calculateBoxPosition({
+        const { manualBoxLeft, manualBoxTop } = this.calculateBoxPosition({
             boxLeft: this.#boxLeft,
-            boxTop: this.#boxTop,
-            boxWidth,
-            boxHeight
+            boxTop: this.#boxTop
         });
 
         let boxLeft;
@@ -997,11 +1008,11 @@ export class Chart {
                 break;
 
             case "manual":
-                boxLeft = manualBoxLeft;
-                boxTop = manualBoxTop;
+                boxLeft = manualBoxLeft + this.chart.plotArea.left;
+                boxTop = manualBoxTop + this.chart.plotArea.top;
                 break;
         }
 
-        boxElement.setAttribute("transform", `translate(${boxLeft}, ${boxTop})`);
+        this.setBoxPosition({ boxLeft, boxTop });
     }
 }

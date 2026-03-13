@@ -432,7 +432,7 @@ const otherEditorObject = new FormattedText({
 });
 
 function updateDesign() {
-    renderChart(plotDesignElement);
+    renderChart(plotDesignElement, { isDesign: true });
 }
 
 function updateMain() {
@@ -715,7 +715,69 @@ function capitaliseTextInElement(element, match, replace) {
     }
 }
 
-function renderChartAux(element) {
+function enableBoxDrag(chart, element) {
+
+    const boxElement = element.querySelector("g.box");
+    const plotBackground = element.querySelector("rect.plotBackground");
+
+    const plotAreaX = parseInt(plotBackground.getAttribute("x"));
+    const plotAreaY = parseInt(plotBackground.getAttribute("y"));
+
+    boxElement.style.cursor = "move";
+    boxElement.style.userSelect = "none";
+    boxElement.style.touchAction = "none";
+
+    let initialClientX;
+    let initialClientY;
+
+    let initialTransformX;
+    let initialTransformY;
+
+    function handleEvent(event) {
+
+        if (event.type === "pointerdown") {
+
+            initialClientX = event.clientX;
+            initialClientY = event.clientY;
+
+            const transform = boxElement.getAttribute("transform");
+            const match = transform.match(/translate\((\d+(\.\d+)?), (\d+(\.\d+)?)\)/);
+
+            initialTransformX = parseInt(match[1]) - plotAreaX;
+            initialTransformY = parseInt(match[3]) - plotAreaY;
+
+            boxElement.setPointerCapture(event.pointerId);
+
+        } else if (event.type === "pointermove") {
+
+            if (boxElement.hasPointerCapture(event.pointerId)) {
+
+                const newTransformX = initialTransformX + event.clientX - initialClientX;
+                const newTransformY = initialTransformY + event.clientY - initialClientY;
+
+                const { manualBoxLeft, manualBoxTop } = chart.calculateBoxPosition({
+                    boxLeft: newTransformX,
+                    boxTop: newTransformY
+                });
+
+                boxLeftInput.value = manualBoxLeft;
+                boxTopInput.value = manualBoxTop;
+
+                chart.setBoxPosition({ boxLeft: manualBoxLeft + plotAreaX, boxTop: manualBoxTop + plotAreaY });
+            }
+
+        } else if (event.type === "pointerup") {
+
+            boxElement.releasePointerCapture(event.pointerId);
+        }
+    }
+
+    boxElement.addEventListener("pointerdown", handleEvent);
+    boxElement.addEventListener("pointermove", handleEvent);
+    boxElement.addEventListener("pointerup", handleEvent);
+}
+
+function renderChartAux(element, { isDesign }) {
 
     const projectData = getProjectData();
 
@@ -797,7 +859,7 @@ function renderChartAux(element) {
         warningTextObject.setFormattedContent(`The ${significance}% CI extends outside the range 0-100% and has been restricted to these limits`);
     }
 
-    new Chart({
+    const chart = new Chart({
         data,
         targetElement: element,
         meanValue: results.mean,
@@ -832,7 +894,12 @@ function renderChartAux(element) {
         boxOpacity: projectData.boxOpacity,
         boxLeft: projectData.boxLeft,
         boxTop: projectData.boxTop,
+        isDesign,
     });
+
+    if (isDesign && (boxPositionSelect.value === "manual")) {
+        enableBoxDrag(chart, element);
+    }
 }
 
 // let loadedFonts = false;
@@ -864,7 +931,7 @@ function statusLine(text) {
     return element;
 }
 
-async function renderChart(element) {
+async function renderChart(element, opts = {}) {
 
     const validationResult = validatePlot();
 
@@ -888,7 +955,7 @@ async function renderChart(element) {
 
         showNoChartMessage(false);
 
-        renderChartAux(element);
+        renderChartAux(element, { isDesign: !!opts.isDesign });
 
         await prepareBitmapCopy()
 
@@ -921,7 +988,7 @@ async function renderChart(element) {
 function showVariabilityPlotDesign() {
     reversionData = getProjectData()
     variabilityPlotDialog.showModal();
-    renderChart(plotDesignElement);
+    renderChart(plotDesignElement, { isDesign: true });
 
     updateDesignOptions();
 }
