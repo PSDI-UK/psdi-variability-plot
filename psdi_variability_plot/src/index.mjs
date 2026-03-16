@@ -51,7 +51,8 @@ var nextValueIndex = 0;
 var manualEntry = false;
 var tooltipList;
 var reversionData;
-
+var lastSavedData;
+var exampleData;
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
 
@@ -594,6 +595,8 @@ function saveProject() {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "text/plain;charset=utf-8" });
 
     saveAs(blob, "variability.json");
+
+    lastSavedData = data;
 }
 
 function loadProject() {
@@ -943,7 +946,23 @@ function initTooltips() {
 }
 
 $(document).ready(function () {
+    lastSavedData = getProjectData();
+
+    exampleData = lastSavedData;
+    exampleData.chartType = "isolatedYield";
+    exampleData.values = [56,66,45,58,59];
+    exampleData.compound = "Example&nbsp;<b>product</b>";
+
     initTooltips();
+});
+
+window.addEventListener("beforeunload", function (event) {
+    // Give a warning if trying to leave the page and data has changed 
+    if ((JSON.stringify(getProjectData()) !== JSON.stringify(lastSavedData)) &&
+        (JSON.stringify(getProjectData()) !== JSON.stringify(exampleData))) {
+        event.preventDefault();
+        event.returnValue = true;
+    }
 });
 
 numberOfValuesInput.addEventListener("change", changeNumberOfValueFields);
