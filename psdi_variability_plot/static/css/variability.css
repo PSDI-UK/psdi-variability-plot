@@ -120,7 +120,7 @@ input.button.init-disabled {
   border: 1px solid var(--psdi-border-color-light);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 950px) {
   .flex-panel-display {
     display: block;
   }
@@ -153,7 +153,7 @@ input.button.init-disabled {
   display: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 950px) {
 
   .big-screen-only {
     display: none;
@@ -305,59 +305,59 @@ div#noChart {
 }
 
 input.valueField {
-    width: 100px;
-    margin: 2px;
+  width : 100px;
+  margin: 2px;
 }
 
 button#addNewValueField {
-    width: fit-content;
+  width: fit-content;
 }
 
 .plotDesignHeader {
-    display: flex;
-    justify-content: space-between;
+  display        : flex;
+  justify-content: space-between;
 }
 
-.plotDesignHeader > * {
-    align-self: start;
+.plotDesignHeader>* {
+  align-self: start;
 }
 
 .plotDesignSections {
-    display: flex;
+  display: flex;
 }
 
 select {
-    padding: 3px;
-    border: 2px inset #767676; 
+  padding: 3px;
+  border : 2px inset #767676;
 }
 
-dialog#variabilityPlotDialog summary { 
-    background: var(--psdi-bg-color-primary);
-    color: white;
-    padding: 4px 12px 4px 12px;
-    margin: 4px 0 4px 0;
-    border: 2px inset #767676; 
-    border-radius: 4px;
+dialog#variabilityPlotDialog summary {
+  background   : var(--psdi-bg-color-primary);
+  color        : white;
+  padding      : 4px 12px 4px 12px;
+  margin       : 4px 0 4px 0;
+  border       : 2px inset #767676;
+  border-radius: 4px;
 }
 
 #variabilityChart {
-    max-width: 800px;
-    max-height: 600px;
-    overflow: auto;
+  max-width : 800px;
+  max-height: 600px;
+  overflow  : auto;
 }
 
 .intro {
-    display: flex;
+  display: flex;
 }
 
-.intro > p {
-    flex-shrink: 1;
+.intro>p {
+  flex-shrink: 1;
 }
 
-.intro > button {
-    flex-shrink: 0;
-    width: fit-content;
-    height: fit-content;
+.intro>button {
+  flex-shrink: 0;
+  width      : fit-content;
+  height     : fit-content;
 }
 
 .plotDesignOptions input[type=color] {
@@ -365,39 +365,39 @@ dialog#variabilityPlotDialog summary {
 }
 
 .plotDesignOptions {
-    margin-left: 16px;
-    min-height: 600px;
+  margin-left: 16px;
+  min-height : 600px;
 }
 
 .cancelButton {
-    background: #696969;
-    color: #ffffff;
+  background: #696969;
+  color     : #ffffff;
 }
 
 .cancelButton:hover {
-    background: #727272;
+  background: #727272;
 }
 
 .applyButton {
-    background: #041e42;
-    color: #ffffff;
+  background: #041e42;
+  color     : #ffffff;
 }
 
 .applyButton:hover {
-    background: #06326a;
+  background: #06326a;
 }
 
 div#variabilityPlotContainer svg {
-    margin-top: 8px;
-    margin-bottom: 8px;
+  margin-top   : 8px;
+  margin-bottom: 8px;
 }
 
 #outsideRangeWarning {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    padding: 16px;
-    background: #ffa;
-    border: 2px solid gray;
+  margin-top   : 8px;
+  margin-bottom: 8px;
+  padding      : 16px;
+  background   : #ffa;
+  border       : 2px solid gray;
 }
 
 .boxCoords input {
