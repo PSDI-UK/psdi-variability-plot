@@ -139,6 +139,7 @@ function setValues(values) {
 }
 
 function fillWithExampleData() {
+
     if (!manualEntry ||
         confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
         const data = [56, 66, 45, 58, 59];
@@ -157,6 +158,11 @@ function fillWithExampleData() {
         updateMain();
         changeOtherTypeVisibility();
     }
+
+    // Clear the tooltip from hovering over the button, since clicking it focuses it and will keep the tooltip present,
+    // which is surprising for mouse users. This needs to happen after a brief delay in case the alert pops up, which
+    // briefly borrows focus before reverting to the button
+    setTimeout(clearTooltips, 100);
 }
 
 function validatePlot() {
@@ -945,12 +951,21 @@ function initTooltips() {
     tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }
 
+/**
+ * Clear any tooltips currently present on the page
+ */
+function clearTooltips() {
+    tooltipList.forEach((tooltip) => {
+        tooltip.hide();
+    });
+}
+
 $(document).ready(function () {
     lastSavedData = getProjectData();
 
     exampleData = lastSavedData;
     exampleData.chartType = "isolatedYield";
-    exampleData.values = [56,66,45,58,59];
+    exampleData.values = [56, 66, 45, 58, 59];
     exampleData.compound = "Example&nbsp;<b>product</b>";
 
     initTooltips();
