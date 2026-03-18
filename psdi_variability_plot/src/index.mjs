@@ -46,6 +46,7 @@ const boxOpacityInput = document.querySelector("input#boxOpacity");
 const boxLeftInput = document.querySelector("input#boxLeft");
 const boxTopInput = document.querySelector("input#boxTop");
 const boxCoordinatesContainer = document.querySelector(".boxCoordinatesContainer");
+const devicePixelRatioSelect = document.querySelector("select#devicePixelRatio");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -209,6 +210,8 @@ async function loadImage(src) {
 
 async function convertSVGToDataURL(svgElement, format, quality) {
 
+    const devicePixelRatio = devicePixelRatioSelect.value;
+
     const xmlSerializer = new XMLSerializer();
     const svgXML = xmlSerializer.serializeToString(svgElement);
     const svgDataURL = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXML)}`;
@@ -218,9 +221,12 @@ async function convertSVGToDataURL(svgElement, format, quality) {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
 
-    canvas.width = svgImage.naturalWidth;
-    canvas.height = svgImage.naturalHeight;
-    context.drawImage(svgImage, 0, 0, svgImage.naturalWidth, svgImage.naturalHeight);
+    const canvasWidth = svgImage.naturalWidth * devicePixelRatio;
+    const canvasHeight = svgImage.naturalHeight * devicePixelRatio;
+
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    context.drawImage(svgImage, 0, 0, canvasWidth, canvasHeight);
 
     return canvas.toDataURL(`image/${format}`, quality);
 }
