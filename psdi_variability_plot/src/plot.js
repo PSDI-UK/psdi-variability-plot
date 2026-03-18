@@ -286,13 +286,13 @@ export class Chart {
     #title;
     #xLabel;
     #yLabel;
-    #titleFontFamily = "Arial sans-serif";
+    #titleFontFamily = "Arial, sans-serif";
     #titleFontSize;
-    #axisFontFamily = "Arial sans-serif";
+    #axisFontFamily = "Arial, sans-serif";
     #axisFontSize;
-    #tickFontFamily = "Arial sans-serif";
+    #tickFontFamily = "Arial, sans-serif";
     #tickFontSize;
-    #boxFontFamily = "Arial sans-serif";
+    #boxFontFamily = "Arial, sans-serif";
     #boxFontSize;
     #yTickStep;
     #showWarningText;
@@ -420,15 +420,19 @@ export class Chart {
         const chartWidth = svgElement.clientWidth;
         const chartHeight = svgElement.clientHeight;
 
+        const warningExtraPadding = 8;
+
         const hundred = new FormattedText({ value: "100" });
         const titleBoundingBox = this.#title.getBoundingBox({ fontFamily: this.#titleFontFamily, fontSize: `${this.#titleFontSize}px`, });
         const xLabelBoundingBox = this.#xLabel.getBoundingBox({ fontFamily: this.#axisFontFamily, fontSize: `${this.#axisFontSize}px`, });
         const yLabelBoundingBox = this.#yLabel.getBoundingBox({ fontFamily: this.#axisFontFamily, fontSize: `${this.#axisFontSize}px`, });
         const hundredBoundingBox = hundred.getBoundingBox({ fontFamily: this.#tickFontFamily, fontSize: `${this.#tickFontSize}px` });
 
+        const warningTextFontSize = "14px";
+
         const warningTextBoundingBox = this.#showWarningText ? this.#warningText.getBoundingBox({
             fontFamily: this.#titleFontFamily,
-            fontSize: `${this.#titleFontSize}px`,
+            fontSize: warningTextFontSize,
         }) : null;
 
         let positions = {
@@ -450,7 +454,7 @@ export class Chart {
             bottom: 2,
         };
 
-        let xLabelBottom = this.#showWarningText ? chartHeight - this.#elementSpacing - warningTextBoundingBox.height - padding.bottom : chartHeight - padding.bottom;
+        let xLabelBottom = this.#showWarningText ? chartHeight - this.#elementSpacing - warningTextBoundingBox.height - warningExtraPadding - padding.bottom : chartHeight - padding.bottom;
 
         positions.title.top = padding.top;
         positions.title.baseline = positions.title.top + titleBoundingBox.baseline - titleBoundingBox.top;
@@ -628,7 +632,7 @@ export class Chart {
                 x: positions.warning.middle,
                 y: positions.warning.baseline,
                 fontFamily: this.#titleFontFamily,
-                fontSize: `${this.#titleFontSize}px`,
+                fontSize: warningTextFontSize,
                 rotation: 0
             });
 
