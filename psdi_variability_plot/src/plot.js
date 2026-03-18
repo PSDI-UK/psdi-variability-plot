@@ -373,20 +373,13 @@ export class Chart {
 
     calculateBoxPosition({ boxLeft, boxTop }) {
 
-        const left = Math.max(Math.min(boxLeft, this.chart.plotArea.width - this.boxWidth), 0);
-        const top = Math.max(Math.min(boxTop, this.chart.plotArea.height - this.boxHeight), 0);
-
         return {
-            manualBoxLeft: left,
-            manualBoxTop: top
-            // manualBoxLeft: this.chart.plotArea.left + left,
-            // manualBoxTop: this.chart.plotArea.top + top
+            manualBoxLeft: Math.max(Math.min(boxLeft, this.chart.plotArea.width - this.boxWidth), 0),
+            manualBoxTop: Math.max(Math.min(boxTop, this.chart.plotArea.height - this.boxHeight), 0)
         };
     }
 
     setBoxPosition({ boxLeft, boxTop }) {
-
-
         this.boxElement.setAttribute("transform", `translate(${boxLeft}, ${boxTop})`);
     }
 
