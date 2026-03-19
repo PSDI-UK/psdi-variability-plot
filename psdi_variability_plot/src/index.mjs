@@ -743,6 +743,8 @@ function enableBoxDrag(chart, element) {
 
         if (event.type === "pointerdown") {
 
+            boxPositionSelect.value = "manual";
+
             initialClientX = event.clientX;
             initialClientY = event.clientY;
 
@@ -903,9 +905,7 @@ function renderChartAux(element, { isDesign }) {
         isDesign,
     });
 
-    if (isDesign && (boxPositionSelect.value === "manual")) {
-        enableBoxDrag(chart, element);
-    }
+    enableBoxDrag(chart, element);
 }
 
 // let loadedFonts = false;
