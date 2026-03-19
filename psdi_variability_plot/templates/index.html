@@ -414,8 +414,14 @@
     project” and load it again by clicking “Load project.”
   </p>
 
-  <button id="loadProject">Load project</button>
-  <button id="saveProject">Save project</button>
+  <button id="saveProject">
+    <img src="{{url_for('static', filename='img/icon-download.svg')}}" alt="Download icon" class="text-icon">
+    Save project
+  </button>
+  <button id="loadProject">
+    <img src="{{url_for('static', filename='img/icon-upload.svg')}}" alt="Download icon" class="text-icon">
+    Load project
+  </button>
 </div>
 
 <input id="loadProjectFile" type="file" value="Load" accept=".json" hidden>
@@ -551,9 +557,18 @@
       </div>
 
       <div>
-        <button id="customiseChart">Customise plot</button>
-        <button id="downloadChart">Download plot</button>
-        <button id="copyToClipboard">Copy plot to clipboard</button>
+        <button id="customiseChart">
+          <img src="{{url_for('static', filename='img/icon-config.svg')}}" alt="Download icon" class="text-icon">
+          Customise plot
+        </button>
+        <button id="downloadChart">
+          <img src="{{url_for('static', filename='img/icon-download.svg')}}" alt="Download icon" class="text-icon">
+          Download plot
+        </button>
+        <button id="copyToClipboard">
+          <img src="{{url_for('static', filename='img/icon-clipboard.svg')}}" alt="Download icon" class="text-icon">
+          Copy plot to clipboard
+        </button>
         <span hidden id="copySuccess">Copied!</span>
         <span hidden id="copyFailure">Copy failed.</span>
       </div><br>
