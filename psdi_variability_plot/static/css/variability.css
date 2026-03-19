@@ -87,6 +87,23 @@ input.button.init-disabled {
   color           : gray
 }
 
+/* Images that appear as icons alongside text */
+.text-icon {
+  height: 1rem;
+  color : var(--ifm-font-color-base);
+  fill  : var(--ifm-font-color-base);
+  stroke: var(--ifm-font-color-base);
+  filter: invert(100%);
+}
+
+button:disabled .text-icon {
+  filter: invert(50%);
+}
+
+[data-theme='dark'] .text-icon {
+  filter: invert(0%);
+}
+
 /* Small vertical space. */
 .smallGap {
   padding: 0.125rem;
