@@ -905,7 +905,9 @@ function renderChartAux(element, { isDesign }) {
         isDesign,
     });
 
-    enableBoxDrag(chart, element);
+    if (isDesign) {
+        enableBoxDrag(chart, element);
+    }
 }
 
 // let loadedFonts = false;
