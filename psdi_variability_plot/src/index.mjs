@@ -608,7 +608,7 @@ function saveProject() {
 
     saveAs(blob, "variability.json");
 
-    lastSavedData = data;
+    lastSavedData = structuredClone(data);
 }
 
 function loadProject() {
@@ -681,6 +681,8 @@ async function loadProjectFile(event) {
         setProjectData(data);
 
         renderChart(variabilityChart);
+
+        lastSavedData = structuredClone(getProjectData());
     }
 }
 
@@ -1036,14 +1038,14 @@ function clearTooltips() {
 }
 
 $(document).ready(function () {
-    lastSavedData = getProjectData();
+    initTooltips();
 
-    exampleData = lastSavedData;
+    lastSavedData = structuredClone(getProjectData());
+
+    exampleData = structuredClone(getProjectData());
     exampleData.chartType = "isolatedYield";
     exampleData.values = [56, 66, 45, 58, 59];
     exampleData.compound = "Example&nbsp;<b>product</b>";
-
-    initTooltips();
 });
 
 window.addEventListener("beforeunload", function (event) {
