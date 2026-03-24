@@ -409,18 +409,24 @@
     This service enables you to produce plots that describe the reproducibility of any
     numerical reaction outcome. The generated scatterplot displays the mean value of
     the outcome (horizontal bar) and the associated confidence interval (shaded area).
-    The scatterplot can be downloaded or copied into another document. You can save
-    a JSON file of project information to your “Downloads” folder by clicking “Save
-    project” and load it again by clicking “Load project.”
+    The scatterplot can be downloaded or copied into another document. You can download
+    a JSON file of project information to your “Downloads” folder by entering a file
+    name (otherwise a default name is used) and clicking “Download project.” File
+    extension .json is added automatically. You can upload it again by clicking “Upload
+    project.”
   </p>
 
+  <div style="padding-top: 6.5px;">
+    <input type="text" placeholder="Default: variability" id="fileName">
+    <label for="fileName">File name for download</label><br>
+  </div>
   <button id="saveProject">
     <img src="{{url_for('static', filename='img/icon-download.svg')}}" alt="Download icon" class="text-icon">
-    Save project
+    Download project
   </button>
   <button id="loadProject">
-    <img src="{{url_for('static', filename='img/icon-upload.svg')}}" alt="Download icon" class="text-icon">
-    Load project
+    <img src="{{url_for('static', filename='img/icon-upload.svg')}}" alt="Upload icon" class="text-icon">
+    Upload project
   </button>
 </div>
 
