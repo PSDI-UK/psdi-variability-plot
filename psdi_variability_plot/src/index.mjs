@@ -90,12 +90,12 @@ const chartTypeLabel = {
     "other": "other"
 }
 
-const chartTypeLabelLoweCase = {
+const chartTypeLabelLowerCase = {
     "isolatedYield": "isolated yield",
     "spectroscopicYield": "spectroscopic yield",
     "chromatographicYield": "chromatographic yield",
-    "ee": "ee",
-    "de": "de",
+    "ee": "<i>ee</i>",
+    "de": "<i>de</i>",
     "other": "other"
 }
 
@@ -105,9 +105,13 @@ function capitalise(text) {
 
     if (match) {
 
-        match[2] = match[2].toUpperCase();
-        return match.slice(1, 4).join("");
-
+        if (match[2].match(/[^de]/)) {
+            match[2] = match[2].toUpperCase();
+            return match.slice(1, 4).join("");
+        } else {
+            return match[2] + "e";
+        }
+            
     } else {
 
         return text;
@@ -436,6 +440,8 @@ const otherEditorObject = new FormattedText({
         renderChart(variabilityChart);
     }
 });
+
+const formattedOutcome = new FormattedText({});
 
 function updateDesign() {
     renderChart(plotDesignElement, { isDesign: true });
@@ -801,19 +807,21 @@ function renderChartAux(element, { isDesign }) {
 
     const compound = compoundEditorObject.getFormattedContent();
 
-    const chartType = chartTypeSelect.value;
+    chartType = chartTypeSelect.value;
+
     const chartTypeElement = document.createElement("span");
 
     if (chartType === "other") {
 
-        chartTypeElement.innerHTML = otherEditorObject.getFormattedContent();
+        chartTypeElement.innerHTML = otherEditorObject.getFormattedContent().toLowerCase();
 
         replaceTextInElement(chartTypeElement, '(%)', '');
         replaceTextInElement(chartTypeElement, '%', '');
 
     } else {
 
-        chartTypeElement.textContent = chartTypeLabelLoweCase[chartType];
+        formattedOutcome.setFormattedContent(chartTypeLabelLowerCase[chartType]);
+        chartTypeElement.innerHTML = formattedOutcome.getFormattedContent();
     }
 
     const capitalisedTChartTypeElement = chartTypeElement.cloneNode(true);
