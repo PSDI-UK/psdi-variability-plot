@@ -47,6 +47,8 @@ const boxLeftInput = document.querySelector("input#boxLeft");
 const boxTopInput = document.querySelector("input#boxTop");
 const boxCoordinatesContainer = document.querySelector(".boxCoordinatesContainer");
 const devicePixelRatioSelect = document.querySelector("select#devicePixelRatio");
+const formatSelect = document.querySelector("select#downloadFormat");
+const fileNameInput = document.querySelector("input#fileName");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -485,10 +487,14 @@ function getProjectData() {
         type: "variabilityPlotProject",
         version: 1,
 
+        filename: fileNameInput.value,
         values: getValues(),
         chartType: chartTypeSelect.value,
+        otherDef: otherEditorObject.getTextContent(),
         chartWidth: parseInt(chartWidthInput.value),
         chartHeight: parseInt(chartHeightInput.value),
+        devicePixelRatio: devicePixelRatioSelect.value,
+        format: formatSelect.value,
         pointType: pointTypeSelect.value,
         pointColor: pointColorInput.value,
         pointWeight: parseInt(pointWeightInput.value),
@@ -500,6 +506,7 @@ function getProjectData() {
         axisFontSize: parseInt(axisFontSizeInput.value),
         tickfontSize: parseInt(tickfontSizeInput.value),
         compound: compoundEditorObject.getFormattedContent(),
+        significance: significanceInput.value,
         yAxisInterval: yAxisIntervalSelect.value === "auto" ? "auto" : parseInt(yAxisIntervalSelect.value),
         boxFontSize: parseInt(boxFontSizeInput.value),
         boxPosition: boxPositionSelect.value,
@@ -513,6 +520,10 @@ function getProjectData() {
 
 function setProjectData(data) {
 
+    if (data.filename) {
+        fileNameInput.value = data.filename;
+    }
+
     if (data.values) {
         setValues(data.values);
     }
@@ -521,12 +532,25 @@ function setProjectData(data) {
         chartTypeSelect.value = data.chartType;
     }
 
+    if (data.otherDef) {
+        otherEditorObject.setFormattedContent(data.otherDef);
+        otherTypeRowDiv.hidden = data.otherDef === "";
+    }
+
     if (data.width) {
         chartWidthInput.value = data.width;
     }
 
     if (data.height) {
         chartHeightInput.value = data.height;
+    }
+
+    if (data.devicePixelRatio) {
+        devicePixelRatioSelect.value = data.devicePixelRatio;
+    }
+
+    if (data.format) {
+        formatSelect.value = data.format;
     }
 
     if (data.pointType) {
@@ -573,6 +597,10 @@ function setProjectData(data) {
         compoundEditorObject.setFormattedContent(data.compound);
     }
 
+    if (data.significance) {
+        significanceInput.value = data.significance;
+    }
+
     if (data.yAxisInterval) {
         yAxisIntervalSelect.value = data.yAxisInterval;
     }
@@ -612,7 +640,11 @@ function saveProject() {
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "text/plain;charset=utf-8" });
 
-    saveAs(blob, "variability.json");
+    var filename = fileNameInput.value;
+
+    filename = (filename === "") ? "variability.json" : filename + ".json";
+
+    saveAs(blob, filename);
 
     lastSavedData = structuredClone(data);
 }
@@ -656,7 +688,7 @@ async function getExportBlob(format) {
 
 async function downloadChart() {
 
-    const format = document.querySelector("select#downloadFormat").value;
+    const format = formatSelect.value;
 
     saveAs(await getExportBlob(format), `variability.${format}`);
 }
