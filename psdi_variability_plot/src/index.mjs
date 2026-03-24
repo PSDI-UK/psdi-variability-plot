@@ -111,7 +111,7 @@ function capitalise(text) {
         } else {
             return match[2] + "e";
         }
-            
+
     } else {
 
         return text;
@@ -807,7 +807,7 @@ function renderChartAux(element, { isDesign }) {
 
     const compound = compoundEditorObject.getFormattedContent();
 
-    chartType = chartTypeSelect.value;
+    const chartType = chartTypeSelect.value;
 
     const chartTypeElement = document.createElement("span");
 
