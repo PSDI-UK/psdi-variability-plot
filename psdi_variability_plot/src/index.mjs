@@ -48,7 +48,6 @@ const boxTopInput = document.querySelector("input#boxTop");
 const boxCoordinatesContainer = document.querySelector(".boxCoordinatesContainer");
 const devicePixelRatioSelect = document.querySelector("select#devicePixelRatio");
 const formatSelect = document.querySelector("select#downloadFormat");
-const fileNameInput = document.querySelector("input#fileName");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -487,7 +486,6 @@ function getProjectData() {
         type: "variabilityPlotProject",
         version: 1,
 
-        filename: fileNameInput.value,
         values: getValues(),
         chartType: chartTypeSelect.value,
         otherDef: otherEditorObject.getTextContent(),
@@ -519,10 +517,6 @@ function getProjectData() {
 }
 
 function setProjectData(data) {
-
-    if (data.filename) {
-        fileNameInput.value = data.filename;
-    }
 
     if (data.values) {
         setValues(data.values);
@@ -640,11 +634,7 @@ function saveProject() {
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "text/plain;charset=utf-8" });
 
-    var filename = fileNameInput.value;
-
-    filename = (filename === "") ? "variability.json" : filename + ".json";
-
-    saveAs(blob, filename);
+    saveAs(blob, "variability.json");
 
     lastSavedData = structuredClone(data);
 }
