@@ -358,13 +358,22 @@ select {
   border : 2px inset #767676;
 }
 
+dialog#variabilityPlotDialog {
+  background: var(--ifm-background-color);
+  color     : var(--ifm-font-color-base);
+}
+
 dialog#variabilityPlotDialog summary {
-  background   : var(--psdi-bg-color-primary);
-  color        : white;
+  background   : var(--ifm-color-primary);
+  color        : var(--ifm-hero-text-color);
   padding      : 4px 12px 4px 12px;
   margin       : 4px 0 4px 0;
-  border       : 2px inset #767676;
+  border       : 2px outset #767676;
   border-radius: 4px;
+}
+
+dialog#variabilityPlotDialog summary {
+  border: 2px inset #767676;
 }
 
 #variabilityChart {
