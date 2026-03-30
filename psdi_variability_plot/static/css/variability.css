@@ -358,9 +358,10 @@ dialog#variabilityPlotDialog summary {
 }
 
 #variabilityChart {
-  max-width : 800px;
-  max-height: 600px;
-  overflow  : auto;
+  max-width       : 800px;
+  max-height      : 600px;
+  overflow        : auto;
+  background-color: white;
 }
 
 .intro {
