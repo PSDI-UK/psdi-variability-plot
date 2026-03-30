@@ -101,7 +101,7 @@ button:disabled .text-icon {
 }
 
 [data-theme='dark'] .text-icon {
-  filter: invert(0%);
+  filter: invert(100%);
 }
 
 /* Small vertical space. */
