@@ -28,7 +28,8 @@
   <script type="module" src="{{url_for('static', filename='js/psdi-common.js')}}"></script>
   {% if ga_tag %}
   <!-- Google tag (gtag.js) -->
-  <script type="text/plain" data-category="analytics" async src="https://www.googletagmanager.com/gtag/js?id={{ ga_tag }}"></script>
+  <script type="text/plain" data-category="analytics" async
+    src="https://www.googletagmanager.com/gtag/js?id={{ ga_tag }}"></script>
   <script type="text/plain" data-category="analytics">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -72,7 +73,7 @@
   {% endblock %}
 
   {% block outer_content %}
-  <div name="content">
+  <div class="content">
     <div class="max-width-box">
       {% block inner_content %}{% endblock %}
     </div>
