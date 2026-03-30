@@ -63,12 +63,18 @@ input:invalid {
 
 .tooltip-on-light {
   --bs-tooltip-bg   : var(--ifm-color-primary);
-  --bs-tooltip-color: var(--psdi-light-text-color-body);
+  --bs-tooltip-color: var(--ifm-hero-text-color);
 }
 
 .tooltip-on-dark {
-  --bs-tooltip-bg   : var(--ifm-background-color);
-  --bs-tooltip-color: var(--psdi-dark-text-color-body);
+  --bs-tooltip-bg   : var(--ifm-color-primary);
+  --bs-tooltip-color: var(--ifm-font-color-base);
+}
+
+[data-theme='dark'] .tooltip-on-light,
+[data-theme='dark'] .tooltip-on-dark {
+  --bs-tooltip-bg   : var(--ifm-color-primary-lightest);
+  --bs-tooltip-color: var(--ifm-font-color-base);
 }
 
 /* Converter details, user input and file conversion initially not displayed. */
