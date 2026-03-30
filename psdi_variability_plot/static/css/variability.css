@@ -336,6 +336,10 @@ button#addNewValueField {
   width: fit-content;
 }
 
+#plotDesign {
+  background-color: white;
+}
+
 .plotDesignHeader {
   display        : flex;
   justify-content: space-between;
