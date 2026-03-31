@@ -184,9 +184,9 @@
   --ifm-bg-color-button-hover : var(--ifm-color-primary-lighter);
   --ifm-bg-color-button-active: var(--ifm-color-primary-lightest);
 
-  --ifm-color-button-disabled       : grey;
-  --ifm-bg-color-button-disabled    : var(--psdi-bg-color-input-contrast);
-  --ifm-border-color-button-disabled: rgba(118, 118, 118, 0.3);
+  --ifm-color-button-disabled       : var(--psdi-dark-text-color-body-f2);
+  --ifm-bg-color-button-disabled    : var(--psdi-bg-color-input-contrast-f3);
+  --ifm-border-color-button-disabled: var(--psdi-bg-color-input-contrast-f3);
 
   --ifm-color-button-cancel          : var(--psdi-text-color-default-body);
   --ifm-bg-color-button-cancel       : var(--psdi-bg-color-input-secondary-f1);
@@ -275,6 +275,10 @@
   --ifm-bg-color-button       : var(--ifm-color-primary-lighter);
   --ifm-bg-color-button-hover : var(--ifm-color-primary-lightestp1);
   --ifm-bg-color-button-active: var(--ifm-color-primary-lightestp2);
+
+  --ifm-color-button-disabled       : var(--psdi-light-text-color-body-f2);
+  --ifm-bg-color-button-disabled    : var(--psdi-dm-bg-color-input-contrast-f3);
+  --ifm-border-color-button-disabled: var(--psdi-dm-bg-color-input-contrast-f3);
 
   --ifm-color-button-cancel          : var(--psdi-dm-text-color-default-body);
   --ifm-bg-color-button-cancel       : var(--psdi-dm-bg-color-input-secondary);
@@ -420,7 +424,7 @@ input::placeholder {
 }
 
 :is(button, input.button, input[type="button"], input[type="file"]::file-selector-button):not(.clean-btn):disabled:hover {
-  background-color: var(--ifm-input-disabled-border-color);
+  background-color: var(--ifm-bg-color-button-disabled);
   cursor          : default;
 }
 
