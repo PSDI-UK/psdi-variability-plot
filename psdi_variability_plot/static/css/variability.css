@@ -385,6 +385,11 @@ dialog#variabilityPlotDialog details[open] summary {
   max-height      : 600px;
   overflow        : auto;
   background-color: white;
+  margin-top      : -1rem;
+}
+
+[data-theme='dark'] #variabilityChart {
+  margin: 0.5rem 0;
 }
 
 .intro {
