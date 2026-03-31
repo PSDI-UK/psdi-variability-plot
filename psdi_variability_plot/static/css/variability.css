@@ -63,12 +63,18 @@ input:invalid {
 
 .tooltip-on-light {
   --bs-tooltip-bg   : var(--ifm-color-primary);
-  --bs-tooltip-color: var(--psdi-light-text-color-body);
+  --bs-tooltip-color: var(--ifm-hero-text-color);
 }
 
 .tooltip-on-dark {
-  --bs-tooltip-bg   : var(--ifm-background-color);
-  --bs-tooltip-color: var(--psdi-dark-text-color-body);
+  --bs-tooltip-bg   : var(--ifm-color-primary);
+  --bs-tooltip-color: var(--ifm-font-color-base);
+}
+
+[data-theme='dark'] .tooltip-on-light,
+[data-theme='dark'] .tooltip-on-dark {
+  --bs-tooltip-bg   : var(--ifm-color-primary-lightest);
+  --bs-tooltip-color: var(--ifm-font-color-base);
 }
 
 /* Converter details, user input and file conversion initially not displayed. */
@@ -101,7 +107,7 @@ button:disabled .text-icon {
 }
 
 [data-theme='dark'] .text-icon {
-  filter: invert(0%);
+  filter: invert(100%);
 }
 
 /* Small vertical space. */
@@ -330,6 +336,10 @@ button#addNewValueField {
   width: fit-content;
 }
 
+#plotDesign {
+  background-color: white;
+}
+
 .plotDesignHeader {
   display        : flex;
   justify-content: space-between;
@@ -348,19 +358,38 @@ select {
   border : 2px inset #767676;
 }
 
+dialog#variabilityPlotDialog {
+  background: var(--ifm-background-color);
+  color     : var(--ifm-font-color-base);
+}
+
 dialog#variabilityPlotDialog summary {
-  background   : var(--psdi-bg-color-primary);
-  color        : white;
+  background   : var(--ifm-bg-color-button);
+  color        : var(--ifm-hero-text-color);
   padding      : 4px 12px 4px 12px;
   margin       : 4px 0 4px 0;
-  border       : 2px inset #767676;
+  border       : 2px outset #767676;
   border-radius: 4px;
 }
 
+dialog#variabilityPlotDialog summary:hover {
+  background: var(--ifm-bg-color-button-hover);
+}
+
+dialog#variabilityPlotDialog details[open] summary {
+  background: var(--ifm-bg-color-button-active);
+}
+
 #variabilityChart {
-  max-width : 800px;
-  max-height: 600px;
-  overflow  : auto;
+  max-width       : 800px;
+  max-height      : 600px;
+  overflow        : auto;
+  background-color: white;
+  margin-top      : -1rem;
+}
+
+[data-theme='dark'] #variabilityChart {
+  margin: 0.5rem 0;
 }
 
 .intro {
@@ -384,24 +413,6 @@ dialog#variabilityPlotDialog summary {
 .plotDesignOptions {
   margin-left: 16px;
   min-height : 600px;
-}
-
-.cancelButton {
-  background: #696969;
-  color     : #ffffff;
-}
-
-.cancelButton:hover {
-  background: #727272;
-}
-
-.applyButton {
-  background: #041e42;
-  color     : #ffffff;
-}
-
-.applyButton:hover {
-  background: #06326a;
 }
 
 div#variabilityPlotContainer svg {
