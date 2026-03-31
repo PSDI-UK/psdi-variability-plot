@@ -364,7 +364,7 @@ dialog#variabilityPlotDialog {
 }
 
 dialog#variabilityPlotDialog summary {
-  background   : var(--ifm-color-primary);
+  background   : var(--ifm-bg-color-button);
   color        : var(--ifm-hero-text-color);
   padding      : 4px 12px 4px 12px;
   margin       : 4px 0 4px 0;
@@ -372,8 +372,12 @@ dialog#variabilityPlotDialog summary {
   border-radius: 4px;
 }
 
-dialog#variabilityPlotDialog summary {
-  border: 2px inset #767676;
+dialog#variabilityPlotDialog summary:hover {
+  background: var(--ifm-bg-color-button-hover);
+}
+
+dialog#variabilityPlotDialog details[open] summary {
+  background: var(--ifm-bg-color-button-active);
 }
 
 #variabilityChart {
