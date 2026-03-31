@@ -166,7 +166,7 @@ function fillWithExampleData() {
         }
 
         chartTypeSelect.options[1].selected = true;
-        compoundEditorObject.setFormattedContent('Example <b>product</b>');
+        compoundEditorObject.setFormattedContent('Example <b>product name</b>');
         manualEntry = false;
 
         updateMain();
@@ -667,7 +667,11 @@ async function getExportBlob(format) {
 
         // const dataURL = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
 
-        blob = new Blob([svg.outerHTML], { type: "image/svg+xml; charset=utf-8" });
+        // Replace any non-breaking spaces in the SVG source with the more commonly-supported code for them so it won't
+        // break if not supported
+        let svgSource = svg.outerHTML.replaceAll("&nbsp;", "&#160;");
+
+        blob = new Blob([svgSource], { type: "image/svg+xml; charset=utf-8" });
 
     } else if ((format === "png") || (format == "jpeg")) {
 
@@ -1091,7 +1095,7 @@ $(document).ready(function () {
     exampleData = structuredClone(getProjectData());
     exampleData.chartType = "isolatedYield";
     exampleData.values = [56, 66, 45, 58, 59];
-    exampleData.compound = "Example&nbsp;<b>product</b>";
+    exampleData.compound = "Example&nbsp;<b>product&nbsp;name</b>";
 });
 
 window.addEventListener("beforeunload", function (event) {
