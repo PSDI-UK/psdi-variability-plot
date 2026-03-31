@@ -17,6 +17,7 @@ const notificationsDiv = document.querySelector("div#notifications");
 const otherTypeRowDiv = document.querySelector("div#otherTypeRow");
 const noChartDiv = document.querySelector("div#noChart");
 const exampleDataButton = document.querySelector("button#exampleData");
+const resetFormButton = document.querySelector("button#resetForm");
 const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
@@ -55,6 +56,8 @@ var tooltipList;
 var reversionData;
 var lastSavedData;
 var exampleData;
+var blankData;
+
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
 
@@ -139,8 +142,13 @@ function setValues(values) {
 
     changeNumberOfValueFields();
 
-    for (let valueIndex = 0; valueIndex < values.length; valueIndex++) {
-        document.getElementById(`value-${valueIndex}`).value = values[valueIndex];
+    for (let valueIndex = 0; valueIndex < numberOfValuesInput.value; valueIndex++) {
+
+        if (valueIndex < values.length) {
+            document.getElementById(`value-${valueIndex}`).value = values[valueIndex];
+        } else {
+            document.getElementById(`value-${valueIndex}`).value = "";
+        }
     }
 }
 
@@ -520,6 +528,8 @@ function setProjectData(data) {
 
     if (data.values) {
         setValues(data.values);
+        numberOfValuesInput.value = 5;
+        changeNumberOfValueFields();
     }
 
     if (data.chartType) {
@@ -531,12 +541,12 @@ function setProjectData(data) {
         otherTypeRowDiv.hidden = data.otherDef === "";
     }
 
-    if (data.width) {
-        chartWidthInput.value = data.width;
+    if (data.chartWidth) {
+        chartWidthInput.value = data.chartWidth;
     }
 
-    if (data.height) {
-        chartHeightInput.value = data.height;
+    if (data.chartHeight) {
+        chartHeightInput.value = data.chartHeight;
     }
 
     if (data.devicePixelRatio) {
@@ -587,9 +597,7 @@ function setProjectData(data) {
         tickfontSizeInput.value = data.tickfontSize;
     }
 
-    if (data.compound) {
-        compoundEditorObject.setFormattedContent(data.compound);
-    }
+    compoundEditorObject.setFormattedContent(data.compound);
 
     if (data.significance) {
         significanceInput.value = data.significance;
@@ -712,6 +720,13 @@ async function loadProjectFile(event) {
 
         lastSavedData = structuredClone(getProjectData());
     }
+}
+
+function loadBlankProject() {
+
+    setProjectData(blankData);
+    renderChart(variabilityChart);
+    lastSavedData = structuredClone(blankData);
 }
 
 function replaceTextInElement(element, match, replace) {
@@ -1071,6 +1086,7 @@ $(document).ready(function () {
     initTooltips();
 
     lastSavedData = structuredClone(getProjectData());
+    blankData = structuredClone(getProjectData());
 
     exampleData = structuredClone(getProjectData());
     exampleData.chartType = "isolatedYield";
@@ -1089,6 +1105,7 @@ window.addEventListener("beforeunload", function (event) {
 
 numberOfValuesInput.addEventListener("change", changeNumberOfValueFields);
 exampleDataButton.addEventListener("click", fillWithExampleData);
+resetFormButton.addEventListener("click", loadBlankProject);
 chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
