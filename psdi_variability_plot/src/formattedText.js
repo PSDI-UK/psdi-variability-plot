@@ -77,11 +77,16 @@ export class FormattedText {
                 symbolButton.addEventListener("click", function () {
                     replaceText(quill, symbolButton.textContent);
                     symbolSelector.hidden = true;
+                    insertSymbolButton.classList.remove("ql-active");
                 });
             }
 
             insertSymbolButton.addEventListener("click", function () {
                 symbolSelector.hidden = !symbolSelector.hidden;
+                if (symbolSelector.hidden)
+                    insertSymbolButton.classList.remove("ql-active");
+                else
+                    insertSymbolButton.classList.add("ql-active");
             })
 
             function processSelectedElementChange(event) {
@@ -100,6 +105,7 @@ export class FormattedText {
 
                     if (hideSymbolSelector) {
                         symbolSelector.hidden = true
+                        insertSymbolButton.classList.remove("ql-active");
                     }
                 }
 
@@ -127,6 +133,7 @@ export class FormattedText {
 
                 if (inactive) {
                     symbolSelector.hidden = true;
+                    insertSymbolButton.classList.remove("ql-active");
                 }
             }
 
