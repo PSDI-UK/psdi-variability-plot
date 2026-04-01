@@ -128,3 +128,7 @@
 .symbolSelector button.symbolButton:hover {
     background-color: var(--ifm-color-secondary);
 }
+
+[data-theme='dark'] .symbolSelector button.symbolButton:hover {
+    background-color: var(--ifm-color-secondary-lighter);
+}
