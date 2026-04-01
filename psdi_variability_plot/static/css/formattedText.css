@@ -50,10 +50,20 @@
     background-color: var(--ifm-color-secondary);
 }
 
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton:hover {
+    background-color: var(--ifm-color-secondary-lighter);
+}
+
 .formattedEditorPalette>div button.toolbarButton.ql-active,
 .formattedEditorPalette>div button.toolbarButton.ql-active:hover {
     color           : var(--ifm-hero-text-color);
     background-color: var(--ifm-color-secondary-dark);
+}
+
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active,
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active:hover {
+    color           : var(--ifm-font-color-base);
+    background-color: var(--ifm-color-secondary-lightest);
 }
 
 .ql-editor {
