@@ -691,8 +691,20 @@ async function getExportBlob(format) {
 async function downloadChart() {
 
     const format = formatSelect.value;
+    const pixelRatio = devicePixelRatioSelect.value;
 
-    saveAs(await getExportBlob(format), `variability.${format}`);
+    let fileName;
+
+    if (pixelRatio == 1) {
+        fileName = "variability-web";
+    } else if (pixelRatio == 2) {
+        fileName = "variability-hi-res-web";
+    } else {
+        fileName = "variability-print";
+    }
+
+    saveAs(await getExportBlob(format), `${fileName}.${format}`);
+//    saveAs(await getExportBlob(format), `variability.${format}`);
 }
 
 async function loadProjectFile(event) {
