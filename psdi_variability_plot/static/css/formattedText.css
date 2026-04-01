@@ -11,47 +11,55 @@
 
 .formattedEditorPalette>div {
     position: absolute;
-    right: 1px;
-    bottom: -1px;
-    outline: 1px solid gray;
-    display: flex;
-    border: none;
-    width: fit-content;
+    right   : 1px;
+    bottom  : -1px;
+    outline : 1px solid gray;
+    display : flex;
+    border  : none;
+    width   : fit-content;
 }
 
 .formattedEditorPalette>div button {
-    display: flex;
-    border: 1px solid #444;
-    align-items: center;
+    display        : flex;
+    border         : 1px solid #444;
+    align-items    : center;
     justify-content: center;
-    border-radius: 0;
-    background: white;
-    color: black;
-    min-width: 32px;
-    padding: 0;
-    margin: 0;
+    border-radius  : 0;
+    background     : white;
+    color          : black;
+    min-width      : 32px;
+    padding        : 0;
+    margin         : 0;
 }
 
 .formattedEditorPalette>div button.ql-active {
-    border: 1px solid #444;
+    border    : 1px solid #444;
     background: #444;
-    color: white;
+    color     : white;
 }
 
 .ql-editor {
-    padding: 3px 3px;
-    height: fit-content;
+    padding         : 3px 3px;
+    background-color: var(--ifm-input-bg-color);
+    border-color    : var(--ifm-input-border-color);
+    font-size       : var(--ifm-font-size-base);
+    height          : fit-content;
+    scrollbar-color : var(--ifm-hero-text-color) var(--ifm-color-primary);
 }
 
 .ql-editor.ql-blank::before {
-    left: inherit;
-    right: inherit;
+    padding-left: 3px;
+    font-family : var(--ifm-font-family-base);
+    font-size   : var(--ifm-font-size-base);
+    color       : var(--ifm-font-color-base-f2);
+    left        : inherit;
+    right       : inherit;
 }
 
 .ql-container {
-    font-family: var(--ifm-font-family-base);
-    font-size: var(--ifm-font-size-base);
-    font-weight: var(--ifm-font-weight-base);
+    font-family   : var(--ifm-font-family-base);
+    font-size     : var(--ifm-font-size-base);
+    font-weight   : var(--ifm-font-weight-base);
     letter-spacing: var(--psdi-letter-spacing-base);
 }
 
@@ -60,36 +68,36 @@
 }
 
 .symbolSelector>div {
-    box-sizing: content-box;
-    position: absolute;
-    right: 0;
-    top: 0;
-    border: 2px solid #444;
-    background: white;
-    display: flex;
-    width: 256px;
-    flex-wrap: wrap;
+    box-sizing : content-box;
+    position   : absolute;
+    right      : 0;
+    top        : 0;
+    border     : 2px solid #444;
+    background : white;
+    display    : flex;
+    width      : 256px;
+    flex-wrap  : wrap;
     user-select: none;
-    z-index: 1;
+    z-index    : 1;
 }
 
 .symbolSelector button {
-    border-radius: 0;
-    box-sizing: content-box;
-    padding: 0;
-    margin: 0;
-    background: white;
-    color: black;
-    border: none;
-    display: inline-flex;
-    width: 32px;
-    height: 32px;
+    border-radius  : 0;
+    box-sizing     : content-box;
+    padding        : 0;
+    margin         : 0;
+    background     : white;
+    color          : black;
+    border         : none;
+    display        : inline-flex;
+    width          : 32px;
+    height         : 32px;
     justify-content: center;
-    align-items: center;
-    cursor: pointer;
+    align-items    : center;
+    cursor         : pointer;
 }
 
 .symbolSelector button:hover {
     background: #444;
-    color: white;
+    color     : white;
 }
