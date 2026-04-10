@@ -34,6 +34,9 @@ const pointWeightInput = document.querySelector("input#pointWeight");
 const bandColorInput = document.querySelector("input#bandColor");
 const meanColorInput = document.querySelector("input#meanColor");
 const meanWeightInput = document.querySelector("input#meanWeight");
+const plotTitleInput = document.querySelector("input#plotTitle");
+const xTitleInput = document.querySelector("input#xTitle");
+const yTitleInput = document.querySelector("input#yTitle");
 const titleFontSizeInput = document.querySelector("input#titleFontSize");
 const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
@@ -57,6 +60,7 @@ var reversionData;
 var lastSavedData;
 var exampleData;
 var blankData;
+var autoUpdatingChartTitles = true;
 
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
@@ -168,7 +172,9 @@ function fillWithExampleData() {
         chartTypeSelect.options[1].selected = true;
         compoundEditorObject.setFormattedContent('Example <b>product name</b>');
         manualEntry = false;
+        autoUpdatingChartTitles = true;
 
+        setDefaultChartTitles();
         updateMain();
         changeOtherTypeVisibility();
     }
@@ -439,6 +445,8 @@ function createButton(id, sign) {
 const compoundEditorObject = new FormattedText({
     element: compoundEditor,
     changeFunc: function () {
+        if (autoUpdatingChartTitles)
+            setDefaultChartTitles();
         renderChart(variabilityChart);
     }
 });
@@ -446,6 +454,8 @@ const compoundEditorObject = new FormattedText({
 const otherEditorObject = new FormattedText({
     element: otherEditor,
     changeFunc: function () {
+        if (autoUpdatingChartTitles)
+            setDefaultChartTitles();
         renderChart(variabilityChart);
     }
 });
@@ -704,7 +714,7 @@ async function downloadChart() {
     }
 
     saveAs(await getExportBlob(format), `${fileName}.${format}`);
-//    saveAs(await getExportBlob(format), `variability.${format}`);
+    //    saveAs(await getExportBlob(format), `variability.${format}`);
 }
 
 async function loadProjectFile(event) {
@@ -846,6 +856,51 @@ function enableBoxDrag(chart, element) {
     boxElement.addEventListener("pointerup", handleEvent);
 }
 
+function getChartTypeElement() {
+    const chartType = chartTypeSelect.value;
+
+    const chartTypeElement = document.createElement("span");
+
+    if (chartType === "other") {
+
+        chartTypeElement.innerHTML = otherEditorObject.getFormattedContent();
+
+        replaceTextInElement(chartTypeElement, '(%)', '');
+        replaceTextInElement(chartTypeElement, '%', '');
+
+    } else {
+
+        formattedOutcome.setFormattedContent(chartTypeLabel[chartType]);
+        chartTypeElement.innerHTML = formattedOutcome.getFormattedContent();
+    }
+
+    return chartTypeElement;
+}
+
+function setDefaultChartXTitle() {
+    xTitleInput.value = "Iteration";
+}
+
+function setDefaultChartYTitle() {
+    yTitleInput.value = `${getChartTypeElement().innerHTML} of ${compoundEditorObject.getFormattedContent()} (%)`;
+}
+
+function setDefaultChartTitle() {
+    // Decapitalise the y title if it starts with one of the default outcomes where we know this is what we want to
+    // happen
+    var yTitle = yTitleInput.value;
+    if (chartTypeSelect.value !== "other") {
+        yTitle = yTitle[0].toLowerCase() + yTitle.slice(1);
+    }
+    plotTitleInput.value = `Variability plot for the ${yTitle}`
+}
+
+function setDefaultChartTitles() {
+    setDefaultChartXTitle();
+    setDefaultChartYTitle();
+    setDefaultChartTitle();
+}
+
 function renderChartAux(element, { isDesign }) {
 
     const projectData = getProjectData();
@@ -860,37 +915,20 @@ function renderChartAux(element, { isDesign }) {
 
     const compound = compoundEditorObject.getFormattedContent();
 
-    const chartType = chartTypeSelect.value;
-
-    const chartTypeElement = document.createElement("span");
-
-    if (chartType === "other") {
-
-        chartTypeElement.innerHTML = otherEditorObject.getFormattedContent().toLowerCase();
-
-        replaceTextInElement(chartTypeElement, '(%)', '');
-        replaceTextInElement(chartTypeElement, '%', '');
-
-    } else {
-
-        formattedOutcome.setFormattedContent(chartTypeLabelLowerCase[chartType]);
-        chartTypeElement.innerHTML = formattedOutcome.getFormattedContent();
-    }
+    const chartTypeElement = getChartTypeElement();
 
     const capitalisedTChartTypeElement = chartTypeElement.cloneNode(true);
 
     capitaliseTextInElement(capitalisedTChartTypeElement);
-
-    const yLabel = `${capitalisedTChartTypeElement.innerHTML} of ${compound} (%)`;
 
     const xLabelEditorObject = new FormattedText({});
     const autoTitleEditorObject = new FormattedText({});
     const yLabelEditorObject = new FormattedText({});
     const warningTextObject = new FormattedText({});
 
-    xLabelEditorObject.setFormattedContent("Iterations");
-    autoTitleEditorObject.setFormattedContent(`Variability plot for the ${chartTypeElement.innerHTML} of ${compound}`);
-    yLabelEditorObject.setFormattedContent(yLabel);
+    xLabelEditorObject.setFormattedContent(xTitleInput.value);
+    yLabelEditorObject.setFormattedContent(yTitleInput.value);
+    autoTitleEditorObject.setFormattedContent(plotTitleInput.value);
 
     let lowerConfidenceBound = Math.round(results.ci[0]);
     let upperConfidenceBound = Math.round(results.ci[1]);
@@ -1108,6 +1146,7 @@ $(document).ready(function () {
     exampleData.chartType = "isolatedYield";
     exampleData.values = [56, 66, 45, 58, 59];
     exampleData.compound = "Example&nbsp;<b>product&nbsp;name</b>";
+    setDefaultChartTitles();
 });
 
 window.addEventListener("beforeunload", function (event) {
