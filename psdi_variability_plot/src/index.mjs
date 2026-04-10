@@ -34,9 +34,9 @@ const pointWeightInput = document.querySelector("input#pointWeight");
 const bandColorInput = document.querySelector("input#bandColor");
 const meanColorInput = document.querySelector("input#meanColor");
 const meanWeightInput = document.querySelector("input#meanWeight");
-const plotTitleInput = document.querySelector("input#plotTitle");
-const xTitleInput = document.querySelector("input#xTitle");
-const yTitleInput = document.querySelector("input#yTitle");
+const plotTitleEditor = document.querySelector("div#plotTitle");
+const xTitleEditor = document.querySelector("div#xTitle");
+const yTitleEditor = document.querySelector("div#yTitle");
 const titleFontSizeInput = document.querySelector("input#titleFontSize");
 const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
@@ -93,17 +93,8 @@ const chartTypeLabel = {
     "isolatedYield": "Isolated yield",
     "spectroscopicYield": "Spectroscopic yield",
     "chromatographicYield": "Chromatographic yield",
-    "ee": "ee",
-    "de": "de",
-    "other": "other"
-}
-
-const chartTypeLabelLowerCase = {
-    "isolatedYield": "isolated yield",
-    "spectroscopicYield": "spectroscopic yield",
-    "chromatographicYield": "chromatographic yield",
     "ee": "<i>ee</i>",
-    "de": "<i>de</i>",
+    "de": "<i>ee</i>",
     "other": "other"
 }
 
@@ -459,6 +450,29 @@ const otherEditorObject = new FormattedText({
         renderChart(variabilityChart);
     }
 });
+
+const plotTitleEditorObject = new FormattedText({
+    element: plotTitleEditor,
+    changeFunc: function () {
+        renderChart(plotDesignElement, { isDesign: true });
+    }
+});
+
+const xTitleEditorObject = new FormattedText({
+    element: xTitleEditor,
+    changeFunc: function () {
+        renderChart(plotDesignElement, { isDesign: true });
+    }
+});
+
+const yTitleEditorObject = new FormattedText({
+    element: yTitleEditor,
+    changeFunc: function () {
+        renderChart(plotDesignElement, { isDesign: true });
+    }
+});
+
+
 
 const formattedOutcome = new FormattedText({});
 
@@ -878,21 +892,21 @@ function getChartTypeElement() {
 }
 
 function setDefaultChartXTitle() {
-    xTitleInput.value = "Iteration";
+    xTitleEditorObject.setFormattedContent("Iteration");
 }
 
 function setDefaultChartYTitle() {
-    yTitleInput.value = `${getChartTypeElement().innerHTML} of ${compoundEditorObject.getFormattedContent()} (%)`;
+    yTitleEditorObject.setFormattedContent(`${getChartTypeElement().innerHTML} of ${compoundEditorObject.getFormattedContent()} (%)`);
 }
 
 function setDefaultChartTitle() {
     // Decapitalise the y title if it starts with one of the default outcomes where we know this is what we want to
     // happen
-    var yTitle = yTitleInput.value;
+    var yTitle = yTitleEditorObject.getFormattedContent();
     if (chartTypeSelect.value !== "other") {
         yTitle = yTitle[0].toLowerCase() + yTitle.slice(1);
     }
-    plotTitleInput.value = `Variability plot for the ${yTitle}`
+    plotTitleEditorObject.setFormattedContent(`Variability plot for the ${yTitle}`);
 }
 
 function setDefaultChartTitles() {
@@ -926,9 +940,9 @@ function renderChartAux(element, { isDesign }) {
     const yLabelEditorObject = new FormattedText({});
     const warningTextObject = new FormattedText({});
 
-    xLabelEditorObject.setFormattedContent(xTitleInput.value);
-    yLabelEditorObject.setFormattedContent(yTitleInput.value);
-    autoTitleEditorObject.setFormattedContent(plotTitleInput.value);
+    xLabelEditorObject.setFormattedContent(xTitleEditorObject.getFormattedContent());
+    yLabelEditorObject.setFormattedContent(yTitleEditorObject.getFormattedContent());
+    autoTitleEditorObject.setFormattedContent(plotTitleEditorObject.getFormattedContent());
 
     let lowerConfidenceBound = Math.round(results.ci[0]);
     let upperConfidenceBound = Math.round(results.ci[1]);
