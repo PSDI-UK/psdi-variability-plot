@@ -525,6 +525,9 @@ function getProjectData() {
         chartHeight: parseInt(chartHeightInput.value),
         devicePixelRatio: devicePixelRatioSelect.value,
         format: formatSelect.value,
+        plotTitle: plotTitleEditorObject.getFormattedContent(),
+        xTitle: xTitleEditorObject.getFormattedContent(),
+        yTitle: yTitleEditorObject.getFormattedContent(),
         pointType: pointTypeSelect.value,
         pointColor: pointColorInput.value,
         pointWeight: parseInt(pointWeightInput.value),
@@ -579,6 +582,18 @@ function setProjectData(data) {
 
     if (data.format) {
         formatSelect.value = data.format;
+    }
+
+    if (data.plotTitle) {
+        plotTitleEditorObject.setFormattedContent(data.plotTitle);
+    }
+
+    if (data.xTitle) {
+        xTitleEditorObject.setFormattedContent(data.xTitle);
+    }
+
+    if (data.yTitle) {
+        yTitleEditorObject.setFormattedContent(data.yTitle);
     }
 
     if (data.pointType) {
