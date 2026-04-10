@@ -60,7 +60,14 @@ var reversionData;
 var lastSavedData;
 var exampleData;
 var blankData;
+
+// Whether or not chart titles should be automatically updated. This is turned off the first time the user opens the
+// plot config dialog which lets them manually change these
 var autoUpdatingChartTitles = true;
+
+var lastXTitle = null;
+var lastYTitle = null;
+var lastPlotTitle = null;
 
 // This is the cutoff value for when to stop using the t-distribution and use
 // the z-distribution instead.
@@ -925,9 +932,29 @@ function setDefaultChartTitle() {
 }
 
 function setDefaultChartTitles() {
+    if (!autoUpdatingChartTitles) {
+        lastXTitle = xTitleEditorObject.getFormattedContent();
+        lastYTitle = yTitleEditorObject.getFormattedContent();
+        lastPlotTitle = plotTitleEditorObject.getFormattedContent();
+        document.querySelector("button#titleRevert").removeAttribute("disabled");
+    }
     setDefaultChartXTitle();
     setDefaultChartYTitle();
     setDefaultChartTitle();
+}
+
+function revertChartTitles() {
+    var tmpXTitle = xTitleEditorObject.getFormattedContent();
+    var tmpYTitle = yTitleEditorObject.getFormattedContent();
+    var tmpPlotTitle = plotTitleEditorObject.getFormattedContent();
+
+    xTitleEditorObject.setFormattedContent(lastXTitle);
+    yTitleEditorObject.setFormattedContent(lastYTitle);
+    plotTitleEditorObject.setFormattedContent(lastPlotTitle);
+
+    lastXTitle = tmpXTitle;
+    lastYTitle = tmpYTitle;
+    lastPlotTitle = tmpPlotTitle;
 }
 
 function renderChartAux(element, { isDesign }) {
@@ -1234,5 +1261,8 @@ document.querySelector("button#saveProject").addEventListener("click", saveProje
 document.querySelector("button#loadProject").addEventListener("click", loadProject);
 document.querySelector("button#downloadChart").addEventListener("click", downloadChart);
 document.querySelector("input#loadProjectFile").addEventListener("change", loadProjectFile);
+document.querySelector("button#titleDefault").addEventListener("click", setDefaultChartTitles);
+document.querySelector("button#titleRevert").addEventListener("click", revertChartTitles);
+document.querySelector("summary#titlesSummary").addEventListener("click", () => { autoUpdatingChartTitles = false; });
 
 renderChart(variabilityChart);
