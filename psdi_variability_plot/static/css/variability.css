@@ -37,7 +37,7 @@ input:invalid {
   align-items     : center;
   content         : "i";
   background-color: var(--ifm-color-info);
-  color           : var(--psdi-light-text-color-body);
+  color           : var(--ifm-hero-text-color);
   font-family     : serif;
   font-weight     : bold;
   width           : 1rem;
@@ -87,12 +87,6 @@ input#fileToUpload {
   margin-right: 0.25rem;
 }
 
-/* Buttons that are initially disabled */
-input.button.init-disabled {
-  background-color: var(--psdi-bg-color-secondary);
-  color           : gray
-}
-
 /* Images that appear as icons alongside text */
 .text-icon {
   height: 1rem;
@@ -131,16 +125,6 @@ button:disabled .text-icon {
   flex-direction : row;
   align-items    : flex-start;
   justify-content: space-between;
-}
-
-.flex-panel-display:has(.instructions-panel) {
-  border       : 1px solid var(--psdi-border-color-dark);
-  border-radius: 1rem;
-  margin-bottom: 2rem;
-}
-
-[data-theme='dark'] .flex-panel-display:has(.instructions-panel) {
-  border: 1px solid var(--psdi-border-color-light);
 }
 
 @media (max-width: 950px) {
@@ -220,53 +204,6 @@ button:disabled .text-icon {
 
 [data-theme="dark"] .access-dm {
   display: block;
-}
-
-/* Select boxes for accessibility options */
-.access-option-container select {
-  min-width: 5rem;
-  width    : 100%;
-}
-
-.access-option-container select option:checked {
-  background-color: var(--ifm-background-color);
-  color           : var(--ifm-font-color-base);
-}
-
-select#light-colour,
-select#dark-background,
-select#light-colour option,
-select#dark-background option,
-select#light-colour option:checked,
-select#dark-background option:checked {
-  background-color: var(--ifm-color-primary);
-  color           : var(--ifm-hero-text-color);
-}
-
-select#size option {
-  font-size: var(--psdi-default-font-size);
-}
-
-select#font option {
-  font-family: var(--psdi-default-font);
-}
-
-select#dark-colour option {
-  color: var(--psdi-default-dark-text-color-body);
-}
-
-select#light-colour option {
-  background-color: var(--ifm-color-primary);
-  color           : var(--psdi-default-light-text-color-body);
-}
-
-select#light-background option {
-  background-color: var(--psdi-default-background-color);
-}
-
-select#dark-background option {
-  background-color: var(--psdi-default-color-primary);
-  color           : var(--psdi-light-text-color-body);
 }
 
 /* Classes to force specific styling for exceptional cases */
