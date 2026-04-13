@@ -171,10 +171,11 @@ function fillWithExampleData() {
         compoundEditorObject.setFormattedContent('Example <b>product name</b>');
         manualEntry = false;
         autoUpdatingChartTitles = true;
+        document.querySelector("details#titlesDetails").removeAttribute("open");
 
         setDefaultChartTitles();
         updateMain();
-        changeOtherTypeVisibility();
+        updateChartType();
     }
 
     // Clear the tooltip from hovering over the button, since clicking it focuses it and will keep the tooltip present,
@@ -205,12 +206,15 @@ function validatePlot() {
     }
 }
 
-function changeOtherTypeVisibility() {
+function updateChartType() {
     otherTypeRowDiv.hidden = chartTypeSelect.value !== "other";
 
     if (chartTypeSelect.value === "other") {
         highlightElement(otherTypeRowDiv);
     }
+
+    if (autoUpdatingChartTitles)
+        setDefaultChartTitles();
 }
 
 async function loadImage(src) {
@@ -788,6 +792,8 @@ function loadBlankProject() {
 
     setProjectData(blankData);
     renderChart(variabilityChart);
+    autoUpdatingChartTitles = true;
+    document.querySelector("details#titlesDetails").removeAttribute("open");
     lastSavedData = structuredClone(blankData);
 }
 
@@ -1217,7 +1223,7 @@ window.addEventListener("beforeunload", function (event) {
 numberOfValuesInput.addEventListener("change", changeNumberOfValueFields);
 exampleDataButton.addEventListener("click", fillWithExampleData);
 resetFormButton.addEventListener("click", loadBlankProject);
-chartTypeSelect.addEventListener("change", changeOtherTypeVisibility);
+chartTypeSelect.addEventListener("change", updateChartType);
 copyToClipboardButton.addEventListener("click", copyToClipboard);
 downloadChartButton.addEventListener("click", downloadChart);
 
