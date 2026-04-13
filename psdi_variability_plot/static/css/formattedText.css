@@ -75,7 +75,7 @@
     scrollbar-color : var(--ifm-hero-text-color) var(--ifm-color-primary);
 }
 
-.formControl .ql-editor {
+.plotDesignOptions .ql-editor {
     max-width : 10.5rem;
     max-height: 4.75rem;
 }
