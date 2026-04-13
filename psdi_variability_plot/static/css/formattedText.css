@@ -88,7 +88,7 @@
     font-family   : var(--ifm-font-family-base);
     font-size     : var(--ifm-font-size-base);
     font-weight   : var(--ifm-font-weight-base);
-    letter-spacing: var(--psdi-letter-spacing-base);
+    letter-spacing: var(--ifm-letter-spacing-base);
 }
 
 .symbolSelector {
