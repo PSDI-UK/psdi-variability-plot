@@ -193,9 +193,9 @@ function validatePlot() {
     const values = getValues();
 
     const needThreeValues = (values === null) || (values.length < 3);
-    const needReactionOutcome = chartType === "noSelection";
+    const needReactionOutcome = chartType === "noSelection" && autoUpdatingChartTitles;
     const needOtherOutcome = (chartType === "other") && (otherDef === "");
-    const needProductLabel = compound === "";
+    const needProductLabel = compound === "" && autoUpdatingChartTitles;
 
     return {
         validated: !(needThreeValues || needReactionOutcome || needOtherOutcome || needProductLabel),
