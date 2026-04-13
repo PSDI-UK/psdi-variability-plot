@@ -937,7 +937,7 @@ function setDefaultChartTitle() {
     plotTitleEditorObject.setFormattedContent(`Variability plot for the ${yTitle}`);
 }
 
-function setDefaultChartTitles() {
+function setDefaultChartTitles(fromEvent = false) {
     if (!autoUpdatingChartTitles) {
         lastXTitle = xTitleEditorObject.getFormattedContent();
         lastYTitle = yTitleEditorObject.getFormattedContent();
@@ -947,6 +947,8 @@ function setDefaultChartTitles() {
     setDefaultChartXTitle();
     setDefaultChartYTitle();
     setDefaultChartTitle();
+    if (fromEvent)
+        renderChart(plotDesignElement, { isDesign: true });
 }
 
 function revertChartTitles() {
@@ -961,6 +963,8 @@ function revertChartTitles() {
     lastXTitle = tmpXTitle;
     lastYTitle = tmpYTitle;
     lastPlotTitle = tmpPlotTitle;
+
+    renderChart(plotDesignElement, { isDesign: true });
 }
 
 function renderChartAux(element, { isDesign }) {
@@ -1267,7 +1271,7 @@ document.querySelector("button#saveProject").addEventListener("click", saveProje
 document.querySelector("button#loadProject").addEventListener("click", loadProject);
 document.querySelector("button#downloadChart").addEventListener("click", downloadChart);
 document.querySelector("input#loadProjectFile").addEventListener("change", loadProjectFile);
-document.querySelector("button#titleDefault").addEventListener("click", setDefaultChartTitles);
+document.querySelector("button#titleDefault").addEventListener("click", () => setDefaultChartTitles(true));
 document.querySelector("button#titleRevert").addEventListener("click", revertChartTitles);
 document.querySelector("summary#titlesSummary").addEventListener("click", () => { autoUpdatingChartTitles = false; });
 
