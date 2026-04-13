@@ -924,7 +924,19 @@ function setDefaultChartXTitle() {
 }
 
 function setDefaultChartYTitle() {
-    yTitleEditorObject.setFormattedContent(`${getChartTypeElement().innerHTML} of ${compoundEditorObject.getFormattedContent()} (%)`);
+    let reactionOutcome = getChartTypeElement().innerHTML;
+    let compound = compoundEditorObject.getFormattedContent();
+
+    // Check for a case where the user has removed the reaction outcome and/or compound and then asked for defaults, and
+    // handle it as sensibly as possible
+    if (reactionOutcome !== "undefined") {
+        if (compound !== "")
+            reactionOutcome += " of "
+    } else {
+        reactionOutcome = ""
+    }
+
+    yTitleEditorObject.setFormattedContent(`${reactionOutcome}${compound} (%)`);
 }
 
 function setDefaultChartTitle() {
@@ -934,7 +946,15 @@ function setDefaultChartTitle() {
     if (chartTypeSelect.value !== "other") {
         yTitle = yTitle[0].toLowerCase() + yTitle.slice(1);
     }
-    plotTitleEditorObject.setFormattedContent(`Variability plot for the ${yTitle}`);
+
+    // Check for a case where the user has removed the reaction outcome and compound and then asked for defaults, and
+    // handle it as sensibly as possible
+    let chartTitle = "Variability plot"
+    if (yTitle === " (%)")
+        chartTitle += yTitle;
+    else
+        chartTitle += ` for the ${ytiyTitletle}`;
+    plotTitleEditorObject.setFormattedContent(yTitle);
 }
 
 function setDefaultChartTitles(fromEvent = false) {
