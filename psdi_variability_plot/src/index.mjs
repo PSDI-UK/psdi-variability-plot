@@ -953,7 +953,7 @@ function setDefaultChartTitle() {
     if (yTitle === " (%)")
         chartTitle += yTitle;
     else
-        chartTitle += ` for the ${ytiyTitletle}`;
+        chartTitle += ` for the ${yTitle}`;
     plotTitleEditorObject.setFormattedContent(yTitle);
 }
 
