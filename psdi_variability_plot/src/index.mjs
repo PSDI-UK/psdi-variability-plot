@@ -950,8 +950,8 @@ function setDefaultChartTitle() {
     // Check for a case where the user has removed the reaction outcome and compound and then asked for defaults, and
     // handle it as sensibly as possible
     let chartTitle = "Variability plot"
-    if (yTitle === " (%)")
-        chartTitle += yTitle;
+    if (yTitle === "(%)")
+        chartTitle += " " + yTitle;
     else
         chartTitle += ` for the ${yTitle}`;
     plotTitleEditorObject.setFormattedContent(chartTitle);
