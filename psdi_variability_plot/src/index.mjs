@@ -954,7 +954,7 @@ function setDefaultChartTitle() {
         chartTitle += yTitle;
     else
         chartTitle += ` for the ${yTitle}`;
-    plotTitleEditorObject.setFormattedContent(yTitle);
+    plotTitleEditorObject.setFormattedContent(chartTitle);
 }
 
 function setDefaultChartTitles(fromEvent = false) {
