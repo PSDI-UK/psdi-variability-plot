@@ -740,10 +740,13 @@ async function loadProjectFile(event) {
 
 function loadBlankProject() {
 
-    setProjectData(blankData);
-    renderChart(variabilityChart);
-    lastSavedData = structuredClone(blankData);
-    manualEntry = false;
+    if (!manualEntry ||
+        confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
+        setProjectData(blankData);
+        renderChart(variabilityChart);
+        lastSavedData = structuredClone(blankData);
+        manualEntry = false;
+    }
 }
 
 function replaceTextInElement(element, match, replace) {
