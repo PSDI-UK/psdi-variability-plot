@@ -790,9 +790,9 @@ async function loadProjectFile(event) {
 
 function loadBlankProject() {
 
+    autoUpdatingChartTitles = true;
     setProjectData(blankData);
     renderChart(variabilityChart);
-    autoUpdatingChartTitles = true;
     document.querySelector("details#titlesDetails").removeAttribute("open");
     lastSavedData = structuredClone(blankData);
 }
