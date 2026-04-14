@@ -704,7 +704,7 @@ async function downloadChart() {
     }
 
     saveAs(await getExportBlob(format), `${fileName}.${format}`);
-//    saveAs(await getExportBlob(format), `variability.${format}`);
+    //    saveAs(await getExportBlob(format), `variability.${format}`);
 }
 
 async function loadProjectFile(event) {
@@ -743,6 +743,7 @@ function loadBlankProject() {
     setProjectData(blankData);
     renderChart(variabilityChart);
     lastSavedData = structuredClone(blankData);
+    manualEntry = false;
 }
 
 function replaceTextInElement(element, match, replace) {
