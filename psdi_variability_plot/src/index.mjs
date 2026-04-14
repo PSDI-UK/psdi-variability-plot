@@ -536,6 +536,7 @@ function getProjectData() {
         chartHeight: parseInt(chartHeightInput.value),
         devicePixelRatio: devicePixelRatioSelect.value,
         format: formatSelect.value,
+        autoUpdatingChartTitles: autoUpdatingChartTitles,
         plotTitle: plotTitleEditorObject.getFormattedContent(),
         xTitle: xTitleEditorObject.getFormattedContent(),
         yTitle: yTitleEditorObject.getFormattedContent(),
@@ -593,6 +594,10 @@ function setProjectData(data) {
 
     if (data.format) {
         formatSelect.value = data.format;
+    }
+
+    if (data.autoUpdatingChartTitles) {
+        autoUpdatingChartTitles = data.autoUpdatingChartTitles;
     }
 
     if (data.plotTitle) {
