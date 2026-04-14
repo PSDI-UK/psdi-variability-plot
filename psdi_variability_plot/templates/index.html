@@ -247,7 +247,40 @@
 
       <h6>Options</h6>
 
-      <details name="chartOptions">
+      <details id="titlesDetails" class="chartOptions">
+
+        <summary id="titlesSummary">Plot and axis titles</summary>
+
+        <div class="formControl">
+          <label for="plotTitle">Plot title:</label>
+          <div data-placeholder="" id="plotTitle" class="formattedEditor" autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false"></div>
+        </div>
+
+        <div class="formControl">
+          <label for="xTitle">x-axis title:</label>
+          <div data-placeholder="" id="xTitle" class="formattedEditor" autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false"></div>
+        </div>
+
+        <div class="formControl">
+          <label for="yTitle">y-axis title:</label>
+          <div data-placeholder="" id="yTitle" class="formattedEditor" autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false"></div>
+        </div>
+
+        <div class="formControl">
+          <button id="titleDefault"
+            title="Use default values for the plot, x-axis, and y-axis titles, based on the provided info">Use
+            defaults</button>
+          <button id="titleRevert"
+            title="Revert to previously-entered values, before using defaults or before the last revert"
+            disabled>Revert</button>
+        </div>
+
+      </details>
+
+      <details class="chartOptions">
 
         <summary>Markers</summary>
 
@@ -284,7 +317,7 @@
 
       </details>
 
-      <details name="chartOptions">
+      <details class="chartOptions">
 
         <summary>Axes</summary>
 
@@ -300,7 +333,7 @@
 
       </details>
 
-      <details name="chartOptions">
+      <details class="chartOptions">
 
         <summary>Confidence interval</summary>
 
@@ -321,7 +354,7 @@
 
       </details>
 
-      <details name="chartOptions">
+      <details class="chartOptions">
 
         <summary>Fonts</summary>
 
@@ -347,7 +380,7 @@
 
       </details>
 
-      <details name="chartOptions">
+      <details class="chartOptions">
 
         <summary>Box overlay</summary>
 

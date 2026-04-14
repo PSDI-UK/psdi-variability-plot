@@ -75,6 +75,11 @@
     scrollbar-color : var(--ifm-hero-text-color) var(--ifm-color-primary);
 }
 
+.plotDesignOptions .ql-editor {
+    max-width : 10.5rem;
+    max-height: 4.75rem;
+}
+
 .ql-editor.ql-blank::before {
     padding-left: 3px;
     font-family : var(--ifm-font-family-base);
