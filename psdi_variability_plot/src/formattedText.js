@@ -69,7 +69,7 @@ export class FormattedText {
                     quill.deleteText(selection.index, selection.length);
                 }
 
-                quill.insertText(selection ? selection.index : 0, text);
+                quill.insertText(selection ? selection.index : quill.getLength() - 1, text);
             }
 
             for (const symbolButton of symbolSelector.querySelectorAll("button")) {
