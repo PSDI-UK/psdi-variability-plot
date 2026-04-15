@@ -63,11 +63,24 @@ export class FormattedText {
             this.selection = null;
             const quillObject = this;
 
+            // Workaround for a bug in Quill where the selection will be lost when clicking a button when the editor is
+            // in a modal dialog element. This stores the selection on mousedown and restores it on mouseup, which will
+            // result in the selection being restored before the click events are fired
+            for (const toolbarButton of
+                this.#editArea.closest(":has(>.ql-toolbar)").querySelectorAll("#toolbar>button")) {
+                toolbarButton.addEventListener("mousedown", function () {
+                    quillObject.selection = quill.getSelection();
+                });
+                toolbarButton.addEventListener("mouseup", function () {
+                    quill.setSelection(quillObject.selection);
+                });
+            }
+
             const contentEditableArea = this.#editArea.querySelector("[contenteditable=true]");
 
             function replaceText(quill, text) {
 
-                const selection = quillObject.selection;
+                const selection = quill.getSelection();
 
                 if (selection !== null) {
                     quill.deleteText(selection.index, selection.length);
@@ -75,7 +88,6 @@ export class FormattedText {
 
                 const index = selection ? selection.index : quill.getLength() - 1;
                 quill.insertText(index, text);
-                quill.setSelection(index + 1);
             }
 
             for (const symbolButton of symbolSelector.querySelectorAll("button")) {
@@ -86,10 +98,6 @@ export class FormattedText {
                     insertSymbolButton.classList.remove("ql-active");
                 });
             }
-
-            insertSymbolButton.addEventListener("mousedown", function () {
-                quillObject.selection = quill.getSelection();
-            });
 
             insertSymbolButton.addEventListener("click", function () {
                 symbolSelector.hidden = !symbolSelector.hidden;
