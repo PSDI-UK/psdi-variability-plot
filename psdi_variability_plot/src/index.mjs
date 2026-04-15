@@ -277,7 +277,7 @@ async function copyToClipboard(e) {
         setTimeout(() => copyFailure.hidden = true, 2000);
 
         if (window.CookieConsent.acceptedCategory('analytics')) {
-            window.gtag("event", "copy_clipboard", { status: "failed"});
+            window.gtag("event", "copy_clipboard", { status: "failure"});
         }
     }
 }
