@@ -61,6 +61,9 @@ var lastSavedData;
 var exampleData;
 var blankData;
 
+let reportedFirstInteraction = false;
+let reportedGeneratePlot = false;
+
 // Whether or not chart titles should be automatically updated. This is turned off the first time the user opens the
 // plot config dialog which lets them manually change these
 var autoUpdatingChartTitles = true;
@@ -262,11 +265,20 @@ async function copyToClipboard(e) {
         copySuccess.hidden = false;
 
         setTimeout(() => copySuccess.hidden = true, 2000);
+
+        if (window.CookieConsent.acceptedCategory('analytics')) {
+            window.gtag("event", "copy_clipboard", { status: "success"});
+        }
+
     } catch (error) {
 
         copyFailure.hidden = false;
 
         setTimeout(() => copyFailure.hidden = true, 2000);
+
+        if (window.CookieConsent.acceptedCategory('analytics')) {
+            window.gtag("event", "copy_clipboard", { status: "failed"});
+        }
     }
 }
 
@@ -492,7 +504,13 @@ function updateDesign() {
 }
 
 function updateMain() {
+
     renderChart(variabilityChart);
+
+    if (window.CookieConsent.acceptedCategory('analytics') && !reportedFirstInteraction) {
+        window.gtag("event", "interaction");
+        reportedFirstInteraction = true;
+    }
 }
 
 function setupChangeEvents() {
@@ -760,6 +778,10 @@ async function downloadChart() {
 
     saveAs(await getExportBlob(format), `${fileName}.${format}`);
     //    saveAs(await getExportBlob(format), `variability.${format}`);
+
+    if (window.CookieConsent.acceptedCategory('analytics')) {
+        window.gtag("event", "download", { format });
+    }
 }
 
 async function loadProjectFile(event) {
@@ -1099,6 +1121,11 @@ function renderChartAux(element, { isDesign }) {
 
     if (isDesign) {
         enableBoxDrag(chart, element);
+    }
+
+    if (window.CookieConsent.acceptedCategory('analytics') && !reportedGeneratePlot) {
+        window.gtag("event", "generate_plot");
+        reportedGeneratePlot = true;
     }
 }
 
