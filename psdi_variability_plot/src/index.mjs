@@ -823,6 +823,7 @@ function loadBlankProject() {
         renderChart(variabilityChart);
         document.querySelector("details#titlesDetails").removeAttribute("open");
         lastSavedData = structuredClone(blankData);
+        autoUpdatingChartTitles = true;
         manualEntry = false;
     }
 }
