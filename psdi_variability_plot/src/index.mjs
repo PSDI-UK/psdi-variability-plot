@@ -817,11 +817,15 @@ async function loadProjectFile(event) {
 
 function loadBlankProject() {
 
-    autoUpdatingChartTitles = true;
-    setProjectData(blankData);
-    renderChart(variabilityChart);
-    document.querySelector("details#titlesDetails").removeAttribute("open");
-    lastSavedData = structuredClone(blankData);
+    if (!manualEntry ||
+        confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
+        setProjectData(blankData);
+        renderChart(variabilityChart);
+        document.querySelector("details#titlesDetails").removeAttribute("open");
+        lastSavedData = structuredClone(blankData);
+        autoUpdatingChartTitles = true;
+        manualEntry = false;
+    }
 }
 
 function replaceTextInElement(element, match, replace) {
