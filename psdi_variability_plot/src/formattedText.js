@@ -2,6 +2,8 @@
 
 export class FormattedText {
 
+    selection;
+
     #quill;
     #editArea;
 
@@ -58,18 +60,22 @@ export class FormattedText {
             });
 
             this.#quill = quill;
+            this.selection = null;
+            const quillObject = this;
 
             const contentEditableArea = this.#editArea.querySelector("[contenteditable=true]");
 
             function replaceText(quill, text) {
 
-                const selection = quill.getSelection();
+                const selection = quillObject.selection;
 
                 if (selection !== null) {
                     quill.deleteText(selection.index, selection.length);
                 }
 
-                quill.insertText(selection ? selection.index : quill.getLength() - 1, text);
+                const index = selection ? selection.index : quill.getLength() - 1;
+                quill.insertText(index, text);
+                quill.setSelection(index + 1);
             }
 
             for (const symbolButton of symbolSelector.querySelectorAll("button")) {
@@ -80,6 +86,10 @@ export class FormattedText {
                     insertSymbolButton.classList.remove("ql-active");
                 });
             }
+
+            insertSymbolButton.addEventListener("mousedown", function () {
+                quillObject.selection = quill.getSelection();
+            });
 
             insertSymbolButton.addEventListener("click", function () {
                 symbolSelector.hidden = !symbolSelector.hidden;
