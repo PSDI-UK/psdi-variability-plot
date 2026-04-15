@@ -2,6 +2,8 @@
 
 export class FormattedText {
 
+    selection;
+
     #quill;
     #editArea;
 
@@ -58,6 +60,21 @@ export class FormattedText {
             });
 
             this.#quill = quill;
+            this.selection = null;
+            const quillObject = this;
+
+            // Workaround for a bug in Quill where the selection will be lost when clicking a button when the editor is
+            // in a modal dialog element. This stores the selection on mousedown and restores it on mouseup, which will
+            // result in the selection being restored before the click events are fired
+            for (const toolbarButton of
+                this.#editArea.closest(":has(>.ql-toolbar)").querySelectorAll("#toolbar>button")) {
+                toolbarButton.addEventListener("mousedown", function () {
+                    quillObject.selection = quill.getSelection();
+                });
+                toolbarButton.addEventListener("mouseup", function () {
+                    quill.setSelection(quillObject.selection);
+                });
+            }
 
             const contentEditableArea = this.#editArea.querySelector("[contenteditable=true]");
 
@@ -69,7 +86,8 @@ export class FormattedText {
                     quill.deleteText(selection.index, selection.length);
                 }
 
-                quill.insertText(selection ? selection.index : 0, text);
+                const index = selection ? selection.index : quill.getLength() - 1;
+                quill.insertText(index, text);
             }
 
             for (const symbolButton of symbolSelector.querySelectorAll("button")) {
@@ -287,7 +305,7 @@ export class FormattedText {
 
         context.font = firstSpanStyle.font;
 
-        const overallBaseline = textSpans[0].boundingBox.baseline;
+        const overallBaseline = textSpans[0]?.boundingBox.baseline;
 
         working.remove();
 
@@ -295,6 +313,18 @@ export class FormattedText {
     }
 
     #calculateBoundingBox({ textSpans, overallBaseline }) {
+
+        if (overallBaseline === undefined) {
+            return {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                baseline: 0,
+                width: 0,
+                height: 0
+            };
+        }
 
         const left = Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.left)));
         const top = Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.top)));
