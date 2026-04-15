@@ -287,7 +287,7 @@ export class FormattedText {
 
         context.font = firstSpanStyle.font;
 
-        const overallBaseline = textSpans[0].boundingBox.baseline;
+        const overallBaseline = textSpans[0]?.boundingBox.baseline;
 
         working.remove();
 
@@ -295,6 +295,18 @@ export class FormattedText {
     }
 
     #calculateBoundingBox({ textSpans, overallBaseline }) {
+
+        if (overallBaseline === undefined) {
+            return {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                baseline: 0,
+                width: 0,
+                height: 0
+            };
+        }
 
         const left = Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.left)));
         const top = Math.floor(Math.min(...textSpans.map(textSpan => textSpan.boundingBox.top)));
