@@ -80,6 +80,22 @@ export class FormattedText {
 
             function replaceText(quill, text) {
 
+                // Determine the formatting that should be applied to this symbol based on the active buttons
+                const symbolFormats = {};
+                const lFormatButtons = element.closest(":has(>.ql-container)")
+                    .querySelectorAll("button.toolbarButton");
+                for (const formatButton of lFormatButtons) {
+                    const classList = formatButton.classList;
+                    if (classList.contains("ql-active")) {
+                        if (classList.contains("ql-bold"))
+                            symbolFormats.bold = true;
+                        else if (classList.contains("ql-italic"))
+                            symbolFormats.italic = true;
+                        else if (classList.contains("ql-underline"))
+                            symbolFormats.underline = true;
+                    }
+                }
+
                 const selection = quill.getSelection();
 
                 if (selection !== null) {
@@ -87,7 +103,9 @@ export class FormattedText {
                 }
 
                 const index = selection ? selection.index : quill.getLength() - 1;
-                quill.insertText(index, text);
+
+                quill.insertText(index, text, symbolFormats, "user");
+                quill.setSelection(index + 1);
             }
 
             for (const symbolButton of symbolSelector.querySelectorAll("button")) {
