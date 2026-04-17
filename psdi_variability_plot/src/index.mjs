@@ -267,7 +267,7 @@ async function copyToClipboard(e) {
         setTimeout(() => copySuccess.hidden = true, 2000);
 
         if (window.CookieConsent.acceptedCategory('analytics')) {
-            window.gtag("event", "copy_clipboard", { status: "success"});
+            window.gtag("event", "copy_clipboard", { status: "success" });
         }
 
     } catch (error) {
@@ -277,7 +277,7 @@ async function copyToClipboard(e) {
         setTimeout(() => copyFailure.hidden = true, 2000);
 
         if (window.CookieConsent.acceptedCategory('analytics')) {
-            window.gtag("event", "copy_clipboard", { status: "failure"});
+            window.gtag("event", "copy_clipboard", { status: "failure" });
         }
     }
 }
@@ -1260,6 +1260,7 @@ function clearTooltips() {
 
 $(document).ready(function () {
     initTooltips();
+    setDefaultChartTitles();
 
     lastSavedData = structuredClone(getProjectData());
     blankData = structuredClone(getProjectData());
