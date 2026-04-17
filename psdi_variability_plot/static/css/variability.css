@@ -365,6 +365,10 @@ div#variabilityPlotContainer svg {
   border       : 2px solid gray;
 }
 
+[data-theme="dark"] #outsideRangeWarning {
+  background: var(--ifm-color-info-darkest);
+}
+
 .boxCoords input {
   width: 88px;
 }
