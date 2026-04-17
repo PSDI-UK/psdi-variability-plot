@@ -93,6 +93,8 @@ export class FormattedText {
                             symbolFormats.italic = true;
                         else if (classList.contains("ql-underline"))
                             symbolFormats.underline = true;
+                        else if (classList.contains("ql-script"))
+                            symbolFormats.script = formatButton.value;
                     }
                 }
 
