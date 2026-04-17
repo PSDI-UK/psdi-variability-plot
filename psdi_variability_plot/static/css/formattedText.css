@@ -60,10 +60,14 @@
     background-color: var(--ifm-color-secondary-dark);
 }
 
-[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active,
-[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active:hover {
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active {
     color           : var(--ifm-font-color-base);
     background-color: var(--ifm-color-secondary-lightest);
+}
+
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active:hover {
+    color           : var(--ifm-font-color-base);
+    background-color: var(--ifm-color-secondary-lightestp1);
 }
 
 .ql-editor {
