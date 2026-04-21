@@ -746,7 +746,7 @@ async function getExportBlob(format) {
 
         blob = new Blob([svgSource], { type: "image/svg+xml; charset=utf-8" });
 
-    } else if ((format === "png") || (format == "jpeg")) {
+    } else if (format === "png") {
 
         const dataURL = await convertSVGToDataURL(svg, format, 1);
         const response = await fetch(dataURL);
