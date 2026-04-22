@@ -25,6 +25,7 @@
 #
 
 FROM python:3.14-slim-bookworm
+FROM alpine:3.22
 
 RUN apt update
 RUN apt-get -y install libxrender1 libxext6 git
