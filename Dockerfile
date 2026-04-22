@@ -35,6 +35,7 @@ RUN pip install --upgrade pip
 WORKDIR /app
 COPY psdi_variability_plot /app/psdi_variability_plot
 COPY CHANGELOG.md CONTRIBUTING.md LICENSE pyproject.toml README.md /app/
+COPY /app/scripts/build_js.py /scripts/build_js.py
 
 ENV SETUPTOOLS_SCM_PRETEND_VERSION="1.0.0"
 
