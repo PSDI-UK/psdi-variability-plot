@@ -43,6 +43,7 @@ jobs:
     needs: [container-push]
     # Proceed if test-all was successful or skipped
     if: always() && (needs.container-push.result == 'success')
+    # Refer to a specific commit for security against supply-chain attacks
     uses: PSDI-UK/psdi-variability-plot-deployment/.github/workflows/job-external-deployment.yaml@c4c4fb99ce149625b94cdc57da39ad45b1281748
     with:
       container_tag: ${{ github.sha }}
