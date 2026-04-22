@@ -8,32 +8,9 @@ the badge in the .github/job-test-main.yaml workflow-->
 
 <!-- ![Coverage Badge](https://img.shields.io/endpoint?url=[GIST_URL]/covbadge.json) -->
 
-Release date: 2025-08-04
+This project provides the code for a Flask-hosted web app to generate a variability plot of reaction data for the user. It publishes a service to https://organic-toolkit.psdi.ac.uk/variability-plot
 
-This is a template project for a PSDI project which deploys a Flask website, also publishing the project to PyPI so users can download it and run a local version. You can use this project on GitHub by clicking the green "Use this template" button on the top-right of the project page. This will let you choose a name for the new project, then create a repository for it.
-
-One you have a new project, you'll want to do the following tasks:
-
-1. Replace the "psdi_variability_plot" placeholders throughout this project with the actual project name. This project provides a script to do this, at `scripts/rename_project.py`. You can run this through e.g.:
-
-```bash
-$ python scripts/rename_project.py new-project-name New Project Name
-```
-
-Here, "new-project-name" is the version of the project name to be used in code (hyphens and underscores will be swapped as appropriate for different contexts and language conventions), and "New Project Name" is the full, human-readable version of the project name. Once this script has run, check that the changes are desired, and you can safely delete it.
-
-If something went wrong, it's easiest to undo this through using git to revert the changes via e.g. `git reset --hard; git clean -f`. You might also have to manually remove created directories (since directories aren't directly tracked by git) via e.g. `rm -r folder_name`.
-
-2. Create a `release` branch and push it
-
-3. On GitHub, set up branch protection rules for `main` and `release`. My recommended settings are:
-
-- `main`: The default settings are fine (prevent creation and deletion). If you're working with multiple collaborators and/or want to be more cautious, you can set it to require a pull request before merging as well
-- `release`: The default settings, plus require a pull request before merging
-
-4. Enable any initially-disabled workflows (seach through the project for "if: false" to find them all) or remove entirely any you don't want
-
-5. If you enabled the workflow to publish to GitHub Pages, you'll need to enable Pages in the project settings. To do this, go to the project page on GitHub, then Settings (in the top bar), Pages (in the left column), and in the "Source" section, select "GitHub Actions". Note GitHub pages is not compatible with a backend server; only pages to be served to the user will be rendered as part of the site
+For internal testing, the main branch of this project is published to https://organic-toolkit-dev.psdi.ac.uk/variability-plot, with a staging deployment at https://organic-toolkit-staging.psdi.ac.uk/variability-plot
 
 ## Table of Contents
 
