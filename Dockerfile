@@ -29,6 +29,17 @@ FROM python:3.14-slim-bookworm
 RUN apt update
 RUN apt-get -y install libxrender1 libxext6 git
 
+ENV NODE_VERSION=16.13.0
+RUN apt install -y curl
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+ENV NVM_DIR=/root/.nvm
+RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+RUN node --version
+RUN npm --version
+
 # Install Python packages (including openbabel-wheel)
 RUN pip install --upgrade pip
 
@@ -61,9 +72,6 @@ ENV REL_URL_PATH=$REL_URL_PATH
 # behaviour (INFO+ to user log, ERROR+ to server log and stdout)
 
 EXPOSE 8000
-
-RUN mkdir -p /app/psdi_variability_plot/static/uploads
-RUN mkdir -p /app/psdi_variability_plot/static/downloads
 
 #set web server timout to more than application default (60)
 ENV TIMEOUT=90
