@@ -51,7 +51,7 @@ jobs:
   # GitHub repository: https://github.com/PSDI-UK/psdi_variability_plot/settings/environments
   # The downstream deploy job leverages on Environment specific secrets, which also must be defined
   deploy-stfc-staging-k8s:
-    needs: [tag]
+    needs: [container-push]
     uses: PSDI-UK/psdi-variability-plot-deployment/.github/workflows/job-external-deployment.yaml@c4c4fb99ce149625b94cdc57da39ad45b1281748
     with:
       container_tag: ${{ github.sha }}
