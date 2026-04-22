@@ -45,70 +45,16 @@ jobs:
           echo "TARGET_TAG=$TARGET_TAG" >> "$GITHUB_OUTPUT"
           echo "Highest version tag found to be = $TARGET_TAG"
 
-  build-python:
+  deploy-stfc-production-k8s:
     needs: get-latest-release-tag
-    name: Build distribution 📦
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.x"
-      - name: Install pypa/build
-        run: >-
-          python3 -m
-          pip install
-          build
-          --user
-      - name: Build a binary wheel and a source tarball
-        run: python3 -m build
-      - name: Store the distribution packages
-        uses: actions/upload-artifact@v7
-        with:
-          name: python-package-distributions
-          path: dist/
-
-  publish-to-pypi:
-    # When ready to enable this step, remove the following line
-    if: false
-    name: >-
-      Publish Python 🐍 distribution 📦 to PyPI
-    needs:
-      - build-python
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/psdi_variability_plot
-    permissions:
-      id-token: write # IMPORTANT: mandatory for trusted publishing
-
-    steps:
-      - name: Download all the dists
-        uses: actions/download-artifact@v8
-        with:
-          name: python-package-distributions
-          path: dist/
-      - name: Publish distribution 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          verbose: true
-
-  # TODO: Uncomment the below sections once the deployment repo is set up
-  # deploy-stfc-production-k8s:
-  #   needs: get-latest-release-tag
-  #   uses: PSDI-UK/psdi-variability-plot-deployment/.github/workflows/job-external-deployment.yaml
-  #   with:
-  #     # container_tag
-  #     container_tag: ${{ github.sha }}
-  #     environment: production
-  #   secrets:
-  #     deployment_app_id: ${{ secrets.DEPLOYMENT_APP_ID }}
-  #     deployment_app_private_key: ${{ secrets.DEPLOYMENT_APP_PRIVATE_KEY }}
+    uses: PSDI-UK/psdi-variability-plot-deployment/.github/workflows/job-external-deployment.yaml@c4c4fb99ce149625b94cdc57da39ad45b1281748
+    with:
+      # container_tag
+      container_tag: ${{ github.sha }}
+      environment: production
+    secrets:
+      deployment_app_id: ${{ secrets.DEPLOYMENT_APP_ID }}
+      deployment_app_private_key: ${{ secrets.DEPLOYMENT_APP_PRIVATE_KEY }}
 
   # # Run a simple test on prod to ensure nothing is broken
   # test-prod:
