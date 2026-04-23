@@ -593,10 +593,8 @@ function setProjectData(data) {
         chartTypeSelect.value = data.chartType;
     }
 
-    if (data.otherDef) {
-        otherEditorObject.setFormattedContent(data.otherDef);
-        otherTypeRowDiv.hidden = data.otherDef === "";
-    }
+    otherEditorObject.setFormattedContent(data.otherDef);
+    otherTypeRowDiv.hidden = data.otherDef === "";
 
     if (data.chartWidth) {
         chartWidthInput.value = data.chartWidth;
