@@ -187,7 +187,7 @@ This section presents solutions for commonly-encountered issues.
 
 ## Contributors
 
-- Raymond Whorley
+- Raymond Whorley (R.P.Whorley@soton.ac.uk)
 - Don Cruickshank (dgc@ecs.soton.ac.uk)
 - Bryan Gillis (7204836+brgillis@users.noreply.github.com)
 

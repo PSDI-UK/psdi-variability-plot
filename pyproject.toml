@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "psdi_variability_plot"
 authors = [
-  { name = "Raymond Whorley" },
+  { name = "Raymond Whorley", email = "R.P.Whorley@soton.ac.uk" },
   { name = "Don Cruickshank", email = "dgc@ecs.soton.ac.uk" },
   { name = "Bryan Gillis", email = "7204836+brgillis@users.noreply.github.com" },
 ]
