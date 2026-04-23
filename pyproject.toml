@@ -5,10 +5,11 @@ build-backend = "hatchling.build"
 [project]
 name = "psdi_variability_plot"
 authors = [
-  # Add your name and email here
+  { name = "Raymond Whorley" },
+  { name = "Don Cruickshank", email = "dgc@ecs.soton.ac.uk" },
   { name = "Bryan Gillis", email = "7204836+brgillis@users.noreply.github.com" },
 ]
-description = "TODO: Project Description"
+description = "Flask-hosted web app to generate a plot illustrating reaction variability for the user."
 readme = "README.md"
 # List keywords relevant to your project here. There's no official list, so include ones you think are relevant and will
 # help find your project in searches, e.g. ["chemistry", "PSDI"]
@@ -56,14 +57,12 @@ psdi-variability-plot-gui = "psdi_variability_plot.main_gui:main"
 psdi-variability-plot-render = "psdi_variability_plot.render_static:main"
 
 [project.urls]
-Homepage = "https://psdi-variability-plot.psdi.ac.uk/"
-Documentation = "https://psdi-uk.github.io/psdi-variability-plot/"
+Homepage = "https://organic-toolkit.psdi.ac.uk/variability-plot"
+Documentation = "https://guidance.psdi.ac.uk/docusaurus-pages/docs/guidance/psdi-resources/organic-toolkit/variability"
 Issues = "https://github.com/PSDI-UK/psdi-variability-plot/issues"
 Changelog = "https://github.com/PSDI-UK/psdi-variability-plot/blob/main/CHANGELOG.md"
-
-# Repository currently isn't public - when it goes public, uncomment the below
-# Repository = "https://github.com/PSDI-UK/psdi-variability-plot"
-# Download = "https://github.com/PSDI-UK/psdi-variability-plot/releases/latest"
+Repository = "https://github.com/PSDI-UK/psdi-variability-plot"
+Download = "https://github.com/PSDI-UK/psdi-variability-plot/releases/latest"
 
 [tool.hatch.build]
 exclude = [
