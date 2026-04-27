@@ -908,7 +908,7 @@ export class Chart {
         const boxOffsetY = 20;
 
         const boxBackground = this.createSVGElement("rect", {
-            class: "legendBackground",
+            stroke: "none",
             x: 0,
             y: 0,
             width: 0,
@@ -916,7 +916,7 @@ export class Chart {
         })
 
         const boxBorder = this.createSVGElement("rect", {
-            class: "legendBorder",
+            fill: "none",
             x: 0,
             y: 0,
             width: 0,
