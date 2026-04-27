@@ -2,12 +2,6 @@
 
 [![License Badge](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-<!-- The following line can be commented out to add a coverage badge here once a gist has been created for it. See the
-tutorial at https://nedbatchelder.com/blog/202209/making_a_coverage_badge.html, and also enable the code to generate
-the badge in the .github/job-test-main.yaml workflow-->
-
-<!-- ![Coverage Badge](https://img.shields.io/endpoint?url=[GIST_URL]/covbadge.json) -->
-
 This project provides the code for a Flask-hosted web app to generate a variability plot of reaction data for the user. It publishes a service to https://organic-toolkit.psdi.ac.uk/variability-plot
 
 For internal testing, the main branch of this project is published to https://organic-toolkit-dev.psdi.ac.uk/variability-plot, with a staging deployment at https://organic-toolkit-staging.psdi.ac.uk/variability-plot
@@ -193,8 +187,8 @@ This section presents solutions for commonly-encountered issues.
 
 ## Contributors
 
-- Raymond Whorley
-- Don Cruickshank
+- Raymond Whorley (R.P.Whorley@soton.ac.uk)
+- Don Cruickshank (dgc@ecs.soton.ac.uk)
 - Bryan Gillis (7204836+brgillis@users.noreply.github.com)
 
 ## Funding
