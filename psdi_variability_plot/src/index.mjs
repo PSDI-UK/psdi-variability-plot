@@ -499,6 +499,20 @@ const yTitleEditorObject = new FormattedText({
 
 const formattedOutcome = new FormattedText({});
 
+/**
+ * Ensure that the width value provided by the user is within the allowed bounds
+ */
+function checkWidth() {
+    chartWidthInput.value = Math.min(Math.max(chartWidthInput.value, chartWidthInput.min), chartWidthInput.max);
+}
+
+/**
+ * Ensure that the height value provided by the user is within the allowed bounds
+ */
+function checkHeight() {
+    chartHeightInput.value = Math.min(Math.max(chartHeightInput.value, chartHeightInput.min), chartHeightInput.max);
+}
+
 function updateDesign() {
     renderChart(plotDesignElement, { isDesign: true });
 }
@@ -515,7 +529,9 @@ function updateMain() {
 
 function setupChangeEvents() {
 
+    chartWidthInput.addEventListener("change", checkWidth);
     chartWidthInput.addEventListener("change", updateMain);
+    chartHeightInput.addEventListener("change", checkHeight);
     chartHeightInput.addEventListener("change", updateMain);
     chartTypeSelect.addEventListener("change", updateMain);
     significanceInput.addEventListener("input", updateMain);
