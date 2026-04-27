@@ -49,6 +49,7 @@ const boxBackgroundColorInput = document.querySelector("input#boxBackgroundColor
 const boxOpacityInput = document.querySelector("input#boxOpacity");
 const boxLeftInput = document.querySelector("input#boxLeft");
 const boxTopInput = document.querySelector("input#boxTop");
+const pointWeightContainer = document.querySelector(".pointWeightContainer");
 const boxCoordinatesContainer = document.querySelector(".boxCoordinatesContainer");
 const devicePixelRatioSelect = document.querySelector("select#devicePixelRatio");
 const formatSelect = document.querySelector("select#downloadFormat");
@@ -1296,6 +1297,7 @@ downloadChartButton.addEventListener("click", downloadChart);
 const shouldShowBoxCoordinates = () => boxPositionSelect.value === "manual";
 
 function updateDesignOptions() {
+    pointWeightContainer.hidden = pointTypeSelect.value.includes("filled");
     boxCoordinatesContainer.hidden = !shouldShowBoxCoordinates();
 }
 
@@ -1309,6 +1311,8 @@ function highlightElement(element) {
         iterations: 1
     });
 }
+
+pointTypeSelect.addEventListener("change", updateDesignOptions);
 
 boxPositionSelect.addEventListener("change", function (event) {
 
