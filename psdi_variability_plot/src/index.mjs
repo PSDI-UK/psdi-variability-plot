@@ -360,11 +360,11 @@ function insertValueField(e) {
 
 function changeNumberOfValueFields() {
     const currentNumberOfFields = nextValueIndex;
-    const newNumberOfFields = numberOfValuesInput.value;
 
-    if (newNumberOfFields < 3) {
-        numberOfValuesInput.value = 3;
-    }
+    // Make sure the value is clamped between the min and max
+    numberOfValuesInput.value = Math.min(Math.max(numberOfValuesInput.value, numberOfValuesInput.min),
+        numberOfValuesInput.max);
+    const newNumberOfFields = numberOfValuesInput.value;
 
     if (newNumberOfFields > currentNumberOfFields) {
         for (var i = currentNumberOfFields - 1; i < newNumberOfFields - 1; i++) {
