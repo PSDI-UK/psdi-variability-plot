@@ -398,8 +398,8 @@
         <div class="formControl boxCoordinatesContainer">
           <label for="boxOpacity">Box coordinates</label>
           <div class="boxCoords">
-            <input id="boxLeft" type="number" value="20" step="10" min="0">
-            <input id="boxTop" type="number" value="20" step="10" min="0">
+            <input id="boxLeft" type="number" value="20" step="10" min="0" max="4000">
+            <input id="boxTop" type="number" value="20" step="10" min="0" max="3000">
           </div>
         </div>
 
@@ -503,7 +503,7 @@
 
     <div class="formControl">
       <label id="numValuesLabel">Number of reaction outcome values</label>
-      <input type="number" aria-labelledby="numValuesLabel" id="numValues" value="5" min="3" max="100">
+      <input type="number" aria-labelledby="numValuesLabel" id="numValues" value="5" min="3" max="600">
     </div>
 
     <div class="formControl">
