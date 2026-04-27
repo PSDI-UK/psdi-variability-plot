@@ -360,11 +360,8 @@ function insertValueField(e) {
 
 function changeNumberOfValueFields() {
     const currentNumberOfFields = nextValueIndex;
-    const newNumberOfFields = numberOfValuesInput.value;
 
-    if (newNumberOfFields < 3) {
-        numberOfValuesInput.value = 3;
-    }
+    const newNumberOfFields = clampInputValue(numberOfValuesInput);
 
     if (newNumberOfFields > currentNumberOfFields) {
         for (var i = currentNumberOfFields - 1; i < newNumberOfFields - 1; i++) {
@@ -499,6 +496,16 @@ const yTitleEditorObject = new FormattedText({
 
 const formattedOutcome = new FormattedText({});
 
+/**
+ * Clamp the value of a numeric input element between its minimum and maximum
+ * @param {HTMLInputElement} el 
+ * @returns {Number}
+ */
+function clampInputValue(el) {
+    el.value = Math.min(Math.max(el.value, el.min), el.max);
+    return el.value;
+}
+
 function updateDesign() {
     renderChart(plotDesignElement, { isDesign: true });
 }
@@ -550,8 +557,8 @@ function getProjectData() {
         values: getValues(),
         chartType: chartTypeSelect.value,
         otherDef: otherEditorObject.getTextContent(),
-        chartWidth: parseInt(chartWidthInput.value),
-        chartHeight: parseInt(chartHeightInput.value),
+        chartWidth: parseInt(clampInputValue(chartWidthInput)),
+        chartHeight: parseInt(clampInputValue(chartHeightInput)),
         devicePixelRatio: devicePixelRatioSelect.value,
         format: formatSelect.value,
         autoUpdatingChartTitles: autoUpdatingChartTitles,
@@ -560,24 +567,24 @@ function getProjectData() {
         yTitle: yTitleEditorObject.getFormattedContent(),
         pointType: pointTypeSelect.value,
         pointColor: pointColorInput.value,
-        pointWeight: parseFloat(pointWeightInput.value),
-        pointSize: parseFloat(pointSizeInput.value),
+        pointWeight: clampInputValue(pointWeightInput),
+        pointSize: clampInputValue(pointSizeInput),
         bandColor: bandColorInput.value,
         meanColor: meanColorInput.value,
-        meanWeight: meanWeightInput.value,
-        titleFontSize: parseInt(titleFontSizeInput.value),
-        axisFontSize: parseInt(axisFontSizeInput.value),
-        tickfontSize: parseInt(tickfontSizeInput.value),
+        meanWeight: clampInputValue(meanWeightInput),
+        titleFontSize: parseInt(clampInputValue(titleFontSizeInput)),
+        axisFontSize: parseInt(clampInputValue(axisFontSizeInput)),
+        tickfontSize: parseInt(clampInputValue(tickfontSizeInput)),
         compound: compoundEditorObject.getFormattedContent(),
         significance: significanceInput.value,
         yAxisInterval: yAxisIntervalSelect.value === "auto" ? "auto" : parseInt(yAxisIntervalSelect.value),
-        boxFontSize: parseInt(boxFontSizeInput.value),
+        boxFontSize: parseInt(clampInputValue(boxFontSizeInput)),
         boxPosition: boxPositionSelect.value,
         boxBorderColor: boxBorderColorInput.value,
         boxBackgroundColor: boxBackgroundColorInput.value,
-        boxOpacity: parseFloat(boxOpacityInput.value),
-        boxLeft: parseInt(boxLeftInput.value),
-        boxTop: parseInt(boxTopInput.value)
+        boxOpacity: clampInputValue(boxOpacityInput),
+        boxLeft: parseInt(clampInputValue(boxLeftInput)),
+        boxTop: parseInt(clampInputValue(boxTopInput))
     };
 }
 

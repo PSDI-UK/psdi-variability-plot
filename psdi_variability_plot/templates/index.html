@@ -391,8 +391,8 @@
         <div class="formControl boxCoordinatesContainer">
           <label for="boxOpacity">Box coordinates</label>
           <div class="boxCoords">
-            <input id="boxLeft" type="number" value="20" step="10" min="0">
-            <input id="boxTop" type="number" value="20" step="10" min="0">
+            <input id="boxLeft" type="number" value="20" step="10" min="0" max="4000">
+            <input id="boxTop" type="number" value="20" step="10" min="0" max="3000">
           </div>
         </div>
 
@@ -496,7 +496,7 @@
 
     <div class="formControl">
       <label id="numValuesLabel">Number of reaction outcome values</label>
-      <input type="number" aria-labelledby="numValuesLabel" id="numValues" value="5" min="3">
+      <input type="number" aria-labelledby="numValuesLabel" id="numValues" value="5" min="3" max="600">
     </div>
 
     <div class="formControl">
@@ -560,8 +560,10 @@
       <div class="formControl">
         <label id="chartSizeLabel">Chart width / height (pixels)</label>
         <div class="spreadWidth">
-          <input type="number" aria-labelledby="chartSizeLabel" id="chartWidth" min="640" value="640" step="10">
-          <input type="number" aria-labelledby="chartSizeLabel" id="chartHeight" min="480" value="480" step="10">
+          <input type="number" aria-labelledby="chartSizeLabel" id="chartWidth" min="640" max="4000" value="640"
+            step="10">
+          <input type="number" aria-labelledby="chartSizeLabel" id="chartHeight" min="480" max="3000" value="480"
+            step="10">
         </div>
       </div>
 
