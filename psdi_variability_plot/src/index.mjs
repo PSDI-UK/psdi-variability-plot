@@ -53,6 +53,7 @@ const pointWeightContainer = document.querySelector(".pointWeightContainer");
 const boxCoordinatesContainer = document.querySelector(".boxCoordinatesContainer");
 const devicePixelRatioSelect = document.querySelector("select#devicePixelRatio");
 const formatSelect = document.querySelector("select#downloadFormat");
+const imageResolutionContainer = document.querySelector("div.imageResolutionContainer");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -515,6 +516,12 @@ function updateMain() {
         window.gtag("event", "interaction");
         reportedFirstInteraction = true;
     }
+
+    // Only show image resolution for pixel-based download formats.
+
+    const pixelFormat = formatSelect.value !== "svg";
+
+    imageResolutionContainer.hidden = !pixelFormat;
 }
 
 function setupChangeEvents() {
@@ -523,6 +530,7 @@ function setupChangeEvents() {
     chartHeightInput.addEventListener("change", updateMain);
     chartTypeSelect.addEventListener("change", updateMain);
     significanceInput.addEventListener("input", updateMain);
+    formatSelect.addEventListener("change", updateMain);
 
     titleFontSizeInput.addEventListener("input", updateDesign);
     pointTypeSelect.addEventListener("change", updateDesign);
