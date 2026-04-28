@@ -78,6 +78,8 @@ var lastPlotTitle = null;
 
 const tDistCutoff = 30;
 
+const initialInputFieldCount = 5;
+
 function calculateVariabilityData(data, alpha) {
 
     const sampleCount = data.length;
@@ -162,14 +164,8 @@ function fillWithExampleData() {
 
     if (!manualEntry ||
         confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
-        const data = [56, 66, 45, 58, 59];
 
-        numberOfValuesInput.value = 5;
-        changeNumberOfValueFields();
-
-        for (var i = 0; i < 5; i++) {
-            document.getElementById("value-" + i).value = data[i];
-        }
+        setValues([56, 66, 45, 58, 59]);
 
         chartTypeSelect.options[1].selected = true;
         compoundEditorObject.setFormattedContent('Example <b>product name</b>');
@@ -593,8 +589,6 @@ function setProjectData(data) {
 
     if (data.values) {
         setValues(data.values);
-        numberOfValuesInput.value = 5;
-        changeNumberOfValueFields();
     }
 
     if (data.chartType) {
@@ -815,6 +809,12 @@ async function loadProjectFile(event) {
 
         setProjectData(data);
 
+        if (numberOfValuesInput.value < initialInputFieldCount) {
+            numberOfValuesInput.value = initialInputFieldCount;
+        }
+
+        changeNumberOfValueFields();
+
         renderChart(variabilityChart);
 
         lastSavedData = structuredClone(getProjectData());
@@ -826,6 +826,8 @@ function loadBlankProject() {
     if (!manualEntry ||
         confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
         setProjectData(blankData);
+        numberOfValuesInput.value = initialInputFieldCount;
+        changeNumberOfValueFields();
         renderChart(variabilityChart);
         document.querySelector("details#titlesDetails").removeAttribute("open");
         lastSavedData = structuredClone(blankData);
@@ -1324,7 +1326,7 @@ boxPositionSelect.addEventListener("change", function (event) {
 });
 
 numberOfValuesInput.style.width = '165px';
-addNewValueField(5)
+addNewValueField(initialInputFieldCount)
 setupChangeEvents();
 
 customiseChart.addEventListener("click", showVariabilityPlotDesign);
