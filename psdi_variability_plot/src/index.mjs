@@ -87,7 +87,7 @@ function calculateVariabilityData(data, alpha) {
     if (sampleCount < tDistCutoff) {
         return ttest(data, { alpha });
     } else {
-        return ztest(data, stdev(data), { alpha });
+        return ztest(data, stdev(data.length, 1, data, 1), { alpha });
     }
 }
 
@@ -1096,7 +1096,7 @@ function renderChartAux(element, { isDesign }) {
     const chart = new Chart({
         data,
         targetElement: element,
-        meanValue: results.mean,
+        meanValue: mean,
         confidenceUpperLimit: results.ci[1],
         confidenceLowerLimit: results.ci[0],
         legendLines: [legendText1, legendText2],
