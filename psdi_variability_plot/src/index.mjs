@@ -1285,6 +1285,8 @@ $(document).ready(function () {
     exampleData.chartType = "isolatedYield";
     exampleData.values = [56, 66, 45, 58, 59];
     exampleData.compound = "Example&nbsp;<b>product&nbsp;name</b>";
+    exampleData.yTitle = "Isolated&nbsp;yield&nbsp;of&nbsp;Example&nbsp;<b>product&nbsp;name</b>&nbsp;(%)";
+    exampleData.plotTitle = "Variability&nbsp;plot&nbsp;for&nbsp;the&nbsp;isolated&nbsp;yield&nbsp;of&nbsp;Example&nbsp;<b>product&nbsp;name</b>&nbsp;(%)";
     setDefaultChartTitles();
 });
 
