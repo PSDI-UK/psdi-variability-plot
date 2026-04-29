@@ -818,6 +818,9 @@ async function loadProjectFile(event) {
             return;
         }
 
+        // Clear the input in case the user wants to load the same file again
+        event.srcElement.value = null;
+
         setProjectData(data);
 
         if (numberOfValuesInput.value < initialInputFieldCount) {
