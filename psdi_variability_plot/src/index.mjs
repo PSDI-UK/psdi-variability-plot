@@ -774,14 +774,17 @@ async function downloadChart() {
     const format = formatSelect.value;
     const pixelRatio = devicePixelRatioSelect.value;
 
-    let fileName;
+    let fileName = "variability";
 
-    if (pixelRatio == 1) {
-        fileName = "variability-web";
-    } else if (pixelRatio == 2) {
-        fileName = "variability-hi-res-web";
-    } else {
-        fileName = "variability-print";
+    if (format !== "svg") {
+        // The different resolutions don't make any difference for svg, so we don't change the filename based on them
+        if (pixelRatio == 1) {
+            fileName += "-web";
+        } else if (pixelRatio == 2) {
+            fileName += "-hi-res-web";
+        } else {
+            fileName += "-print";
+        }
     }
 
     saveAs(await getExportBlob(format), `${fileName}.${format}`);
