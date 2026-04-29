@@ -457,7 +457,7 @@ export class Chart {
         const padding = {
             left: 2,
             top: 2,
-            right: 2,
+            right: this.#tickFontSize,
             bottom: 2,
         };
 
