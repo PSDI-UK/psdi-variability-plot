@@ -49,9 +49,11 @@ const boxBackgroundColorInput = document.querySelector("input#boxBackgroundColor
 const boxOpacityInput = document.querySelector("input#boxOpacity");
 const boxLeftInput = document.querySelector("input#boxLeft");
 const boxTopInput = document.querySelector("input#boxTop");
+const pointWeightContainer = document.querySelector(".pointWeightContainer");
 const boxCoordinatesContainer = document.querySelector(".boxCoordinatesContainer");
 const devicePixelRatioSelect = document.querySelector("select#devicePixelRatio");
 const formatSelect = document.querySelector("select#downloadFormat");
+const imageResolutionContainer = document.querySelector("div.imageResolutionContainer");
 
 var nextValueIndex = 0;
 var manualEntry = false;
@@ -77,6 +79,8 @@ var lastPlotTitle = null;
 
 const tDistCutoff = 30;
 
+const initialInputFieldCount = 5;
+
 function calculateVariabilityData(data, alpha) {
 
     const sampleCount = data.length;
@@ -84,7 +88,7 @@ function calculateVariabilityData(data, alpha) {
     if (sampleCount < tDistCutoff) {
         return ttest(data, { alpha });
     } else {
-        return ztest(data, stdev(data), { alpha });
+        return ztest(data, stdev(data.length, 1, data, 1), { alpha });
     }
 }
 
@@ -161,14 +165,8 @@ function fillWithExampleData() {
 
     if (!manualEntry ||
         confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
-        const data = [56, 66, 45, 58, 59];
 
-        numberOfValuesInput.value = 5;
-        changeNumberOfValueFields();
-
-        for (var i = 0; i < 5; i++) {
-            document.getElementById("value-" + i).value = data[i];
-        }
+        setValues([56, 66, 45, 58, 59]);
 
         chartTypeSelect.options[1].selected = true;
         compoundEditorObject.setFormattedContent('Example <b>product name</b>');
@@ -360,11 +358,8 @@ function insertValueField(e) {
 
 function changeNumberOfValueFields() {
     const currentNumberOfFields = nextValueIndex;
-    const newNumberOfFields = numberOfValuesInput.value;
 
-    if (newNumberOfFields < 3) {
-        numberOfValuesInput.value = 3;
-    }
+    const newNumberOfFields = clampInputValue(numberOfValuesInput);
 
     if (newNumberOfFields > currentNumberOfFields) {
         for (var i = currentNumberOfFields - 1; i < newNumberOfFields - 1; i++) {
@@ -499,6 +494,16 @@ const yTitleEditorObject = new FormattedText({
 
 const formattedOutcome = new FormattedText({});
 
+/**
+ * Clamp the value of a numeric input element between its minimum and maximum
+ * @param {HTMLInputElement} el 
+ * @returns {Number}
+ */
+function clampInputValue(el) {
+    el.value = Math.min(Math.max(el.value, el.min), el.max);
+    return el.value;
+}
+
 function updateDesign() {
     renderChart(plotDesignElement, { isDesign: true });
 }
@@ -511,6 +516,12 @@ function updateMain() {
         window.gtag("event", "interaction");
         reportedFirstInteraction = true;
     }
+
+    // Only show image resolution for pixel-based download formats.
+
+    const pixelFormat = formatSelect.value !== "svg";
+
+    imageResolutionContainer.hidden = !pixelFormat;
 }
 
 function setupChangeEvents() {
@@ -519,6 +530,7 @@ function setupChangeEvents() {
     chartHeightInput.addEventListener("change", updateMain);
     chartTypeSelect.addEventListener("change", updateMain);
     significanceInput.addEventListener("input", updateMain);
+    formatSelect.addEventListener("change", updateMain);
 
     titleFontSizeInput.addEventListener("input", updateDesign);
     pointTypeSelect.addEventListener("change", updateDesign);
@@ -550,8 +562,8 @@ function getProjectData() {
         values: getValues(),
         chartType: chartTypeSelect.value,
         otherDef: otherEditorObject.getTextContent(),
-        chartWidth: parseInt(chartWidthInput.value),
-        chartHeight: parseInt(chartHeightInput.value),
+        chartWidth: parseInt(clampInputValue(chartWidthInput)),
+        chartHeight: parseInt(clampInputValue(chartHeightInput)),
         devicePixelRatio: devicePixelRatioSelect.value,
         format: formatSelect.value,
         autoUpdatingChartTitles: autoUpdatingChartTitles,
@@ -560,24 +572,24 @@ function getProjectData() {
         yTitle: yTitleEditorObject.getFormattedContent(),
         pointType: pointTypeSelect.value,
         pointColor: pointColorInput.value,
-        pointWeight: parseFloat(pointWeightInput.value),
-        pointSize: parseFloat(pointSizeInput.value),
+        pointWeight: clampInputValue(pointWeightInput),
+        pointSize: clampInputValue(pointSizeInput),
         bandColor: bandColorInput.value,
         meanColor: meanColorInput.value,
-        meanWeight: meanWeightInput.value,
-        titleFontSize: parseInt(titleFontSizeInput.value),
-        axisFontSize: parseInt(axisFontSizeInput.value),
-        tickfontSize: parseInt(tickfontSizeInput.value),
+        meanWeight: clampInputValue(meanWeightInput),
+        titleFontSize: parseInt(clampInputValue(titleFontSizeInput)),
+        axisFontSize: parseInt(clampInputValue(axisFontSizeInput)),
+        tickfontSize: parseInt(clampInputValue(tickfontSizeInput)),
         compound: compoundEditorObject.getFormattedContent(),
         significance: significanceInput.value,
         yAxisInterval: yAxisIntervalSelect.value === "auto" ? "auto" : parseInt(yAxisIntervalSelect.value),
-        boxFontSize: parseInt(boxFontSizeInput.value),
+        boxFontSize: parseInt(clampInputValue(boxFontSizeInput)),
         boxPosition: boxPositionSelect.value,
         boxBorderColor: boxBorderColorInput.value,
         boxBackgroundColor: boxBackgroundColorInput.value,
-        boxOpacity: parseFloat(boxOpacityInput.value),
-        boxLeft: parseInt(boxLeftInput.value),
-        boxTop: parseInt(boxTopInput.value)
+        boxOpacity: clampInputValue(boxOpacityInput),
+        boxLeft: parseInt(clampInputValue(boxLeftInput)),
+        boxTop: parseInt(clampInputValue(boxTopInput))
     };
 }
 
@@ -585,8 +597,6 @@ function setProjectData(data) {
 
     if (data.values) {
         setValues(data.values);
-        numberOfValuesInput.value = 5;
-        changeNumberOfValueFields();
     }
 
     if (data.chartType) {
@@ -764,14 +774,17 @@ async function downloadChart() {
     const format = formatSelect.value;
     const pixelRatio = devicePixelRatioSelect.value;
 
-    let fileName;
+    let fileName = "variability";
 
-    if (pixelRatio == 1) {
-        fileName = "variability-web";
-    } else if (pixelRatio == 2) {
-        fileName = "variability-hi-res-web";
-    } else {
-        fileName = "variability-print";
+    if (format !== "svg") {
+        // The different resolutions don't make any difference for svg, so we don't change the filename based on them
+        if (pixelRatio == 1) {
+            fileName += "-web";
+        } else if (pixelRatio == 2) {
+            fileName += "-hi-res-web";
+        } else {
+            fileName += "-print";
+        }
     }
 
     saveAs(await getExportBlob(format), `${fileName}.${format}`);
@@ -805,7 +818,16 @@ async function loadProjectFile(event) {
             return;
         }
 
+        // Clear the input in case the user wants to load the same file again
+        event.srcElement.value = null;
+
         setProjectData(data);
+
+        if (numberOfValuesInput.value < initialInputFieldCount) {
+            numberOfValuesInput.value = initialInputFieldCount;
+        }
+
+        changeNumberOfValueFields();
 
         renderChart(variabilityChart);
 
@@ -818,6 +840,8 @@ function loadBlankProject() {
     if (!manualEntry ||
         confirm("Data currently entered in the form will be lost. Do you want to proceed?")) {
         setProjectData(blankData);
+        numberOfValuesInput.value = initialInputFieldCount;
+        changeNumberOfValueFields();
         renderChart(variabilityChart);
         document.querySelector("details#titlesDetails").removeAttribute("open");
         lastSavedData = structuredClone(blankData);
@@ -1086,7 +1110,7 @@ function renderChartAux(element, { isDesign }) {
     const chart = new Chart({
         data,
         targetElement: element,
-        meanValue: results.mean,
+        meanValue: mean,
         confidenceUpperLimit: results.ci[1],
         confidenceLowerLimit: results.ci[0],
         legendLines: [legendText1, legendText2],
@@ -1267,6 +1291,8 @@ $(document).ready(function () {
     exampleData.chartType = "isolatedYield";
     exampleData.values = [56, 66, 45, 58, 59];
     exampleData.compound = "Example&nbsp;<b>product&nbsp;name</b>";
+    exampleData.yTitle = "Isolated&nbsp;yield&nbsp;of&nbsp;Example&nbsp;<b>product&nbsp;name</b>&nbsp;(%)";
+    exampleData.plotTitle = "Variability&nbsp;plot&nbsp;for&nbsp;the&nbsp;isolated&nbsp;yield&nbsp;of&nbsp;Example&nbsp;<b>product&nbsp;name</b>&nbsp;(%)";
     setDefaultChartTitles();
 });
 
@@ -1289,6 +1315,7 @@ downloadChartButton.addEventListener("click", downloadChart);
 const shouldShowBoxCoordinates = () => boxPositionSelect.value === "manual";
 
 function updateDesignOptions() {
+    pointWeightContainer.hidden = pointTypeSelect.value.includes("filled");
     boxCoordinatesContainer.hidden = !shouldShowBoxCoordinates();
 }
 
@@ -1303,6 +1330,8 @@ function highlightElement(element) {
     });
 }
 
+pointTypeSelect.addEventListener("change", updateDesignOptions);
+
 boxPositionSelect.addEventListener("change", function (event) {
 
     updateDesignOptions();
@@ -1313,7 +1342,7 @@ boxPositionSelect.addEventListener("change", function (event) {
 });
 
 numberOfValuesInput.style.width = '165px';
-addNewValueField(5)
+addNewValueField(initialInputFieldCount)
 setupChangeEvents();
 
 customiseChart.addEventListener("click", showVariabilityPlotDesign);
