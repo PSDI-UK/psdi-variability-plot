@@ -3,7 +3,8 @@
   display: none;
 }
 
-@media (pointer:none) {
+@media (pointer:none),
+(pointer:coarse) {
   .mobile-only {
     display: block;
   }
