@@ -330,8 +330,8 @@ dialog#variabilityPlotDialog details[open] summary {
 }
 
 #variabilityChart {
-  max-width       : 800px;
-  max-height      : 600px;
+  max-width       : 640px;
+  max-height      : 480px;
   overflow        : auto;
   background-color: white;
   margin-top      : -1rem;
@@ -362,11 +362,6 @@ dialog#variabilityPlotDialog details[open] summary {
 .plotDesignOptions {
   margin-left: 16px;
   min-height : 600px;
-}
-
-div#variabilityPlotContainer svg {
-  margin-top   : 8px;
-  margin-bottom: 8px;
 }
 
 #outsideRangeWarning {
