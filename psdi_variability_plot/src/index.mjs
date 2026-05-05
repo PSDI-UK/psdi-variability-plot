@@ -530,10 +530,10 @@ function setupChangeEvents() {
     chartWidthInput.addEventListener("change", updateMain);
     chartHeightInput.addEventListener("change", updateMain);
     chartTypeSelect.addEventListener("change", updateMain);
-    significanceInput.addEventListener("input", updateMain);
+    significanceInput.addEventListener("change", updateMain);
     formatSelect.addEventListener("change", updateMain);
 
-    titleFontSizeInput.addEventListener("input", updateDesign);
+    titleFontSizeInput.addEventListener("change", updateDesign);
     pointTypeSelect.addEventListener("change", updateDesign);
     pointColorInput.addEventListener("change", updateDesign);
     pointWeightInput.addEventListener("change", updateDesign);
@@ -541,9 +541,9 @@ function setupChangeEvents() {
     bandColorInput.addEventListener("change", updateDesign);
     meanColorInput.addEventListener("change", updateDesign);
     meanWeightInput.addEventListener("change", updateDesign);
-    axisFontSizeInput.addEventListener("input", updateDesign);
-    tickfontSizeInput.addEventListener("input", updateDesign);
-    yAxisIntervalSelect.addEventListener("input", updateDesign);
+    axisFontSizeInput.addEventListener("change", updateDesign);
+    tickfontSizeInput.addEventListener("change", updateDesign);
+    yAxisIntervalSelect.addEventListener("change", updateDesign);
     boxFontSizeInput.addEventListener("change", updateDesign);
     boxPositionSelect.addEventListener("change", updateDesign);
     boxBorderColorInput.addEventListener("change", updateDesign);
@@ -929,8 +929,8 @@ function enableBoxDrag(chart, element, { width, height }) {
 
             if (boxElement.hasPointerCapture(event.pointerId)) {
 
-                const newTransformX = initialTransformX + (event.clientX  - initialClientX) * dragScale;
-                const newTransformY = initialTransformY + (event.clientY  - initialClientY) * dragScale;
+                const newTransformX = initialTransformX + (event.clientX - initialClientX) * dragScale;
+                const newTransformY = initialTransformY + (event.clientY - initialClientY) * dragScale;
 
                 const { manualBoxLeft, manualBoxTop } = chart.calculateBoxPosition({
                     boxLeft: newTransformX,
