@@ -423,7 +423,7 @@ input::placeholder {
   font-style: italic;
 }
 
-:is(button, input.button, input[type="button"]):not(.clean-btn),
+:is(button, input.button, input[type="button"]):not(.clean-btn, .tribe-common *),
 input[type="file"]:not(.tribe-common *)::file-selector-button {
   font-family     : var(--ifm-font-family-base);
   font-size       : var(--ifm-font-size-base);

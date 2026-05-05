@@ -21,6 +21,7 @@ const resetFormButton = document.querySelector("button#resetForm");
 const copyToClipboardButton = document.querySelector("button#copyToClipboard");
 const downloadChartButton = document.querySelector("button#downloadChart");
 const valuesAreaDiv = document.querySelector("div#valuesArea");
+
 const copySuccess = document.querySelector("#copySuccess");
 const copyFailure = document.querySelector("#copyFailure");
 const variabilityChart = document.querySelector("#variabilityChart");
@@ -529,10 +530,10 @@ function setupChangeEvents() {
     chartWidthInput.addEventListener("change", updateMain);
     chartHeightInput.addEventListener("change", updateMain);
     chartTypeSelect.addEventListener("change", updateMain);
-    significanceInput.addEventListener("input", updateMain);
+    significanceInput.addEventListener("change", updateMain);
     formatSelect.addEventListener("change", updateMain);
 
-    titleFontSizeInput.addEventListener("input", updateDesign);
+    titleFontSizeInput.addEventListener("change", updateDesign);
     pointTypeSelect.addEventListener("change", updateDesign);
     pointColorInput.addEventListener("change", updateDesign);
     pointWeightInput.addEventListener("change", updateDesign);
@@ -540,9 +541,9 @@ function setupChangeEvents() {
     bandColorInput.addEventListener("change", updateDesign);
     meanColorInput.addEventListener("change", updateDesign);
     meanWeightInput.addEventListener("change", updateDesign);
-    axisFontSizeInput.addEventListener("input", updateDesign);
-    tickfontSizeInput.addEventListener("input", updateDesign);
-    yAxisIntervalSelect.addEventListener("input", updateDesign);
+    axisFontSizeInput.addEventListener("change", updateDesign);
+    tickfontSizeInput.addEventListener("change", updateDesign);
+    yAxisIntervalSelect.addEventListener("change", updateDesign);
     boxFontSizeInput.addEventListener("change", updateDesign);
     boxPositionSelect.addEventListener("change", updateDesign);
     boxBorderColorInput.addEventListener("change", updateDesign);
@@ -887,7 +888,7 @@ function capitaliseTextInElement(element, match, replace) {
     }
 }
 
-function enableBoxDrag(chart, element) {
+function enableBoxDrag(chart, element, { width, height }) {
 
     const boxElement = element.querySelector("g.box");
     const plotBackground = element.querySelector("rect.plotBackground");
@@ -904,6 +905,8 @@ function enableBoxDrag(chart, element) {
 
     let initialTransformX;
     let initialTransformY;
+
+    let dragScale = width / element.clientWidth;
 
     function handleEvent(event) {
 
@@ -926,8 +929,8 @@ function enableBoxDrag(chart, element) {
 
             if (boxElement.hasPointerCapture(event.pointerId)) {
 
-                const newTransformX = initialTransformX + event.clientX - initialClientX;
-                const newTransformY = initialTransformY + event.clientY - initialClientY;
+                const newTransformX = initialTransformX + (event.clientX - initialClientX) * dragScale;
+                const newTransformY = initialTransformY + (event.clientY - initialClientY) * dragScale;
 
                 const { manualBoxLeft, manualBoxTop } = chart.calculateBoxPosition({
                     boxLeft: newTransformX,
@@ -1146,7 +1149,7 @@ function renderChartAux(element, { isDesign }) {
     });
 
     if (isDesign) {
-        enableBoxDrag(chart, element);
+        enableBoxDrag(chart, element, { width: projectData.chartWidth, height: projectData.chartHeight });
     }
 
     if (window.CookieConsent.acceptedCategory('analytics') && !reportedGeneratePlot) {

@@ -419,13 +419,16 @@ export class Chart {
         const plotAreaMaskElement = svgElement.querySelector(`clipPath#${maskId}`);
         this.boxElement = svgElement.querySelector("g.box");
 
-        svgElement.setAttribute("width", this.#width);
-        svgElement.setAttribute("height", this.#height);
+        svgElement.setAttribute("viewBox", `0 0 ${this.#width} ${this.#height}`);
+        svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+        // svgElement.setAttributeNS("http://www.w3.org/2000/svg", "svg:viewbox", `0 0 ${this.#width} ${this.#height}`);
+        // svgElement.setAttributeNS("http://www.w3.org/2000/svg", "svg:preserveAspectRatio", "xMidYMid meet");
 
         // Arrange positions of chart elements.
 
-        const chartWidth = svgElement.clientWidth;
-        const chartHeight = svgElement.clientHeight;
+        const chartWidth = this.#width;
+        const chartHeight = this.#height;
 
         const warningExtraPadding = 8;
 
