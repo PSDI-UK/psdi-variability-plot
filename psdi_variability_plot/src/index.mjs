@@ -756,9 +756,18 @@ async function getExportBlob(format) {
 
         // const dataURL = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
 
+        const copy = svg.cloneNode(true);
+
+        const projectData = getProjectData();
+
+        copy.setAttribute("width", projectData.chartWidth);
+        copy.setAttribute("height", projectData.chartHeight);
+        copy.removeAttribute("viewBox");
+        copy.removeAttribute("preserveAspectRatio");
+
         // Replace any non-breaking spaces in the SVG source with the more commonly-supported code for them so it won't
         // break if not supported
-        let svgSource = svg.outerHTML.replaceAll("&nbsp;", "&#160;");
+        let svgSource = copy.outerHTML.replaceAll("&nbsp;", "&#160;");
 
         blob = new Blob([svgSource], { type: "image/svg+xml; charset=utf-8" });
 
