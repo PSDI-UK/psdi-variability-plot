@@ -46,6 +46,10 @@
     outline        : none;
 }
 
+.plotDesignOptions .formattedEditorPalette>div button.toolbarButton {
+    min-width: 24px;
+}
+
 .formattedEditorPalette>div button.toolbarButton {
     background-color: var(--ifm-background-color);
 }
@@ -146,6 +150,10 @@
     align-items    : center;
     cursor         : pointer;
     outline        : none;
+}
+
+.plotDesignOptions .symbolSelector button.symbolButton {
+    width: 24px;
 }
 
 .symbolSelector button.symbolButton {
