@@ -275,6 +275,15 @@ button#addNewValueField {
 
 #plotDesign {
   background-color: white;
+  width           : 800px;
+  height          : 600px;
+  max-width       : calc(100vw - 350px);
+  max-height      : calc(100vh - 220px);
+}
+
+div#plotDesign>svg {
+    width : 100%;
+    height: 100%;
 }
 
 .plotDesignHeader {
@@ -323,11 +332,6 @@ dialog#variabilityPlotDialog details[open] summary {
   background-color: white;
 }
 
-div#plotDesign {
-  width: 800px;
-  height: 600px;
-}
-
 div#variabilityChart svg {
   width: 100%;
   height: 100%;
@@ -356,8 +360,11 @@ div#variabilityChart svg {
 }
 
 .plotDesignOptions {
+  width      : 194px;
+  /* width      : 210px; */
   margin-left: 16px;
-  min-height : 600px;
+  max-height : calc(100vh - 200px);
+  overflow-y : auto;
 }
 
 #outsideRangeWarning {
@@ -374,4 +381,10 @@ div#variabilityChart svg {
 
 .boxCoords input {
   width: 88px;
+}
+
+dialog#variabilityPlotDialog .symbolSelector>div {
+  width     : 160px;
+  height    : 224px;
+  overflow-y: scroll;
 }

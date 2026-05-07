@@ -136,7 +136,8 @@ function getValues() {
     var values = [];
 
     for (var i = 0; i < nextValueIndex; i++) {
-        const val = parseFloat(document.getElementById("value-" + i).value);
+        const valInput = document.getElementById("value-" + i);
+        const val = parseFloat(clampInputValue(valInput, true));
 
         if (!isNaN(val)) {
             values.push(val);
@@ -419,9 +420,14 @@ function addNewValueField(count) {
         addButton.style.marginLeft = '0px';
         addButton.style.marginRight = '7px';
 
-        newValue.type = 'text';
+        newValue.type = 'number';
+        newValue.min = '0';
+        newValue.max = '100';
+        newValue.class = 'valueInput';
         newValue.id = 'value-' + n;
+        newValue.autocomplete = 'off';
         newValue.style.width = '102px';
+        newValue.step = 'any';
 
         newValue.addEventListener("change", () => {
             updateMain();
@@ -500,7 +506,9 @@ const formattedOutcome = new FormattedText({});
  * @param {HTMLInputElement} el 
  * @returns {Number}
  */
-function clampInputValue(el) {
+function clampInputValue(el, allowEmpty = false) {
+    if (allowEmpty && el.value == "")
+        return NaN;
     el.value = Math.min(Math.max(el.value, el.min), el.max);
     return el.value;
 }
@@ -749,9 +757,18 @@ async function getExportBlob(format) {
 
         // const dataURL = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
 
+        const copy = svg.cloneNode(true);
+
+        const projectData = getProjectData();
+
+        copy.setAttribute("width", projectData.chartWidth);
+        copy.setAttribute("height", projectData.chartHeight);
+        copy.removeAttribute("viewBox");
+        copy.removeAttribute("preserveAspectRatio");
+
         // Replace any non-breaking spaces in the SVG source with the more commonly-supported code for them so it won't
         // break if not supported
-        let svgSource = svg.outerHTML.replaceAll("&nbsp;", "&#160;");
+        let svgSource = copy.outerHTML.replaceAll("&nbsp;", "&#160;");
 
         blob = new Blob([svgSource], { type: "image/svg+xml; charset=utf-8" });
 
@@ -1242,7 +1259,10 @@ async function renderChart(element, opts = {}) {
 }
 
 function showVariabilityPlotDesign() {
+
     reversionData = getProjectData()
+    delete reversionData.values;
+
     variabilityPlotDialog.showModal();
     renderChart(plotDesignElement, { isDesign: true });
 

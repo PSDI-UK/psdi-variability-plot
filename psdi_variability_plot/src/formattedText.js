@@ -6,8 +6,11 @@ export class FormattedText {
 
     #quill;
     #editArea;
+    #keepSymbolSelectorOpen = false;
 
     constructor({ element, value: initialValue, changeFunc }) {
+
+        let thisObject = this;
 
         if (element === undefined) {
 
@@ -141,6 +144,10 @@ export class FormattedText {
                         hideSymbolSelector = false;
                     }
 
+                    if (thisObject.#keepSymbolSelectorOpen) {
+                        hideSymbolSelector = false;
+                    }
+
                     if (hideSymbolSelector) {
                         symbolSelector.hidden = true
                         insertSymbolButton.classList.remove("ql-active");
@@ -167,6 +174,12 @@ export class FormattedText {
                     inactive = false;
                 }
 
+                // Not finished if "keepOpen" is set.
+
+                if (thisObject.#keepSymbolSelectorOpen) {
+                    inactive = false;
+                }
+
                 toolbar.hidden = inactive;
 
                 if (inactive) {
@@ -181,6 +194,17 @@ export class FormattedText {
             toolbar.addEventListener("focusout", processSelectedElementChange, { capture: true });
             symbolSelector.addEventListener("focusin", processSelectedElementChange, { capture: true });
             symbolSelector.addEventListener("focusout", processSelectedElementChange, { capture: true });
+
+            // Mouse down events on the symbol selector will mark it to stay open for at least 500ms. This
+            // is because we can't detect mouse events on a scrollbar in the symbol selector by focus/blur
+            // events alone.
+
+            symbolSelector.addEventListener("mousedown", function (event) {
+
+                thisObject.#keepSymbolSelectorOpen = true;
+
+                setTimeout(() => { thisObject.#keepSymbolSelectorOpen = false }, 500);
+            });
 
             if (initialValue) {
                 this.setFormattedContent(initialValue);

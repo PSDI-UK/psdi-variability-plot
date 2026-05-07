@@ -33,40 +33,57 @@
 }
 
 .formattedEditorPalette>div button.toolbarButton,
-.formattedEditorPalette>div button.toolbarButton.insertSymbolButton:not(:hover, .ql-active) {
-    display         : flex;
-    border          : 1px solid var(--ifm-input-border-color);
-    align-items     : center;
-    justify-content : center;
-    border-radius   : 0;
-    min-width       : 32px;
-    padding         : 0;
-    margin          : 0;
-    color           : var(--ifm-font-color-base);
+.formattedEditorPalette>div button.toolbarButton:focus-visible {
+    display        : flex;
+    border         : 1px solid var(--ifm-input-border-color);
+    align-items    : center;
+    justify-content: center;
+    border-radius  : 0;
+    min-width      : 32px;
+    padding        : 0;
+    margin         : 0;
+    color          : var(--ifm-font-color-base);
+    outline        : none;
+}
+
+.plotDesignOptions .formattedEditorPalette>div button.toolbarButton {
+    min-width: 24px;
+}
+
+.formattedEditorPalette>div button.toolbarButton {
     background-color: var(--ifm-background-color);
 }
 
-.formattedEditorPalette>div button.toolbarButton:hover {
+.formattedEditorPalette>div button.toolbarButton:hover,
+.formattedEditorPalette>div button.toolbarButton:focus-visible {
     background-color: var(--ifm-color-secondary);
 }
 
-[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton:hover {
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton:hover,
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton:focus-visible {
     background-color: var(--ifm-color-secondary-lighter);
 }
 
-.formattedEditorPalette>div button.toolbarButton.ql-active,
-.formattedEditorPalette>div button.toolbarButton.ql-active:hover {
-    color           : var(--ifm-hero-text-color);
-    background-color: var(--ifm-color-secondary-dark);
+.formattedEditorPalette>div button.toolbarButton.ql-active {
+    color: var(--ifm-hero-text-color);
+}
+
+.formattedEditorPalette>div button.toolbarButton.ql-active {
+    background-color: var(--ifm-color-secondary-darkest);
+}
+
+.formattedEditorPalette>div button.toolbarButton.ql-active:hover,
+.formattedEditorPalette>div button.toolbarButton.ql-active:focus-visible {
+    background-color: var(--ifm-color-secondary-darker);
 }
 
 [data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active {
     color           : var(--ifm-font-color-base);
-    background-color: var(--ifm-color-secondary-lightest);
+    background-color: var(--ifm-color-secondary-lighter);
 }
 
-[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active:hover {
-    color           : var(--ifm-font-color-base);
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active:hover,
+[data-theme='dark'] .formattedEditorPalette>div button.toolbarButton.ql-active:focus-visible {
     background-color: var(--ifm-color-secondary-lightestp1);
 }
 
@@ -118,26 +135,37 @@
     z-index    : 1;
 }
 
-.symbolSelector button.symbolButton {
-    border-radius   : 0;
-    box-sizing      : content-box;
-    padding         : 0;
-    margin          : 0;
-    color           : var(--ifm-font-color-base);
-    background-color: var(--ifm-background-color);
-    border          : none;
-    display         : inline-flex;
-    width           : 32px;
-    height          : 32px;
-    justify-content : center;
-    align-items     : center;
-    cursor          : pointer;
+.symbolSelector button.symbolButton,
+.symbolSelector button.symbolButton:focus-visible {
+    border-radius  : 0;
+    box-sizing     : content-box;
+    padding        : 0;
+    margin         : 0;
+    color          : var(--ifm-font-color-base);
+    border         : none;
+    display        : inline-flex;
+    width          : 32px;
+    height         : 32px;
+    justify-content: center;
+    align-items    : center;
+    cursor         : pointer;
+    outline        : none;
 }
 
-.symbolSelector button.symbolButton:hover {
+.plotDesignOptions .symbolSelector button.symbolButton {
+    width: 24px;
+}
+
+.symbolSelector button.symbolButton {
+    background-color: var(--ifm-background-color);
+}
+
+.symbolSelector button.symbolButton:hover,
+.symbolSelector button.symbolButton:focus-visible {
     background-color: var(--ifm-color-secondary);
 }
 
-[data-theme='dark'] .symbolSelector button.symbolButton:hover {
+[data-theme='dark'] .symbolSelector button.symbolButton:hover,
+[data-theme='dark'] .symbolSelector button.symbolButton:focus-visible {
     background-color: var(--ifm-color-secondary-lighter);
 }
