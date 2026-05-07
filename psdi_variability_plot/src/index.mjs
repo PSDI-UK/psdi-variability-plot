@@ -245,8 +245,8 @@ async function convertSVGToDataURL(svgElement, format, quality) {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
 
-    const canvasWidth = svgImage.naturalWidth * devicePixelRatio;
-    const canvasHeight = svgImage.naturalHeight * devicePixelRatio;
+    const canvasWidth = chartWidthInput.value * devicePixelRatio;
+    const canvasHeight = chartHeightInput.value * devicePixelRatio;
 
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
