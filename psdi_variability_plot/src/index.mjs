@@ -1259,7 +1259,10 @@ async function renderChart(element, opts = {}) {
 }
 
 function showVariabilityPlotDesign() {
+
     reversionData = getProjectData()
+    delete reversionData.values;
+
     variabilityPlotDialog.showModal();
     renderChart(plotDesignElement, { isDesign: true });
 
