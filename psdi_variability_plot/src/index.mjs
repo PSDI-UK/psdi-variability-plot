@@ -427,6 +427,7 @@ function addNewValueField(count) {
         newValue.id = 'value-' + n;
         newValue.autocomplete = 'off';
         newValue.style.width = '102px';
+        newValue.step = 'any';
 
         newValue.addEventListener("change", () => {
             updateMain();
