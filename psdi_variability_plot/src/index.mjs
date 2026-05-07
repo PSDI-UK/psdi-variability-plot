@@ -109,7 +109,7 @@ const chartTypeLabel = {
     "spectroscopicYield": "Spectroscopic yield",
     "chromatographicYield": "Chromatographic yield",
     "ee": "<i>ee</i>",
-    "de": "<i>ee</i>",
+    "de": "<i>de</i>",
     "other": "other"
 }
 
