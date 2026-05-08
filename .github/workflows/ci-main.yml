@@ -15,6 +15,7 @@ on:
     paths:
       - "**/ci-main.yml"
       - "psdi_variability_plot/**"
+      - "public/**"
       - "tests/**"
       - "Dockerfile"
       - "pyproject.toml"
