@@ -1148,8 +1148,7 @@ function renderChartAux(element, { isDesign }) {
             element.textContent = significance;
         }
 
-        warningTextObject.setFormattedContent(`The ${significance}% CI has a range of zero, indicating zero uncertainty in the reaction outcome`);
-
+        warningTextObject.setFormattedContent(`The ${significance}% CI indicates < 1% uncertainty in the reaction outcome`);
         showWarningText = true;
     }
 
