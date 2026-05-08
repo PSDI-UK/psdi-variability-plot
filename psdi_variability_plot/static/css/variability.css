@@ -367,7 +367,7 @@ div#variabilityChart svg {
   overflow-y : auto;
 }
 
-#outsideRangeWarning {
+#outsideRangeWarning, #zeroRangeWarning {
   margin-top   : 8px;
   margin-bottom: 8px;
   padding      : 16px;
@@ -375,7 +375,7 @@ div#variabilityChart svg {
   border       : 2px solid gray;
 }
 
-[data-theme="dark"] #outsideRangeWarning {
+[data-theme="dark"] #outsideRangeWarning, [data-theme="dark"] #zeroRangeWarning {
   background: var(--ifm-color-info-darkest);
 }
 
