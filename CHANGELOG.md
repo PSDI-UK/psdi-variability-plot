@@ -2,6 +2,10 @@
 
 ## v0.1.3
 
+### UX/Stylistic changes
+
+- The plot preview in the customise plot dialog will now update for all color changes before the user clicks away on all browsers
+
 ### Bugfixes
 
 - Fixed outlines of select boxes being cut off within the customise plot dialog box in dark mode

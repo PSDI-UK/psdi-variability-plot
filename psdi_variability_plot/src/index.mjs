@@ -518,6 +518,30 @@ function updateDesign() {
     renderChart(plotDesignElement, { isDesign: true });
 }
 
+const SLOW_UPDATE_LOCK_TIME = 100;
+let slowUpdateLock = false;
+let slowUpdateQueued = false;
+
+/**
+ * updateDesign, but with a limitation so that it doesn't re-execute too quickly and slow down the site. This is used
+ * for color inputs, which update the design on the "input" trigger and can call this trigger very rapidly. Use of this
+ * function slows down how frequently it's called to avoid causing lag.
+ * @param {Boolean} queued 
+ * @returns 
+ */
+function slowUpdateDesign(queued = false) {
+    if (!queued && slowUpdateQueued) {
+        return;
+    } else if (slowUpdateLock) {
+        slowUpdateQueued = true;
+        setTimeout(() => slowUpdateDesign(true), SLOW_UPDATE_LOCK_TIME);
+        return;
+    }
+    slowUpdateLock = true;
+    setTimeout(() => slowUpdateLock = false, SLOW_UPDATE_LOCK_TIME);
+    updateDesign();
+}
+
 function updateMain() {
 
     renderChart(variabilityChart);
@@ -544,19 +568,19 @@ function setupChangeEvents() {
 
     titleFontSizeInput.addEventListener("change", updateDesign);
     pointTypeSelect.addEventListener("change", updateDesign);
-    pointColorInput.addEventListener("change", updateDesign);
+    pointColorInput.addEventListener("input", slowUpdateDesign);
     pointWeightInput.addEventListener("change", updateDesign);
     pointSizeInput.addEventListener("change", updateDesign);
-    bandColorInput.addEventListener("change", updateDesign);
-    meanColorInput.addEventListener("change", updateDesign);
+    bandColorInput.addEventListener("input", slowUpdateDesign);
+    meanColorInput.addEventListener("input", slowUpdateDesign);
     meanWeightInput.addEventListener("change", updateDesign);
     axisFontSizeInput.addEventListener("change", updateDesign);
     tickfontSizeInput.addEventListener("change", updateDesign);
     yAxisIntervalSelect.addEventListener("change", updateDesign);
     boxFontSizeInput.addEventListener("change", updateDesign);
     boxPositionSelect.addEventListener("change", updateDesign);
-    boxBorderColorInput.addEventListener("change", updateDesign);
-    boxBackgroundColorInput.addEventListener("change", updateDesign);
+    boxBorderColorInput.addEventListener("input", slowUpdateDesign);
+    boxBackgroundColorInput.addEventListener("input", slowUpdateDesign);
     boxOpacityInput.addEventListener("change", updateDesign);
     boxLeftInput.addEventListener("change", updateDesign);
     boxTopInput.addEventListener("change", updateDesign);
