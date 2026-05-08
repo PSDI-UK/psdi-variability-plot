@@ -26,12 +26,6 @@ jobs:
     uses: ./.github/workflows/job-test-main.yml
     secrets: inherit # pass all secrets for the environment
 
-  deploy-pages:
-    uses: ./.github/workflows/job-publish-pages.yml
-    needs: [test-all]
-    # Proceed if test-all was successful or skipped
-    if: always() &&  (needs.test-all.result == 'skipped' || needs.test-all.result == 'success')
-
   container-push:
     uses: ./.github/workflows/job-container-push.yml
     needs: [test-all]

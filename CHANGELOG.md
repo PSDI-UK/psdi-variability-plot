@@ -1,5 +1,11 @@
 # Changelog for PSDI Variability Plot
 
+## v0.1.4
+
+### Miscellaneous changes
+
+- Previous location hosted on GitHub pages will now redirect to the new live location at https://organic-toolkit.psdi.ac.uk/variability-plot
+
 ## v0.1.3
 
 ### UX/Stylistic changes
