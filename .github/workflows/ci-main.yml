@@ -34,6 +34,12 @@ jobs:
     with:
       container_tag: ${{ github.sha }}
 
+  deploy-pages:
+    uses: ./.github/workflows/job-publish-pages.yml
+    needs: [test-all]
+    # Proceed if test-all was successful or skipped
+    if: always() &&  (needs.test-all.result == 'skipped' || needs.test-all.result == 'success')
+
   # Deploy to Kubernetes Job
   # Requires an environment, which must reflect the target environment as defined in the
   # GitHub repository: https://github.com/PSDI-UK/psdi-variability-plot/settings/environments
