@@ -12,6 +12,12 @@ on:
         type: boolean
   push:
     branches: ["main"]
+    paths:
+      - "**/ci-main.yml"
+      - "psdi_variability_plot/**"
+      - "tests/**"
+      - "Dockerfile"
+      - "pyproject.toml"
 
 jobs:
   test-all:
