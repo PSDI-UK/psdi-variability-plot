@@ -43,6 +43,7 @@ const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
 const yAxisIntervalSelect = document.querySelector("select#yAxisInterval");
 const outsideRangeWarning = document.querySelector("#outsideRangeWarning");
+const zeroRangeWarning = document.querySelector("#zeroRangeWarning");
 const boxFontSizeInput = document.querySelector("input#boxFontSize");
 const boxPositionSelect = document.querySelector("select#boxPosition");
 const boxBorderColorInput = document.querySelector("input#boxBorderColor");
@@ -1092,7 +1093,8 @@ function renderChartAux(element, { isDesign }) {
     let lowerConfidenceBound = Math.round(results.ci[0]);
     let upperConfidenceBound = Math.round(results.ci[1]);
 
-    const showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
+    let showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
+    let showZeroRangeWarning = '' + lowerConfidenceBound === 'NaN' && '' + upperConfidenceBound === 'NaN'
 
     if (lowerConfidenceBound < 0) {
         lowerConfidenceBound = 0;
@@ -1100,6 +1102,18 @@ function renderChartAux(element, { isDesign }) {
 
     if (upperConfidenceBound > 100) {
         upperConfidenceBound = 100;
+    }
+
+    if (showZeroRangeWarning) {
+        lowerConfidenceBound = Math.round(mean);
+        upperConfidenceBound = Math.round(mean);
+        results.ci[0] = mean;
+        results.ci[1] = mean;
+    }
+
+    // Show warning in all circumstances where the rounded CI is zero
+    if (lowerConfidenceBound === upperConfidenceBound) {
+        showZeroRangeWarning = true;
     }
 
     const legendText1 = `Mean yield = ${Math.round(mean)}%`;
@@ -1117,6 +1131,7 @@ function renderChartAux(element, { isDesign }) {
     }
 
     outsideRangeWarning.hidden = !showWarningText;
+    zeroRangeWarning.hidden = !showZeroRangeWarning;
 
     if (showWarningText) {
 
@@ -1125,6 +1140,17 @@ function renderChartAux(element, { isDesign }) {
         }
 
         warningTextObject.setFormattedContent(`The ${significance}% CI extends outside the range 0-100% and has been restricted to these limits`);
+    }
+
+    if (showZeroRangeWarning) {
+
+        for (const element of document.querySelectorAll(".outsideWarningSignificance")) {
+            element.textContent = significance;
+        }
+
+        warningTextObject.setFormattedContent(`The ${significance}% CI has a range of zero, indicating zero uncertainty in the reaction outcome`);
+
+        showWarningText = true;
     }
 
     const chart = new Chart({
