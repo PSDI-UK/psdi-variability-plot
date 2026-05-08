@@ -9,6 +9,7 @@
 ### Bugfixes
 
 - Fixed outlines of select boxes being cut off within the customise plot dialog box in dark mode
+- Added handling for if all inputted outcome values are the same or nearly the same and the calculated variance is near-zero or NaN, displaying a warning to the user that this has happened so they aren't confused
 
 ## v0.1.2
 
