@@ -43,6 +43,7 @@ const axisFontSizeInput = document.querySelector("input#axisFontSize");
 const tickfontSizeInput = document.querySelector("input#tickfontSize");
 const yAxisIntervalSelect = document.querySelector("select#yAxisInterval");
 const outsideRangeWarning = document.querySelector("#outsideRangeWarning");
+const zeroRangeWarning = document.querySelector("#zeroRangeWarning");
 const boxFontSizeInput = document.querySelector("input#boxFontSize");
 const boxPositionSelect = document.querySelector("select#boxPosition");
 const boxBorderColorInput = document.querySelector("input#boxBorderColor");
@@ -517,6 +518,30 @@ function updateDesign() {
     renderChart(plotDesignElement, { isDesign: true });
 }
 
+const SLOW_UPDATE_LOCK_TIME = 100;
+let slowUpdateLock = false;
+let slowUpdateQueued = false;
+
+/**
+ * updateDesign, but with a limitation so that it doesn't re-execute too quickly and slow down the site. This is used
+ * for color inputs, which update the design on the "input" trigger and can call this trigger very rapidly. Use of this
+ * function slows down how frequently it's called to avoid causing lag.
+ * @param {Boolean} queued 
+ * @returns 
+ */
+function slowUpdateDesign(queued = false) {
+    if (!queued && slowUpdateQueued) {
+        return;
+    } else if (slowUpdateLock) {
+        slowUpdateQueued = true;
+        setTimeout(() => slowUpdateDesign(true), SLOW_UPDATE_LOCK_TIME);
+        return;
+    }
+    slowUpdateLock = true;
+    setTimeout(() => slowUpdateLock = false, SLOW_UPDATE_LOCK_TIME);
+    updateDesign();
+}
+
 function updateMain() {
 
     renderChart(variabilityChart);
@@ -543,19 +568,19 @@ function setupChangeEvents() {
 
     titleFontSizeInput.addEventListener("change", updateDesign);
     pointTypeSelect.addEventListener("change", updateDesign);
-    pointColorInput.addEventListener("change", updateDesign);
+    pointColorInput.addEventListener("input", slowUpdateDesign);
     pointWeightInput.addEventListener("change", updateDesign);
     pointSizeInput.addEventListener("change", updateDesign);
-    bandColorInput.addEventListener("change", updateDesign);
-    meanColorInput.addEventListener("change", updateDesign);
+    bandColorInput.addEventListener("input", slowUpdateDesign);
+    meanColorInput.addEventListener("input", slowUpdateDesign);
     meanWeightInput.addEventListener("change", updateDesign);
     axisFontSizeInput.addEventListener("change", updateDesign);
     tickfontSizeInput.addEventListener("change", updateDesign);
     yAxisIntervalSelect.addEventListener("change", updateDesign);
     boxFontSizeInput.addEventListener("change", updateDesign);
     boxPositionSelect.addEventListener("change", updateDesign);
-    boxBorderColorInput.addEventListener("change", updateDesign);
-    boxBackgroundColorInput.addEventListener("change", updateDesign);
+    boxBorderColorInput.addEventListener("input", slowUpdateDesign);
+    boxBackgroundColorInput.addEventListener("input", slowUpdateDesign);
     boxOpacityInput.addEventListener("change", updateDesign);
     boxLeftInput.addEventListener("change", updateDesign);
     boxTopInput.addEventListener("change", updateDesign);
@@ -1092,7 +1117,8 @@ function renderChartAux(element, { isDesign }) {
     let lowerConfidenceBound = Math.round(results.ci[0]);
     let upperConfidenceBound = Math.round(results.ci[1]);
 
-    const showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
+    let showWarningText = (lowerConfidenceBound < 0) || (upperConfidenceBound > 100);
+    let showZeroRangeWarning = '' + lowerConfidenceBound === 'NaN' && '' + upperConfidenceBound === 'NaN'
 
     if (lowerConfidenceBound < 0) {
         lowerConfidenceBound = 0;
@@ -1100,6 +1126,18 @@ function renderChartAux(element, { isDesign }) {
 
     if (upperConfidenceBound > 100) {
         upperConfidenceBound = 100;
+    }
+
+    if (showZeroRangeWarning) {
+        lowerConfidenceBound = Math.round(mean);
+        upperConfidenceBound = Math.round(mean);
+        results.ci[0] = mean;
+        results.ci[1] = mean;
+    }
+
+    // Show warning in all circumstances where the rounded CI is zero
+    if (lowerConfidenceBound === upperConfidenceBound) {
+        showZeroRangeWarning = true;
     }
 
     const legendText1 = `Mean yield = ${Math.round(mean)}%`;
@@ -1117,6 +1155,7 @@ function renderChartAux(element, { isDesign }) {
     }
 
     outsideRangeWarning.hidden = !showWarningText;
+    zeroRangeWarning.hidden = !showZeroRangeWarning;
 
     if (showWarningText) {
 
@@ -1125,6 +1164,16 @@ function renderChartAux(element, { isDesign }) {
         }
 
         warningTextObject.setFormattedContent(`The ${significance}% CI extends outside the range 0-100% and has been restricted to these limits`);
+    }
+
+    if (showZeroRangeWarning) {
+
+        for (const element of document.querySelectorAll(".outsideWarningSignificance")) {
+            element.textContent = significance;
+        }
+
+        warningTextObject.setFormattedContent(`The ${significance}% CI indicates < 1% uncertainty in the reaction outcome`);
+        showWarningText = true;
     }
 
     const chart = new Chart({
