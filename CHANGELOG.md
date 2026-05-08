@@ -1,5 +1,11 @@
 # Changelog for PSDI Variability Plot
 
+## v0.1.3
+
+### Bugfixes
+
+- Fixed outlines of select boxes being cut off within the customise plot dialog box in dark mode
+
 ## v0.1.2
 
 ### Bugfixes
