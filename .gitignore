@@ -6,9 +6,6 @@
 *.pyc
 *.pyo
 
-# Compiled documentation
-html/*
-
 # Build files
 build/*
 dist/*

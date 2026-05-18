@@ -12,9 +12,17 @@ on:
 
 jobs:
   test-python:
-    uses: ./.github/workflows/job-test-python.yml
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/test-python.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
+    with:
+      source_dir: psdi_variability_plot
+
   test-gui:
-    uses: ./.github/workflows/job-test-gui.yml
+    name: Run full tests of the gui locally
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/test-gui.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
+    with:
+      require_node: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
   # The commented out code below runs a code vulnerability scan on the
   # containerised app. This will not work on the free GitHub plan, since
@@ -31,20 +39,20 @@ jobs:
   #  needs: [test-package, test-gui]
 
   tag:
-    uses: ./.github/workflows/job-tag.yml
     needs: [test-python, test-gui]
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/tag.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
   container-push:
-    uses: ./.github/workflows/job-container-push.yml
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/container-push.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
     needs: [tag]
     with:
       container_tag: ${{ needs.tag.outputs.container_tag }}
-
-  publish-doc:
-    # When ready to enable this step, remove the following line
-    if: false
-    needs: [tag]
-    uses: ./.github/workflows/job-publish-doc.yml
+      service_name: psdi_variability_plot
+      rel_url_path: /variability-plot
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
   # Deploy to Kubernetes Job
   # Requires an environment, which must reflect the target environment as defined in the
@@ -52,10 +60,13 @@ jobs:
   # The downstream deploy job leverages on Environment specific secrets, which also must be defined
   deploy-stfc-staging-k8s:
     needs: [tag, container-push]
-    uses: PSDI-UK/psdi-variability-plot-deployment/.github/workflows/job-external-deployment.yaml@c4c4fb99ce149625b94cdc57da39ad45b1281748
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/deploy.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
     with:
       container_tag: ${{ needs.tag.outputs.container_tag }}
+      deployment_repo: psdi-variability-plot-deployment
       environment: staging
+      prod: false
     secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
       deployment_app_id: ${{ secrets.DEPLOYMENT_APP_ID }}
       deployment_app_private_key: ${{ secrets.DEPLOYMENT_APP_PRIVATE_KEY }}

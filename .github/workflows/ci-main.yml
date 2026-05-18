@@ -12,27 +12,34 @@ on:
         type: boolean
   push:
     branches: ["main"]
+    paths:
+      - "**/ci-main.yml"
+      - "psdi_variability_plot/**"
+      - "tests/**"
+      - "Dockerfile"
+      - "pyproject.toml"
 
 jobs:
   test-all:
-    if: ${{ github.event_name == 'push' || ! github.event.inputs.skip-tests }}
-
-    uses: ./.github/workflows/job-test-main.yml
-    secrets: inherit # pass all secrets for the environment
-
-  deploy-pages:
-    uses: ./.github/workflows/job-publish-pages.yml
-    needs: [test-all]
-    # Proceed if test-all was successful or skipped
-    if: always() &&  (needs.test-all.result == 'skipped' || needs.test-all.result == 'success')
+    if: github.event_name == 'push' || github.event.inputs.skip-tests == 'false'
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/test-all.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
+    with:
+      source_dir: psdi_variability_plot
+      require_node: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
   container-push:
-    uses: ./.github/workflows/job-container-push.yml
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/container-push.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
     needs: [test-all]
     # Proceed if test-all was successful or skipped
     if: always() &&  (needs.test-all.result == 'skipped' || needs.test-all.result == 'success')
     with:
       container_tag: ${{ github.sha }}
+      service_name: psdi_variability_plot
+      rel_url_path: /variability-plot
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
   # Deploy to Kubernetes Job
   # Requires an environment, which must reflect the target environment as defined in the
@@ -43,11 +50,13 @@ jobs:
     needs: [container-push]
     # Proceed if test-all was successful or skipped
     if: always() && (needs.container-push.result == 'success')
-    # Refer to a specific commit for security against supply-chain attacks
-    uses: PSDI-UK/psdi-variability-plot-deployment/.github/workflows/job-external-deployment.yaml@c4c4fb99ce149625b94cdc57da39ad45b1281748
+    uses: PSDI-UK/psdi-github-workflows-public/.github/workflows/deploy.yml@b4c884a5fbaa96777c26f1ac6d4eac67531e2fc7
     with:
       container_tag: ${{ github.sha }}
+      deployment_repo: psdi-variability-plot-deployment
       environment: development
+      prod: false
     secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
       deployment_app_id: ${{ secrets.DEPLOYMENT_APP_ID }}
       deployment_app_private_key: ${{ secrets.DEPLOYMENT_APP_PRIVATE_KEY }}

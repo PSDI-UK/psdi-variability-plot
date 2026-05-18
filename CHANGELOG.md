@@ -1,5 +1,13 @@
 # Changelog for PSDI Variability Plot
 
+## v0.1.4
+
+### Miscellaneous changes
+
+- Previous location hosted on GitHub pages will now redirect to the new live location at https://organic-toolkit.psdi.ac.uk/variability-plot
+- Reusable GitHub workflows now moved to be sourced from the common repo https://github.com/PSDI-UK/psdi-github-workflows-public
+- Restored link to project source repo on Documentation page
+
 ## v0.1.3
 
 ### UX/Stylistic changes
