@@ -1,5 +1,11 @@
 # Changelog for PSDI Variability Plot
 
+## v0.1.5
+
+### Miscellaneous changes
+
+- Add link back to the Organic Toolkit Hub page
+
 ## v0.1.4
 
 ### Miscellaneous changes
