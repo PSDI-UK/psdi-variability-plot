@@ -1,5 +1,11 @@
 # Changelog for PSDI Variability Plot
 
+## v0.1.6
+
+### Stylistic Change
+
+- Pulled updated common assets, adding link to sitemap to footer
+
 ## v0.1.5
 
 ### Miscellaneous changes
