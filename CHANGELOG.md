@@ -1,8 +1,14 @@
 # Changelog for PSDI Variability Plot
 
+## v0.1.10
+
+### Miscellaneous changes
+
+- Updated common assets, switching to self-hosting fonts for GDPR compliance
+
 ## v0.1.6
 
-### Stylistic Change
+### Stylistic changes
 
 - Pulled updated common assets, adding link to sitemap to footer
 
