@@ -1,5 +1,11 @@
 # Changelog for PSDI Variability Plot
 
+## v0.1.13
+
+### Miscellaneous changes
+
+- Self-hosted JS and CSS packages as well for GDPR compliance
+
 ## v0.1.10
 
 ### Miscellaneous changes
