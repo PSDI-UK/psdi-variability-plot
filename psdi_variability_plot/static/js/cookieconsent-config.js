@@ -1,4 +1,4 @@
-import "./cookieconsent.umd.js";
+import "./packages/cookieconsent.umd.js";
 
 // Value in sessionStorage to track state of cookie consent
 sessionStorage["analyticsAllowed"] = false;
